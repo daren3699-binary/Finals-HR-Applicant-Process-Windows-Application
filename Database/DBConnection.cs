@@ -14,4 +14,4 @@ namespace FinalsHRApplicantProcessWindowsApplication.Database
             return new MySqlConnection(connectionString);
         }
     }
-}
+}   

@@ -9,7 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Forms\Applicant\" />
     <Folder Include="Forms\HR\" />
     <Folder Include="Models\" />
     <Folder Include="Helpers\" />
