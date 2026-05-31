@@ -1,3 +1,5 @@
+using FinalsHRApplicantProcessWindowsApplication.Forms.Applicant;
+
 namespace FinalsHRApplicantProcessWindowsApplication
 {
     internal static class Program
