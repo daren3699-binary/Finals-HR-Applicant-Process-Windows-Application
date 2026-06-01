@@ -1,4 +1,4 @@
-using FinalsHRApplicantProcessWindowsApplication.Forms.HR;
+using FinalsHRApplicantProcessWindowsApplication.Forms;
 
 namespace FinalsHRApplicantProcessWindowsApplication
 {
@@ -10,7 +10,7 @@ namespace FinalsHRApplicantProcessWindowsApplication
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             ApplicationConfiguration.Initialize();
-            Application.Run(new HRLogin());  
+            Application.Run(new MainMenu());  
         }
     }
 }
