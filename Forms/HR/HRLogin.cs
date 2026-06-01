@@ -62,10 +62,9 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
 
                                 MessageBox.Show($"Welcome, {uname}! Role: {role}.", "Login Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                                //TODO: open hr dashboard
-                                // HRDashboard dashboard = new HRDashboard();
-                                // dashboard.Show();
-                                // this.Hide();
+                                HRDashboard dashboard = new HRDashboard();
+                                dashboard.Show();
+                                this.Hide();
 
                                 // TODO: Route based on role
                                 // if (roleName == "Admin" || roleName == "HR Manager")
