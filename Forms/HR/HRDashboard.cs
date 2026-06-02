@@ -59,5 +59,11 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
                 MessageBox.Show("DB Error: " + ex.Message);
             }
         }
+
+        private void btnApplicantList_Click(object sender, EventArgs e)
+        {
+            ApplicantList list = new ApplicantList();
+            list.Show();
+        }
     }
 }

@@ -81,6 +81,7 @@
             btnApplicantList.TabIndex = 4;
             btnApplicantList.Text = "View Applicants";
             btnApplicantList.UseVisualStyleBackColor = true;
+            btnApplicantList.Click += btnApplicantList_Click;
             // 
             // btnLogout
             // 
