@@ -58,10 +58,9 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                                 int accountID = reader.GetInt32("ApplicantAccountID");
                                 MessageBox.Show("Login successful! Welcome.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                                // TODO: Open the applicant dashboard
-                                // ApplicantDashboard dashboard = new ApplicantDashboard(accountID);
-                                // dashboard.Show();
-                                // this.Hide();
+                                ApplicantDashboard dashboard = new ApplicantDashboard(accountID);
+                                dashboard.Show();
+                                this.Hide();
                             }
                             else
                             {
