@@ -1,6 +1,6 @@
-﻿namespace ApplicationRegistration
+﻿namespace ApplicantRegistration
 {
-    partial class ApplicationRegistration
+    partial class ApplicantRegistration
     {
         private System.ComponentModel.IContainer components = null;
 
@@ -43,88 +43,99 @@
             // 
             // txtFirstName
             // 
+            txtFirstName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtFirstName.Location = new Point(20, 115);
             txtFirstName.Name = "txtFirstName";
-            txtFirstName.Size = new Size(440, 27);
+            txtFirstName.Size = new Size(326, 27);
             txtFirstName.TabIndex = 0;
             // 
             // txtSurname
             // 
+            txtSurname.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtSurname.Location = new Point(20, 175);
             txtSurname.Name = "txtSurname";
-            txtSurname.Size = new Size(440, 27);
+            txtSurname.Size = new Size(326, 27);
             txtSurname.TabIndex = 1;
             // 
             // txtMiddleInitial
             // 
+            txtMiddleInitial.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtMiddleInitial.Location = new Point(20, 235);
             txtMiddleInitial.Name = "txtMiddleInitial";
-            txtMiddleInitial.Size = new Size(440, 27);
+            txtMiddleInitial.Size = new Size(326, 27);
             txtMiddleInitial.TabIndex = 2;
             // 
             // dtpDateOfBirth
             // 
+            dtpDateOfBirth.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             dtpDateOfBirth.Format = DateTimePickerFormat.Short;
             dtpDateOfBirth.Location = new Point(20, 295);
             dtpDateOfBirth.Name = "dtpDateOfBirth";
-            dtpDateOfBirth.Size = new Size(440, 27);
+            dtpDateOfBirth.Size = new Size(326, 27);
             dtpDateOfBirth.TabIndex = 3;
             // 
             // cmbSex
             // 
+            cmbSex.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             cmbSex.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbSex.Items.AddRange(new object[] { "Male", "Female" });
             cmbSex.Location = new Point(20, 355);
             cmbSex.Name = "cmbSex";
-            cmbSex.Size = new Size(440, 28);
+            cmbSex.Size = new Size(326, 28);
             cmbSex.TabIndex = 4;
             // 
             // txtContactInfo
             // 
+            txtContactInfo.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtContactInfo.Location = new Point(20, 415);
             txtContactInfo.Name = "txtContactInfo";
-            txtContactInfo.Size = new Size(440, 27);
+            txtContactInfo.Size = new Size(326, 27);
             txtContactInfo.TabIndex = 5;
             // 
             // pnlSeparator
             // 
+            pnlSeparator.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             pnlSeparator.BackColor = Color.LightGray;
             pnlSeparator.Location = new Point(20, 460);
             pnlSeparator.Name = "pnlSeparator";
-            pnlSeparator.Size = new Size(440, 2);
+            pnlSeparator.Size = new Size(326, 2);
             pnlSeparator.TabIndex = 8;
             // 
             // txtEmail
             // 
+            txtEmail.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtEmail.Location = new Point(20, 525);
             txtEmail.Name = "txtEmail";
-            txtEmail.Size = new Size(440, 27);
+            txtEmail.Size = new Size(326, 27);
             txtEmail.TabIndex = 6;
             // 
             // txtPassword
             // 
+            txtPassword.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtPassword.Location = new Point(20, 585);
             txtPassword.Name = "txtPassword";
             txtPassword.PasswordChar = '*';
-            txtPassword.Size = new Size(440, 27);
+            txtPassword.Size = new Size(326, 27);
             txtPassword.TabIndex = 7;
             // 
             // txtConfirmPassword
             // 
+            txtConfirmPassword.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtConfirmPassword.Location = new Point(20, 645);
             txtConfirmPassword.Name = "txtConfirmPassword";
             txtConfirmPassword.PasswordChar = '*';
-            txtConfirmPassword.Size = new Size(440, 27);
+            txtConfirmPassword.Size = new Size(326, 27);
             txtConfirmPassword.TabIndex = 8;
             // 
             // btnRegister
             // 
+            btnRegister.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             btnRegister.BackColor = Color.SteelBlue;
             btnRegister.FlatStyle = FlatStyle.Flat;
             btnRegister.ForeColor = Color.White;
             btnRegister.Location = new Point(20, 690);
             btnRegister.Name = "btnRegister";
-            btnRegister.Size = new Size(440, 40);
+            btnRegister.Size = new Size(326, 40);
             btnRegister.TabIndex = 9;
             btnRegister.Text = "Register";
             btnRegister.UseVisualStyleBackColor = false;
@@ -132,8 +143,9 @@
             // 
             // lnkLogin
             // 
+            lnkLogin.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lnkLogin.AutoSize = true;
-            lnkLogin.Location = new Point(124, 751);
+            lnkLogin.Location = new Point(85, 751);
             lnkLogin.Name = "lnkLogin";
             lnkLogin.Size = new Size(233, 20);
             lnkLogin.TabIndex = 13;
@@ -143,6 +155,7 @@
             // 
             // lblTitle
             // 
+            lblTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lblTitle.AutoSize = true;
             lblTitle.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
             lblTitle.Location = new Point(168, 9);
@@ -153,6 +166,7 @@
             // 
             // lblFirstName
             // 
+            lblFirstName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lblFirstName.AutoSize = true;
             lblFirstName.Location = new Point(20, 95);
             lblFirstName.Name = "lblFirstName";
@@ -162,6 +176,7 @@
             // 
             // lblSurname
             // 
+            lblSurname.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lblSurname.AutoSize = true;
             lblSurname.Location = new Point(20, 155);
             lblSurname.Name = "lblSurname";
@@ -171,6 +186,7 @@
             // 
             // lblMiddleInitial
             // 
+            lblMiddleInitial.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lblMiddleInitial.AutoSize = true;
             lblMiddleInitial.Location = new Point(20, 215);
             lblMiddleInitial.Name = "lblMiddleInitial";
@@ -180,6 +196,7 @@
             // 
             // lblDateOfBirth
             // 
+            lblDateOfBirth.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lblDateOfBirth.AutoSize = true;
             lblDateOfBirth.Location = new Point(20, 275);
             lblDateOfBirth.Name = "lblDateOfBirth";
@@ -189,6 +206,7 @@
             // 
             // lblSex
             // 
+            lblSex.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lblSex.AutoSize = true;
             lblSex.Location = new Point(20, 335);
             lblSex.Name = "lblSex";
@@ -198,6 +216,7 @@
             // 
             // lblContactInfo
             // 
+            lblContactInfo.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lblContactInfo.AutoSize = true;
             lblContactInfo.Location = new Point(20, 395);
             lblContactInfo.Name = "lblContactInfo";
@@ -207,6 +226,7 @@
             // 
             // lblEmail
             // 
+            lblEmail.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lblEmail.AutoSize = true;
             lblEmail.Location = new Point(20, 505);
             lblEmail.Name = "lblEmail";
@@ -216,6 +236,7 @@
             // 
             // lblPassword
             // 
+            lblPassword.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lblPassword.AutoSize = true;
             lblPassword.Location = new Point(20, 565);
             lblPassword.Name = "lblPassword";
@@ -225,6 +246,7 @@
             // 
             // lblConfirmPassword
             // 
+            lblConfirmPassword.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lblConfirmPassword.AutoSize = true;
             lblConfirmPassword.Location = new Point(20, 625);
             lblConfirmPassword.Name = "lblConfirmPassword";
@@ -234,6 +256,7 @@
             // 
             // lblPersonalInfo
             // 
+            lblPersonalInfo.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lblPersonalInfo.AutoSize = true;
             lblPersonalInfo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             lblPersonalInfo.ForeColor = Color.Gray;
@@ -245,6 +268,7 @@
             // 
             // lblAccountInfo
             // 
+            lblAccountInfo.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lblAccountInfo.AutoSize = true;
             lblAccountInfo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             lblAccountInfo.ForeColor = Color.Gray;
@@ -254,13 +278,12 @@
             lblAccountInfo.TabIndex = 9;
             lblAccountInfo.Text = "ACCOUNT INFORMATION";
             // 
-            // Form1
+            // ApplicantRegistration
             // 
-            AutoScroll = true;
-            AutoScaleMode = AutoScaleMode.Font;
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(480, 780);
+            AutoScroll = true;
+            ClientSize = new Size(513, 824);
             Controls.Add(lblTitle);
             Controls.Add(lblPersonalInfo);
             Controls.Add(lblFirstName);
@@ -285,32 +308,8 @@
             Controls.Add(txtConfirmPassword);
             Controls.Add(btnRegister);
             Controls.Add(lnkLogin);
-            Name = "Form1";
+            Name = "ApplicantRegistration";
             Text = "Application Registration";
-            lblTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            lblPersonalInfo.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            lblFirstName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            lblSurname.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            lblMiddleInitial.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            lblDateOfBirth.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            lblSex.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            lblContactInfo.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            lblAccountInfo.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            lblEmail.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            lblPassword.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            lblConfirmPassword.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            lnkLogin.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txtFirstName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txtSurname.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txtMiddleInitial.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            dtpDateOfBirth.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            cmbSex.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txtContactInfo.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            pnlSeparator.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txtEmail.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txtPassword.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txtConfirmPassword.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            btnRegister.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             ResumeLayout(false);
             PerformLayout();
         }

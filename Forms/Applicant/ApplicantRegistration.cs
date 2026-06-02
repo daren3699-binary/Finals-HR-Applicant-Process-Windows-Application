@@ -1,14 +1,15 @@
+using FinalsHRApplicantProcessWindowsApplication.Forms.Applicant;
 using MySql.Data.MySqlClient;
 using System;
 using System.Windows.Forms;
 
-namespace ApplicationRegistration
+namespace ApplicantRegistration
 {
-    public partial class ApplicationRegistration : Form
+    public partial class ApplicantRegistration : Form
     {
         string connectionString = "Server=localhost;Database=hr_applicant_db;Uid=root;Pwd=;";
 
-        public ApplicationRegistration()
+        public ApplicantRegistration()
         {
             InitializeComponent();
         }
@@ -77,7 +78,7 @@ namespace ApplicationRegistration
                     return;
                 }
 
-                string insertQuery = "INSERT INTO ApplicantAccounts (FirstName, Surname, MiddleInitial, DateOfBirth, Sex, ContactInfo, Email, Password) VALUES (@firstname, @surname, @middleinitial, @dob, @sex, @contactinfo, @email, @password)";
+                string insertQuery = "INSERT INTO ApplicantAccounts (FirstName, Surname, MiddleInitial, DateOfBirth, Sex, ContactInfo, Email, PasswordHash) VALUES (@firstname, @surname, @middleinitial, @dob, @sex, @contactinfo, @email, @password)";
                 MySqlCommand insertCmd = new MySqlCommand(insertQuery, conn);
                 insertCmd.Parameters.AddWithValue("@firstname", firstName);
                 insertCmd.Parameters.AddWithValue("@surname", surname);
@@ -100,7 +101,9 @@ namespace ApplicationRegistration
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-
+            ApplicantLogin loginForm = new ApplicantLogin();
+            loginForm.Show();
+            this.Hide();
         }
     }
 }

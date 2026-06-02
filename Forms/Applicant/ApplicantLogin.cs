@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using ApplicantRegistration;
 using MySql.Data.MySqlClient;
 using FinalsHRApplicantProcessWindowsApplication.Database;
 
@@ -79,10 +80,9 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 
         private void btnRegister_Click(object sender, EventArgs e)
         {
-            // TODO: Open the registration form
-            // ApplicantRegistration registrationForm = new ApplicantRegistration();
-            // reg.Show();
-            // this.Hide();
+            ApplicantRegistration.ApplicantRegistration registrationForm = new ApplicantRegistration.ApplicantRegistration();
+            registrationForm.Show();
+            this.Hide();
         }
     }
 }
