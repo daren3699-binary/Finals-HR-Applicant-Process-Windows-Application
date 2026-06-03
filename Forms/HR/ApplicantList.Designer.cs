@@ -96,6 +96,7 @@
             dgvApplicants.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvApplicants.Size = new Size(765, 318);
             dgvApplicants.TabIndex = 5;
+            dgvApplicants.CellDoubleClick += dgvApplicants_CellDoubleClick;
             // 
             // ApplicantList
             // 

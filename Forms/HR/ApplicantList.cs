@@ -77,6 +77,15 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
             this.Close();
         }
 
-       
+        private void dgvApplicants_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0) // prevents crash if user clicks the header row
+            {   
+                // gets the applicant id from the clicked row
+                int applicantId = Convert.ToInt32(dgvApplicants.Rows[e.RowIndex].Cells["ApplicantID"].Value);
+                ApplicantReview review = new ApplicantReview(applicantId);
+                review.Show();
+            }
+        }
     }
 }

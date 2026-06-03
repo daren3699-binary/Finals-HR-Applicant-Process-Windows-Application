@@ -1,0 +1,122 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using FinalsHRApplicantProcessWindowsApplication.Database;
+using FinalsHRApplicantProcessWindowsApplication.Helpers;
+using MySql.Data.MySqlClient;
+
+namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
+{
+    public partial class ApplicantReview : Form
+    {
+        // stores the applicant id from the applicant list
+        private int _applicantId;
+
+        public ApplicantReview(int applicantId) // receives the applicant id when the form is opened
+        {
+            InitializeComponent();
+            _applicantId = applicantId;
+
+        }
+
+        private void ApplicantReview_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                using (var conn = DBConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    // gets applicant details + their latest application status
+                    string query = @"SELECT a.FirstName, a.LastName, aa.Email,
+                                     ap.Status, ap.ApplicationID
+                                     FROM Applicants a
+                                     JOIN ApplicantAccounts aa ON a.ApplicantAccountID = aa.ApplicantAccountID
+                                     LEFT JOIN Applications ap ON a.ApplicantID = ap.ApplicantID
+                                     WHERE a.ApplicantID = @id
+                                     ORDER BY ap.CreatedAt DESC LIMIT 1";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", _applicantId);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                lblName.Text = $"Name: {reader["FirstName"]} {reader["LastName"]}";
+                                lblEmail.Text = $"Email: {reader["Email"]}";
+
+                                string status = reader["Status"]?.ToString() ?? "Submitted";
+                                cmbStatus.SelectedItem = status;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Database Error: {ex.Message}");
+            }
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            if (cmbStatus.SelectedItem == null)
+            {
+                MessageBox.Show("Please select a status.", "Missing", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                using (var conn = DBConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    // updates the application status
+                    string updateQuery = @"UPDATE Applications SET Status = @status
+                                          WHERE ApplicantID = @id
+                                          ORDER BY CreatedAt DESC LIMIT 1";
+
+                    using (var cmd = new MySqlCommand(updateQuery, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@status", cmbStatus.SelectedItem.ToString());
+                        cmd.Parameters.AddWithValue("@id", _applicantId);
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    // logs to ApplicationStatusHistory
+                    string historyQuery = @"INSERT INTO ApplicationStatusHistory 
+                                           (ApplicationID, Status, Remarks, ChangedBy)
+                                           SELECT ApplicationID, @status, @remarks, @changedBy
+                                           FROM Applications WHERE ApplicantID = @id
+                                           ORDER BY CreatedAt DESC LIMIT 1";
+
+                    using (var cmd2 = new MySqlCommand(historyQuery, conn))
+                    {
+                        cmd2.Parameters.AddWithValue("@status", cmbStatus.SelectedItem.ToString());
+                        cmd2.Parameters.AddWithValue("@remarks", txtRemarks.Text.Trim());
+                        cmd2.Parameters.AddWithValue("@changedBy", Session.CurrentUsername);
+                        cmd2.Parameters.AddWithValue("@id", _applicantId);
+                        cmd2.ExecuteNonQuery();
+                    }
+
+                    MessageBox.Show("Status updated successfully!", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Database Error: {ex.Message}");
+            }
+        }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+    }
+}
