@@ -14,6 +14,35 @@ namespace ApplicantRegistration
             InitializeComponent();
         }
 
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+
+            int formWidth = this.ClientSize.Width;
+            int panelWidth = 580;
+            int centeredX = (formWidth - panelWidth) / 2;
+
+            if (pnlPersonal != null)
+            {
+                pnlPersonal.Left = centeredX;
+                lblTitle.Left = centeredX + (panelWidth / 2) - (lblTitle.Width / 2);
+                lblPersonalInfo.Left = centeredX + (panelWidth / 2) - (lblPersonalInfo.Width / 2);
+            }
+
+            if (pnlAccount != null)
+            {
+                pnlAccount.Left = centeredX;
+                pnlSeparator.Left = centeredX;
+            }
+        }
+
+        private void chkShowPassword_CheckedChanged(object sender, EventArgs e)
+        {
+            char mask = chkShowPassword.Checked ? '\0' : '*';
+            txtPassword.PasswordChar = mask;
+            txtConfirmPassword.PasswordChar = mask;
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             string firstName = txtFirstName.Text.Trim();
@@ -104,16 +133,6 @@ namespace ApplicantRegistration
             ApplicantLogin loginForm = new ApplicantLogin();
             loginForm.Show();
             this.Hide();
-        }
-
-        private void lblDateOfBirth_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void ApplicantRegistration_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }
