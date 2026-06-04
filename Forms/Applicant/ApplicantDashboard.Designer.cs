@@ -17,7 +17,7 @@
         {
             pnlHeader = new Panel();
             lblLogo = new Label();
-            btnLogout = new Button();
+            btnProfileMenu = new Button();
             pnlSidebar = new Panel();
             pnlSidebarBottom = new Panel();
             btnMyDocuments = new Button();
@@ -39,7 +39,7 @@
             pnlHeader.BackColor = Color.White;
             pnlHeader.BorderStyle = BorderStyle.FixedSingle;
             pnlHeader.Controls.Add(lblLogo);
-            pnlHeader.Controls.Add(btnLogout);
+            pnlHeader.Controls.Add(btnProfileMenu);
             pnlHeader.Dock = DockStyle.Top;
             pnlHeader.ForeColor = SystemColors.Highlight;
             pnlHeader.Location = new Point(0, 0);
@@ -59,22 +59,23 @@
             lblLogo.TabIndex = 0;
             lblLogo.Text = "Applicant Portal";
             // 
-            // btnLogout
+            // btnProfileMenu
             // 
-            btnLogout.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnLogout.BackColor = Color.FromArgb(245, 245, 245);
-            btnLogout.Cursor = Cursors.Hand;
-            btnLogout.FlatAppearance.BorderColor = Color.FromArgb(220, 220, 220);
-            btnLogout.FlatStyle = FlatStyle.Flat;
-            btnLogout.Font = new Font("Segoe UI", 9F);
-            btnLogout.ForeColor = Color.FromArgb(60, 60, 60);
-            btnLogout.Location = new Point(1153, 18);
-            btnLogout.Name = "btnLogout";
-            btnLogout.Size = new Size(90, 30);
-            btnLogout.TabIndex = 1;
-            btnLogout.Text = "Logout";
-            btnLogout.UseVisualStyleBackColor = false;
-            btnLogout.Click += btnLogout_Click;
+            btnProfileMenu.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnProfileMenu.BackColor = Color.FromArgb(245, 245, 245);
+            btnProfileMenu.Cursor = Cursors.Hand;
+            btnProfileMenu.FlatAppearance.BorderColor = Color.FromArgb(220, 220, 220);
+            btnProfileMenu.FlatStyle = FlatStyle.Flat;
+            btnProfileMenu.Font = new Font("Segoe UI", 9F);
+            btnProfileMenu.ForeColor = Color.FromArgb(60, 60, 60);
+            btnProfileMenu.Location = new Point(1090, 18);
+            btnProfileMenu.Name = "btnProfileMenu";
+            btnProfileMenu.Size = new Size(160, 30);
+            btnProfileMenu.TabIndex = 1;
+            btnProfileMenu.Text = "Account  v";
+            btnProfileMenu.TextAlign = ContentAlignment.MiddleCenter;
+            btnProfileMenu.UseVisualStyleBackColor = false;
+            btnProfileMenu.Click += btnProfileMenu_Click;
             // 
             // pnlSidebar
             // 
@@ -257,7 +258,7 @@
 
         private Panel pnlHeader;
         private Label lblLogo;
-        private Button btnLogout;
+        private Button btnProfileMenu;
         private Panel pnlSidebar;
         private Button btnHome;
         private Button btnAppStatus;

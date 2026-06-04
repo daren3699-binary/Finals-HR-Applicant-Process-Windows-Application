@@ -38,6 +38,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                 object result = cmd.ExecuteScalar();
                 _applicantName = result != null ? result.ToString() : "User";
                 lblWelcome.Text = "Hello, " + _applicantName + "!";
+                btnProfileMenu.Text = _applicantName + "  v";
 
                 conn.Close();
             }
@@ -98,7 +99,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             }
             catch { }
 
-            // Welcome heading
             Label lblHello = new Label();
             lblHello.AutoSize = true;
             lblHello.Font = new Font("Segoe UI", 22F, FontStyle.Bold);
@@ -118,7 +118,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             pnlLine.Location = new Point(40, 118);
             pnlLine.Size = new Size(1000, 1);
 
-            // Row 1 cards -- Status, Date Applied, Position
             Color statusColor = appStatus == "Approved" ? Color.FromArgb(92, 184, 92)
                               : appStatus == "Rejected" ? Color.FromArgb(217, 83, 79)
                               : Color.FromArgb(255, 193, 7);
@@ -127,7 +126,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             Panel cardDate = MakeCard("Date Applied", dateApplied, Color.FromArgb(70, 130, 180), 310, 135);
             Panel cardPosition = MakeCard("Position Applied", position, Color.FromArgb(111, 66, 193), 580, 135);
 
-            // Row 2 cards -- Missing Requirements, Interview Schedule
             Color missingColor = missingReqs == "None" ? Color.FromArgb(92, 184, 92) : Color.FromArgb(217, 83, 79);
             Panel cardMissing = MakeCard("Missing Requirements", missingReqs, missingColor, 40, 285);
 
@@ -138,7 +136,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             Color interviewColor = interviewDate == "Not scheduled" ? Color.FromArgb(150, 150, 150) : Color.FromArgb(23, 162, 184);
             Panel cardInterview = MakeTallCard("Interview Schedule", interviewDisplay, interviewColor, 310, 285);
 
-            // Recent Activity
             Label lblActivity = new Label();
             lblActivity.AutoSize = true;
             lblActivity.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
@@ -171,7 +168,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             pnlActivity.Controls.Add(lblActivityNote);
             pnlActivity.Controls.Add(lblActivityNote2);
 
-            // Quick Actions
             Label lblActions = new Label();
             lblActions.AutoSize = true;
             lblActions.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
@@ -343,15 +339,36 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             pnlContent.Controls.Add(lbl);
         }
 
-        private void btnLogout_Click(object sender, EventArgs e)
+        private void btnProfileMenu_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you want to logout?", "Logout", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (result == DialogResult.Yes)
+            ContextMenuStrip menu = new ContextMenuStrip();
+            menu.Font = new Font("Segoe UI", 10F);
+
+            ToolStripMenuItem itemProfile = new ToolStripMenuItem("My Profile");
+            itemProfile.Click += (s, ev) =>
             {
-                ApplicantLogin loginForm = new ApplicantLogin();
-                loginForm.Show();
-                this.Close();
-            }
+                MyProfile profileForm = new MyProfile(_applicantAccountID);
+                profileForm.ShowDialog();
+            };
+
+            ToolStripMenuItem itemLogout = new ToolStripMenuItem("Logout");
+            itemLogout.ForeColor = Color.FromArgb(180, 50, 50);
+            itemLogout.Click += (s, ev) =>
+            {
+                DialogResult result = MessageBox.Show("Are you sure you want to logout?", "Logout", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    ApplicantLogin loginForm = new ApplicantLogin();
+                    loginForm.Show();
+                    this.Close();
+                }
+            };
+
+            menu.Items.Add(itemProfile);
+            menu.Items.Add(new ToolStripSeparator());
+            menu.Items.Add(itemLogout);
+
+            menu.Show(btnProfileMenu, new Point(0, btnProfileMenu.Height));
         }
 
         private void lblSubWelcome_Click(object sender, EventArgs e)
