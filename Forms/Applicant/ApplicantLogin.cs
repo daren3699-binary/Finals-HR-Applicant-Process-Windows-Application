@@ -18,6 +18,28 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             InitializeComponent();
         }
 
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            if (panel1 != null)
+            {
+                panel1.Location = new Point(
+                    (this.ClientSize.Width - panel1.Width) / 2,
+                    (this.ClientSize.Height - panel1.Height) / 2
+                );
+            }
+        }
+
+        private void chkShowPassword_CheckedChanged(object sender, EventArgs e)
+        {
+            txtPassword.PasswordChar = chkShowPassword.Checked ? '\0' : '*';
+        }
+
+        private void lnkForgotPassword_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            MessageBox.Show("Please contact HR to reset your password.", "Forgot Password", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
         private void btnLogin_Click(object sender, EventArgs e)
         {
             string email = txtEmail.Text.Trim();
@@ -41,7 +63,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                     using (var cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@Email", email);
-                        cmd.Parameters.AddWithValue("@Password", password); // In production, use hashed passwords
+                        cmd.Parameters.AddWithValue("@Password", password);
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -66,7 +88,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                             {
                                 MessageBox.Show("Invalid email or password. Please try again.", "Login Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
-
                         }
                     }
                 }

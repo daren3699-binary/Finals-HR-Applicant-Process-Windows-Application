@@ -105,5 +105,15 @@ namespace ApplicantRegistration
             loginForm.Show();
             this.Hide();
         }
+
+        private void lblDateOfBirth_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ApplicantRegistration_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
