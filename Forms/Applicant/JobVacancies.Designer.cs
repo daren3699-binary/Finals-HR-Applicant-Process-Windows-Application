@@ -2,15 +2,8 @@
 {
     partial class JobVacancies
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,20 +13,61 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "JobVacancies";
+            lblTitle = new Label();
+            txtSearch = new TextBox();
+            btnSearch = new Button();
+            flpJobsContainer = new FlowLayoutPanel();
+            SuspendLayout();
+
+            // lblTitle
+            lblTitle.AutoSize = true;
+            lblTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            lblTitle.Location = new System.Drawing.Point(40, 40);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new System.Drawing.Size(298, 41);
+            lblTitle.Text = "Available Vacancies";
+
+            // txtSearch
+            txtSearch.Font = new Font("Segoe UI", 10F);
+            txtSearch.Location = new System.Drawing.Point(40, 100);
+            txtSearch.Name = "txtSearch";
+            txtSearch.Size = new System.Drawing.Size(350, 30);
+
+            // btnSearch
+            btnSearch.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnSearch.Location = new System.Drawing.Point(405, 99);
+            btnSearch.Name = "btnSearch";
+            btnSearch.Size = new System.Drawing.Size(100, 32);
+            btnSearch.Text = "Search";
+            btnSearch.UseVisualStyleBackColor = true;
+            btnSearch.Click += btnSearch_Click;
+
+            // flpJobsContainer
+            flpJobsContainer.AutoScroll = true;
+            flpJobsContainer.Location = new System.Drawing.Point(40, 150);
+            flpJobsContainer.Name = "flpJobsContainer";
+            flpJobsContainer.Size = new System.Drawing.Size(980, 520);
+
+            // JobVacancies Configuration
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(247, 248, 250);
+            Controls.Add(lblTitle);
+            Controls.Add(txtSearch);
+            Controls.Add(btnSearch);
+            Controls.Add(flpJobsContainer);
+            Name = "JobVacancies";
+            Size = new System.Drawing.Size(1060, 715);
+            Load += JobVacancies_Load;
+            ResumeLayout(false);
+            PerformLayout();
         }
 
-        #endregion
+        private Label lblTitle;
+        private TextBox txtSearch;
+        private Button btnSearch;
+        private FlowLayoutPanel flpJobsContainer;
     }
 }
