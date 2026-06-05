@@ -78,6 +78,12 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                                 }
 
                                 int accountID = reader.GetInt32("ApplicantAccountID");
+
+                                if (chkKeepSignedIn.Checked)
+                                    SessionManager.SaveSession(accountID);
+                                else
+                                    SessionManager.ClearSession();
+
                                 MessageBox.Show("Login successful! Welcome.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                                 ApplicantDashboard dashboard = new ApplicantDashboard(accountID);
