@@ -1,4 +1,5 @@
-using FinalsHRApplicantProcessWindowsApplication.Forms;
+using System;
+using System.Windows.Forms;
 
 namespace FinalsHRApplicantProcessWindowsApplication
 {
@@ -7,10 +8,17 @@ namespace FinalsHRApplicantProcessWindowsApplication
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
             ApplicationConfiguration.Initialize();
-            Application.Run(new MainMenu());  
+
+            int savedID = SessionManager.LoadSession();
+            if (savedID != -1)
+            {
+                Application.Run(new Forms.Applicant.ApplicantDashboard(savedID));
+            }
+            else
+            {
+                Application.Run(new Forms.Applicant.ApplicantLogin());
+            }
         }
     }
 }
