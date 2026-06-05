@@ -1,5 +1,6 @@
 using FinalsHRApplicantProcessWindowsApplication.Forms.Applicant;
 using MySql.Data.MySqlClient;
+using FinalsHRApplicantProcessWindowsApplication.Database;
 using System;
 using System.Windows.Forms;
 
@@ -7,7 +8,7 @@ namespace ApplicantRegistration
 {
     public partial class ApplicantRegistration : Form
     {
-        string connectionString = "Server=localhost;Database=hr_applicant_db;Uid=root;Pwd=;";
+        // Remove the hardcoded connectionString field entirely
 
         public ApplicantRegistration()
         {
@@ -92,7 +93,7 @@ namespace ApplicantRegistration
 
             try
             {
-                MySqlConnection conn = new MySqlConnection(connectionString);
+                MySqlConnection conn = DBConnection.GetConnection();
                 conn.Open();
 
                 string checkQuery = "SELECT COUNT(*) FROM ApplicantAccounts WHERE Email = @email";
