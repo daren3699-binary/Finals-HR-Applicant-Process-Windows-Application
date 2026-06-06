@@ -7,7 +7,9 @@ namespace FinalsHRApplicantProcessWindowsApplication.Models
         public int ApplicationID { get; set; }
         public int ApplicantID { get; set; }
         public int JobVacancyID { get; set; }
-        public DateTime ApplicationDate { get; set; }
         public string Status { get; set; }
+        public string SubmmitedAt { get; set; }
+        public string CreatedAt { get; set; }
+
     }
 }
