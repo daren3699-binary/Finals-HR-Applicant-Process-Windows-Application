@@ -3,13 +3,13 @@ using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
+using FinalsHRApplicantProcessWindowsApplication.Database;
 
 namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 {
     public partial class JobVacancies : UserControl
     {
         private int _applicantAccountID;
-        private string connectionString = "Server=localhost;Database=hr_applicant_db;Uid=root;Pwd=;";
 
         public JobVacancies()
         {
@@ -38,11 +38,10 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = DBConnection.GetConnection())
                 {
                     conn.Open();
 
-                    // Capstone Requirement: Only pull active/open jobs from 'JobVacancies' table
                     string query = "SELECT JobID, JobTitle, Qualifications FROM JobVacancies WHERE Status = 'Open'";
                     if (!string.IsNullOrEmpty(searchFilter))
                     {
@@ -132,11 +131,10 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = DBConnection.GetConnection())
                 {
                     conn.Open();
 
-                    // Business Rule: Prevent duplicate applications by same applicant for same job vacancy
                     string checkQuery = "SELECT COUNT(*) FROM Applications WHERE ApplicantAccountID = @uid AND JobID = @jid";
                     using (MySqlCommand checkCmd = new MySqlCommand(checkQuery, conn))
                     {
@@ -151,7 +149,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                         }
                     }
 
-                    // Business Rule: Map entry initialization sets state flag value explicitly to 'Submitted'
                     string insertQuery = "INSERT INTO Applications (ApplicantAccountID, JobID, Status, DateApplied) " +
                                          "VALUES (@uid, @jid, 'Submitted', @date); SELECT LAST_INSERT_ID();";
 
@@ -165,7 +162,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                         newApplicationId = Convert.ToInt32(insertCmd.ExecuteScalar());
                     }
 
-                    // Business Rule: Every status change must create a record in ApplicationStatusHistory
                     string historyQuery = "INSERT INTO ApplicationStatusHistory (ApplicationID, Status, ChangeDate, Remarks) " +
                                           "VALUES (@appId, 'Submitted', @date, 'Application submitted by user.')";
                     using (MySqlCommand historyCmd = new MySqlCommand(historyQuery, conn))

@@ -1,7 +1,8 @@
-﻿using System;
+﻿using FinalsHRApplicantProcessWindowsApplication.Database;
+using MySql.Data.MySqlClient;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
 
 namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 {
@@ -9,7 +10,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
     {
         private int _applicantAccountID;
         private string _applicantName;
-        private string connectionString = "Server=localhost;Database=hr_applicant_db;Uid=root;Pwd=;";
 
         public ApplicantDashboard()
         {
@@ -55,11 +55,12 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = DBConnection.GetConnection())
                 {
                     conn.Open();
 
-                    string nameQuery = "SELECT FirstName FROM Applicants WHERE ApplicantAccountID = @uid"; using (MySqlCommand nameCmd = new MySqlCommand(nameQuery, conn))
+                    string nameQuery = "SELECT FirstName FROM Applicants WHERE ApplicantAccountID = @uid";
+                    using (MySqlCommand nameCmd = new MySqlCommand(nameQuery, conn))
                     {
                         nameCmd.Parameters.AddWithValue("@uid", _applicantAccountID);
                         object nameResult = nameCmd.ExecuteScalar();

@@ -2,13 +2,13 @@
 using System.Drawing;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
+using FinalsHRApplicantProcessWindowsApplication.Database;
 
 namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 {
     public partial class ApplicationStatus : UserControl
     {
         private int _applicantAccountID;
-        private string connectionString = "Server=localhost;Database=hr_applicant_db;Uid=root;Pwd=;";
 
         public ApplicationStatus()
         {
@@ -26,7 +26,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = DBConnection.GetConnection())
                 {
                     conn.Open();
 
@@ -47,11 +47,9 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                                 DateTime dateApplied = reader.GetDateTime("DateApplied");
                                 string jobTitle = reader.GetString("JobTitle");
 
-                                // Step 1 always green if there is an application
                                 pnlStatus1.BackColor = Color.FromArgb(92, 184, 92);
                                 lblStep1Desc.Text = "Submitted on " + dateApplied.ToString("MMMM dd, yyyy") + " for " + jobTitle + ".";
 
-                                // Step 2
                                 if (status == "Under Review" || status == "Accepted" || status == "Rejected")
                                 {
                                     pnlStatus2.BackColor = Color.FromArgb(92, 184, 92);
@@ -63,7 +61,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                                     lblStep2Desc.Text = "Human Resources is currently evaluating your qualifications.";
                                 }
 
-                                // Step 3
                                 if (status == "Accepted")
                                 {
                                     pnlStatus3.BackColor = Color.FromArgb(92, 184, 92);
@@ -84,7 +81,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                             }
                             else
                             {
-                                // No application at all
                                 pnlStatus1.BackColor = Color.FromArgb(220, 220, 220);
                                 pnlStatus2.BackColor = Color.FromArgb(220, 220, 220);
                                 pnlStatus3.BackColor = Color.FromArgb(220, 220, 220);

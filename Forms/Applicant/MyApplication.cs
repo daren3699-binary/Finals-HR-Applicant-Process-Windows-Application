@@ -1,16 +1,14 @@
 ﻿using MySql.Data.MySqlClient;
-using Org.BouncyCastle.Asn1.Cmp;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using FinalsHRApplicantProcessWindowsApplication.Database;
 
 namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 {
     public partial class MyApplication : UserControl
     {
         private int _applicantAccountID;
-        private string connectionString = "Server=localhost;Database=hr_applicant_db;Uid=root;Pwd=;";
-
         private int _applicationID = -1;
         private string _currentStatus = "";
 
@@ -30,7 +28,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = DBConnection.GetConnection())
                 {
                     conn.Open();
 
@@ -143,7 +141,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = DBConnection.GetConnection())
                 {
                     conn.Open();
 
