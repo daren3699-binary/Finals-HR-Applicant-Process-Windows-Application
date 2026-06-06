@@ -1,4 +1,7 @@
-﻿namespace FinalsHRApplicantProcessWindowsApplication.Models
+﻿using System;
+
+namespace FinalsHRApplicantProcessWindowsApplication.Models
+
 {
     public class JobVacancyModel
     {

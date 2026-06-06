@@ -65,5 +65,11 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
             ApplicantList list = new ApplicantList();
             list.Show();
         }
+
+        private void btnReports_Click(object sender, EventArgs e)
+        {
+            Reports reports = new Reports();
+            reports.Show();
+        }
     }
 }
