@@ -34,6 +34,7 @@
             lblInterviews = new Label();
             btnApplicantList = new Button();
             btnLogout = new Button();
+            btnReports = new Button();
             SuspendLayout();
             // 
             // lblWelcome
@@ -49,7 +50,7 @@
             // lblTotalApplicants
             // 
             lblTotalApplicants.AutoSize = true;
-            lblTotalApplicants.Location = new Point(77, 94);
+            lblTotalApplicants.Location = new Point(54, 120);
             lblTotalApplicants.Name = "lblTotalApplicants";
             lblTotalApplicants.Size = new Size(131, 20);
             lblTotalApplicants.TabIndex = 1;
@@ -58,7 +59,7 @@
             // lblPending
             // 
             lblPending.AutoSize = true;
-            lblPending.Location = new Point(77, 175);
+            lblPending.Location = new Point(54, 189);
             lblPending.Name = "lblPending";
             lblPending.Size = new Size(128, 20);
             lblPending.TabIndex = 2;
@@ -67,7 +68,7 @@
             // lblInterviews
             // 
             lblInterviews.AutoSize = true;
-            lblInterviews.Location = new Point(77, 253);
+            lblInterviews.Location = new Point(54, 258);
             lblInterviews.Name = "lblInterviews";
             lblInterviews.Size = new Size(163, 20);
             lblInterviews.TabIndex = 3;
@@ -75,9 +76,9 @@
             // 
             // btnApplicantList
             // 
-            btnApplicantList.Location = new Point(282, 318);
+            btnApplicantList.Location = new Point(543, 67);
             btnApplicantList.Name = "btnApplicantList";
-            btnApplicantList.Size = new Size(156, 29);
+            btnApplicantList.Size = new Size(153, 29);
             btnApplicantList.TabIndex = 4;
             btnApplicantList.Text = "View Applicants";
             btnApplicantList.UseVisualStyleBackColor = true;
@@ -85,19 +86,30 @@
             // 
             // btnLogout
             // 
-            btnLogout.Location = new Point(282, 363);
+            btnLogout.Location = new Point(554, 364);
             btnLogout.Name = "btnLogout";
-            btnLogout.Size = new Size(156, 29);
+            btnLogout.Size = new Size(104, 29);
             btnLogout.TabIndex = 5;
             btnLogout.Text = "Logout";
             btnLogout.UseVisualStyleBackColor = true;
             btnLogout.Click += btnLogout_Click;
+            // 
+            // btnReports
+            // 
+            btnReports.Location = new Point(543, 32);
+            btnReports.Name = "btnReports";
+            btnReports.Size = new Size(153, 29);
+            btnReports.TabIndex = 6;
+            btnReports.Text = "View Reports";
+            btnReports.UseVisualStyleBackColor = true;
+            btnReports.Click += btnReports_Click;
             // 
             // HRDashboard
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(718, 421);
+            Controls.Add(btnReports);
             Controls.Add(btnLogout);
             Controls.Add(btnApplicantList);
             Controls.Add(lblInterviews);
@@ -119,5 +131,6 @@
         private Label lblInterviews;
         private Button btnApplicantList;
         private Button btnLogout;
+        private Button btnReports;
     }
 }
