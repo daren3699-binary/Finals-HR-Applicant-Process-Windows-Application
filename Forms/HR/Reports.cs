@@ -38,9 +38,8 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
                                      JOIN JobVacancies j ON ap.JobVacancyID = j.JobVacancyID";
 
                     // adding WHERE clause only if a filter was selected 
-                    if (!string.IsNullOrEmpty(statusFilter)) query += "WHERE ap.Status = @status";
-
-                    query += "ORDER BY ap.SubmittedAt DESC";
+                    if (!string.IsNullOrEmpty(statusFilter)) query += " WHERE ap.Status = @status";
+                    query += " ORDER BY ap.SubmittedAt DESC";
 
                     using (var cmd = new MySqlCommand(query, conn))
                     {
@@ -97,10 +96,11 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
                     if (row.IsNewRow) continue;
                     foreach (DataGridViewCell cell in row.Cells) sb.Append(cell.Value?.ToString() + ",");
                     sb.AppendLine();
-
-                    File.WriteAllText(saveDialog.FileName, sb.ToString());
-                    MessageBox.Show("Exported successfully!", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+
+                File.WriteAllText(saveDialog.FileName, sb.ToString());
+                MessageBox.Show("Exported successfully!", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                
             }
         }
     }

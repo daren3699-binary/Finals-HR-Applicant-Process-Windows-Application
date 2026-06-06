@@ -154,3 +154,42 @@ INSERT INTO Roles (RoleName) VALUES ('Admin'), ('HR Manager'), ('HR Staff');
 INSERT INTO Departments (DepartmentName) VALUES ('Human Resources'), ('IT'), ('Finance'), ('Operations');
 INSERT INTO RequirementTypes (RequirementName) VALUES ('Resume'), ('Valid ID'), ('Transcript of Records'), ('Certificate of Employment'), ('NBI Clearance');
 INSERT INTO Users (Username, PasswordHash, RoleID) VALUES ('admin', 'admin123', 1), ('hrmanager', 'hr123', 2), ('hrstaff', 'staff123', 3);
+
+use hr_applicant_db;
+-- Alter ApplicantAccounts to support registration fields
+ALTER TABLE ApplicantAccounts
+ADD COLUMN FirstName VARCHAR(100) NULL AFTER PasswordHash,
+ADD COLUMN Surname VARCHAR(100) NULL AFTER FirstName,
+ADD COLUMN MiddleInitial VARCHAR(10) NULL AFTER Surname,
+ADD COLUMN DateOfBirth DATE NULL AFTER MiddleInitial,
+ADD COLUMN Sex VARCHAR(20) NULL AFTER DateOfBirth,
+ADD COLUMN ContactInfo VARCHAR(100) NULL AFTER Sex;
+
+-- Alter Applicants to support MyProfile fields
+USE hr_applicant_db;
+
+ALTER TABLE Applicants
+ADD COLUMN CivilStatus VARCHAR(30) NULL,
+ADD COLUMN Nationality VARCHAR(50) NULL,
+ADD COLUMN Phone VARCHAR(30) NULL,
+ADD COLUMN Street VARCHAR(200) NULL,
+ADD COLUMN Barangay VARCHAR(100) NULL,
+ADD COLUMN ZipCode VARCHAR(20) NULL,
+ADD COLUMN School VARCHAR(200) NULL,
+ADD COLUMN Degree VARCHAR(150) NULL,
+ADD COLUMN YearGraduated VARCHAR(10) NULL,
+ADD COLUMN Skills TEXT NULL,
+ADD COLUMN CompanyName VARCHAR(200) NULL,
+ADD COLUMN JobTitle VARCHAR(150) NULL,
+ADD COLUMN WorkFrom VARCHAR(20) NULL,
+ADD COLUMN WorkTo VARCHAR(20) NULL,
+ADD COLUMN WorkRemarks TEXT NULL;
+
+-- Fix: Add ApplicantAccountID to Applications for applicant-side queries
+use hr_applicant_db;
+ALTER TABLE Applications
+ADD COLUMN ApplicantAccountID INT NULL AFTER ApplicantID;
+-- other fixes 
+ALTER TABLE Applications
+ADD COLUMN JobID INT NULL AFTER ApplicantAccountID,
+ADD COLUMN DateApplied DATETIME NULL AFTER SubmittedAt;
