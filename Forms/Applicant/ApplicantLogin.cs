@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using ApplicantRegistration;
 using MySql.Data.MySqlClient;
 using FinalsHRApplicantProcessWindowsApplication.Database;
+using FinalsHRApplicantProcessWindowsApplication.Helpers;
 
 namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 {
