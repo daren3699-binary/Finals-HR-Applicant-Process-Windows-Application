@@ -37,6 +37,7 @@
             txtRemarks = new TextBox();
             btnSave = new Button();
             btnBack = new Button();
+            btnScreen = new Button();
             SuspendLayout();
             // 
             // lblTitle
@@ -104,17 +105,20 @@
             // 
             // btnSave
             // 
-            btnSave.Location = new Point(183, 350);
+            btnSave.BackColor = Color.SteelBlue;
+            btnSave.FlatStyle = FlatStyle.Flat;
+            btnSave.ForeColor = Color.White;
+            btnSave.Location = new Point(233, 357);
             btnSave.Name = "btnSave";
-            btnSave.Size = new Size(94, 29);
+            btnSave.Size = new Size(136, 29);
             btnSave.TabIndex = 7;
             btnSave.Text = "Save";
-            btnSave.UseVisualStyleBackColor = true;
+            btnSave.UseVisualStyleBackColor = false;
             btnSave.Click += btnSave_Click;
             // 
             // btnBack
             // 
-            btnBack.Location = new Point(183, 385);
+            btnBack.Location = new Point(24, 392);
             btnBack.Name = "btnBack";
             btnBack.Size = new Size(94, 29);
             btnBack.TabIndex = 8;
@@ -122,11 +126,22 @@
             btnBack.UseVisualStyleBackColor = true;
             btnBack.Click += btnBack_Click;
             // 
+            // btnScreen
+            // 
+            btnScreen.Location = new Point(233, 392);
+            btnScreen.Name = "btnScreen";
+            btnScreen.Size = new Size(136, 29);
+            btnScreen.TabIndex = 9;
+            btnScreen.Text = "Screen Applicant";
+            btnScreen.UseVisualStyleBackColor = true;
+            btnScreen.Click += btnScreen_Click;
+            // 
             // ApplicantReview
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(456, 442);
+            Controls.Add(btnScreen);
             Controls.Add(btnBack);
             Controls.Add(btnSave);
             Controls.Add(txtRemarks);
@@ -154,5 +169,6 @@
         private TextBox txtRemarks;
         private Button btnSave;
         private Button btnBack;
+        private Button btnScreen;
     }
 }
