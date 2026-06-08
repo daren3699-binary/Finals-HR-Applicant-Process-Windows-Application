@@ -53,7 +53,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
                                 string status = reader["Status"]?.ToString() ?? "Submitted";
                                 cmbStatus.SelectedItem = status;
 
-                                _applicationID = reader["ApplicationID"] != DBNull.Value? Convert.ToInt32(reader["ApplicationID"]) : 0;
+                                _applicationID = reader["ApplicationID"] != DBNull.Value ? Convert.ToInt32(reader["ApplicationID"]) : 0;
                             }
                         }
                     }
@@ -130,6 +130,24 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
             }
             Screening screen = new Screening(_applicationID);
             screen.ShowDialog();
+        }
+
+        private void btnSchedule_Click(object sender, EventArgs e)
+        {
+            if (_applicationID == 0) { MessageBox.Show("No application found."); return; }
+            new InterviewSchedule(_applicationID).ShowDialog();
+        }
+
+        private void btnEvaluate_Click(object sender, EventArgs e)
+        {
+            if (_applicationID == 0) { MessageBox.Show("No application found."); return; }
+            new InterviewEvaluation(_applicationID).ShowDialog();
+        }
+
+        private void btnDecide_Click(object sender, EventArgs e)
+        {
+            if (_applicationID == 0) { MessageBox.Show("No application found."); return; }
+            new HiringDecision(_applicationID).ShowDialog();
         }
     }
 }

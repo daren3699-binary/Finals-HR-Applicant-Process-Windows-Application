@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 using FinalsHRApplicantProcessWindowsApplication.Database;
 using FinalsHRApplicantProcessWindowsApplication.Helpers;
@@ -14,34 +15,122 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
         {
             InitializeComponent();
             _applicationID = applicationID;
+            btnSave.Click += btnSave_Click;
+            btnBack.Click += btnBack_Click;
+            Load += HiringDecision_Load;
         }
 
         private void HiringDecision_Load(object sender, EventArgs e)
         {
-            // TODO: Load applicant profile
-            // TODO: Load interview evaluation results
+            LoadApplicantInfo();
+            CheckRoleAccess();
         }
 
-        private void btnApprove_Click(object sender, EventArgs e)
+        private void LoadApplicantInfo()
         {
-            // TODO: Validate hiring decision requirements
-            // TODO: Update application status to 'Hired'
-            // TODO: Create employee record if required
-            // TODO: Log status change into ApplicationStatusHistory
-            // TODO: Notify applicant of hiring result
+            try
+            {
+                using (var conn = DBConnection.GetConnection())
+                {
+                    conn.Open();
+                    string query = @"SELECT a.FirstName, a.LastName
+                                     FROM Applications ap
+                                     JOIN Applicants a ON ap.ApplicantID = a.ApplicantID
+                                     WHERE ap.ApplicationID = @id";
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", _applicationID);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                lblApplicant.Text = $"Applicant: {reader["FirstName"]} {reader["LastName"]}";
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex) { MessageBox.Show($"Error: {ex.Message}"); }
         }
 
-        private void btnReject_Click(object sender, EventArgs e)
+        private void CheckRoleAccess()
         {
-            // TODO: Validate rejection remarks
-            // TODO: Update application status to 'Rejected'
-            // TODO: Log status change into ApplicationStatusHistory
-            // TODO: Notify applicant of rejection result
+            bool canAccept = Session.CurrentRole == "HR Manager" || Session.CurrentRole == "Admin";
+            if (!canAccept)
+            {
+                cmbDecision.Items.Remove("Accepted");
+                lblWarning.Text = "⚠ You do not have permission to accept applicants.";
+                lblWarning.ForeColor = Color.Red;
+            }
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void btnSave_Click(object sender, EventArgs e)
         {
-            // TODO: Close form without saving decision
+            if (cmbDecision.SelectedItem == null)
+            {
+                MessageBox.Show("Please select a decision.", "Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string decision = cmbDecision.SelectedItem.ToString();
+            // backend guard, double checks even if dropdown was manipulated
+            if (decision == "Accepted" && Session.CurrentRole != "HR Manager" && Session.CurrentRole != "Admin")
+            {
+                MessageBox.Show("Only HR Manager or Admin can accept applicants.", "Access denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // "on-hold" display in Database
+            string newStatus = decision == "Accepted" ? "Accepted" :
+                               decision == "Rejected" ? "Rejected" : "On Hold";
+
+            try
+            {
+                using (var conn = DBConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    string insertQuery = @"INSERT INTO HiringDecisions
+                                          (ApplicationID, Decision, Remarks, DecidedBy)
+                                          VALUES (@appId, @decision, @remarks, @by)";
+                    using (var cmd = new MySqlCommand(insertQuery, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@appID", _applicationID);
+                        cmd.Parameters.AddWithValue("@decision", newStatus);
+                        cmd.Parameters.AddWithValue("@remarks", txtRemarks.Text.Trim());
+                        cmd.Parameters.AddWithValue("@by", Session.CurrentUserId);
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    string updateQuery = "UPDATE Applications SET Status=@status WHERE ApplicationID=@id";
+                    using (var cmd = new MySqlCommand(updateQuery, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@status", newStatus);
+                        cmd.Parameters.AddWithValue("@id", _applicationID);
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    string historyQuery = @"INSERT INTO ApplicationStatusHistory
+                                           (ApplicationID, Status, Remarks, ChangedBy)
+                                           VALUES (@id, @status, @remarks, @by)";
+                    using (var cmd = new MySqlCommand(historyQuery, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", _applicationID);
+                        cmd.Parameters.AddWithValue("@status", newStatus);
+                        cmd.Parameters.AddWithValue("@remarks", txtRemarks.Text.Trim());
+                        cmd.Parameters.AddWithValue("@by", Session.CurrentUsername);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                MessageBox.Show($"Decision saved: {newStatus}", "Saved");
+                this.Close();
+            }
+            catch (Exception ex) { MessageBox.Show($"Error: {ex.Message}"); }
+        }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
