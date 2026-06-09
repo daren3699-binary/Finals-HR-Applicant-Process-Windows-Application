@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using FinalsHRApplicantProcessWindowsApplication.Helpers;
 
 namespace FinalsHRApplicantProcessWindowsApplication
 {
@@ -9,16 +10,7 @@ namespace FinalsHRApplicantProcessWindowsApplication
         static void Main()
         {
             ApplicationConfiguration.Initialize();
-
-            int savedID = SessionManager.LoadSession();
-            if (savedID != -1)
-            {
-                Application.Run(new Forms.Applicant.ApplicantDashboard(savedID));
-            }
-            else
-            {
-                Application.Run(new Forms.Applicant.ApplicantLogin());
-            }
+            Application.Run(new MainMenu());
         }
     }
 }

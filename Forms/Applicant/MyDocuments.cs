@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using FinalsHRApplicantProcessWindowsApplication.Database;
 using MySql.Data.MySqlClient;
 
 namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
@@ -11,8 +12,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
         private int _applicationID;
         private bool _editingAllowed = true;
         private string _selectedFilePath = "";
-
-        string connectionString = "Server=localhost;Database=hr_applicant_db;Uid=root;Pwd=root;";
 
         public MyDocuments(int applicantAccountID)
         {
@@ -37,7 +36,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                              ORDER BY DateApplied DESC LIMIT 1";
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (var conn = DBConnection.GetConnection())
                 {
                     conn.Open();
                     MySqlCommand cmd = new MySqlCommand(query, conn);
@@ -55,7 +54,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             string query = "SELECT RequirementTypeID, RequirementName FROM RequirementTypes ORDER BY RequirementName";
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (var conn = DBConnection.GetConnection())
                 {
                     conn.Open();
                     MySqlCommand cmd = new MySqlCommand(query, conn);
@@ -91,7 +90,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             string query = "SELECT Status FROM Applications WHERE ApplicationID = @AppID";
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (var conn = DBConnection.GetConnection())
                 {
                     conn.Open();
                     MySqlCommand cmd = new MySqlCommand(query, conn);
@@ -141,7 +140,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (var conn = DBConnection.GetConnection())
                 {
                     conn.Open();
                     MySqlCommand cmd = new MySqlCommand(query, conn);
@@ -221,7 +220,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                                 (@AppID, @TypeID, @FilePath, 'Submitted', NOW())";
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (var conn = DBConnection.GetConnection())
                 {
                     conn.Open();
                     MySqlCommand cmd = new MySqlCommand(query, conn);
@@ -268,7 +267,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                              WHERE ApplicationID = @AppID AND RequirementTypeID = @TypeID";
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (var conn = DBConnection.GetConnection())
                 {
                     conn.Open();
                     MySqlCommand cmd = new MySqlCommand(query, conn);
@@ -328,7 +327,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                              WHERE ApplicationID = @AppID AND RequirementTypeID = @TypeID";
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (var conn = DBConnection.GetConnection())
                 {
                     conn.Open();
                     MySqlCommand cmd = new MySqlCommand(query, conn);

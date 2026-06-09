@@ -1,8 +1,12 @@
-﻿using FinalsHRApplicantProcessWindowsApplication.Database;
-using MySql.Data.MySqlClient;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+<<<<<<< HEAD
+=======
+using FinalsHRApplicantProcessWindowsApplication.Helpers;
+using FinalsHRApplicantProcessWindowsApplication.Database;
+using MySql.Data.MySqlClient;
+>>>>>>> 98e7a5106b7988c15022176cad42018b8410658d
 
 namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 {
