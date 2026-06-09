@@ -42,7 +42,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                 {
                     conn.Open();
 
-                    string query = "SELECT JobID, JobTitle, Qualifications FROM JobVacancies WHERE Status = 'Open'";
+                    string query = "SELECT JobVacancyID, JobTitle, Qualifications FROM JobVacancies WHERE Status = 'Open'";
                     if (!string.IsNullOrEmpty(searchFilter))
                     {
                         query += " AND (JobTitle LIKE @search OR Qualifications LIKE @search)";
@@ -59,7 +59,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                         {
                             while (reader.Read())
                             {
-                                int jobId = reader.GetInt32("JobID");
+                                int jobId = reader.GetInt32("JobVacancyID");
                                 string title = reader.GetString("JobTitle");
                                 string qualifications = reader.GetString("Qualifications");
 

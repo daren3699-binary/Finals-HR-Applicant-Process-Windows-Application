@@ -34,7 +34,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 
                     string query = @"SELECT a.ApplicationID, a.Status, a.DateApplied, j.JobTitle, j.Qualifications
                                      FROM Applications a
-                                     JOIN JobVacancies j ON a.JobID = j.JobID
+                                     JOIN JobVacancies j ON a.JobID = j.JobVacancyID
                                      WHERE a.ApplicantAccountID = @uid
                                      ORDER BY a.DateApplied DESC LIMIT 1";
 

@@ -12,7 +12,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
         private bool _editingAllowed = true;
         private string _selectedFilePath = "";
 
-        string connectionString = "Server=localhost;Database=hr_applicant_db;Uid=root;Pwd=;";
+        string connectionString = "Server=localhost;Database=hr_applicant_db;Uid=root;Pwd=root;";
 
         public MyDocuments(int applicantAccountID)
         {
@@ -30,9 +30,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             LoadDocuments();
         }
 
-        // ------------------------------------------------------------------
-        // Resolve the most recent ApplicationID for this applicant
-        // ------------------------------------------------------------------
         private void ResolveApplicationID()
         {
             string query = @"SELECT ApplicationID FROM Applications
@@ -52,13 +49,10 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             catch { _applicationID = 0; }
         }
 
-        // ------------------------------------------------------------------
-        // Populate Document Type dropdown from RequirementTypes table
-        // ------------------------------------------------------------------
         private void LoadDocumentTypes()
         {
             cmbDocumentType.Items.Clear();
-            string query = "SELECT RequirementTypeID, TypeName FROM RequirementTypes ORDER BY TypeName";
+            string query = "SELECT RequirementTypeID, RequirementName FROM RequirementTypes ORDER BY RequirementName";
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -71,7 +65,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                         {
                             cmbDocumentType.Items.Add(new ComboItem(
                                 reader.GetInt32("RequirementTypeID"),
-                                reader.GetString("TypeName")
+                                reader.GetString("RequirementName")
                             ));
                         }
                     }
@@ -84,9 +78,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             }
         }
 
-        // ------------------------------------------------------------------
-        // Check application status - lock controls if HR review has started
-        // ------------------------------------------------------------------
         private void CheckApplicationStatus()
         {
             if (_applicationID <= 0)
@@ -97,7 +88,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                 return;
             }
 
-            string query = "SELECT CurrentStatus FROM Applications WHERE ApplicationID = @AppID";
+            string query = "SELECT Status FROM Applications WHERE ApplicationID = @AppID";
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -133,21 +124,18 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             }
         }
 
-        // ------------------------------------------------------------------
-        // Load document grid
-        // ------------------------------------------------------------------
         private void LoadDocuments()
         {
             dgvDocuments.Rows.Clear();
 
             if (_applicationID <= 0) return;
 
-            string query = @"SELECT rt.TypeName, ad.FileName, ad.DocumentStatus,
-                                    ad.Remarks, ad.DateSubmitted
+            string query = @"SELECT rt.RequirementName, ad.FilePath, ad.Status,
+                                    ad.UploadedAt
                              FROM ApplicantDocuments ad
                              JOIN RequirementTypes rt ON ad.RequirementTypeID = rt.RequirementTypeID
                              WHERE ad.ApplicationID = @AppID
-                             ORDER BY rt.TypeName";
+                             ORDER BY rt.RequirementName";
 
             int submittedCount = 0;
 
@@ -163,16 +151,15 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                     {
                         while (reader.Read())
                         {
-                            string docStatus = reader.GetString("DocumentStatus");
-                            string remarks = reader.IsDBNull(reader.GetOrdinal("Remarks")) ? "" : reader.GetString("Remarks");
-                            string dateStr = reader.IsDBNull(reader.GetOrdinal("DateSubmitted")) ? ""
-                                : reader.GetDateTime("DateSubmitted").ToString("MM/dd/yyyy");
+                            string docStatus = reader.GetString("Status");
+                            string dateStr = reader.IsDBNull(reader.GetOrdinal("UploadedAt")) ? ""
+                                : reader.GetDateTime("UploadedAt").ToString("MM/dd/yyyy");
 
                             int rowIndex = dgvDocuments.Rows.Add(
-                                reader.GetString("TypeName"),
-                                reader.GetString("FileName"),
+                                reader.GetString("RequirementName"),
+                                reader.GetString("FilePath"),
                                 docStatus,
-                                remarks,
+                                "",
                                 dateStr
                             );
 
@@ -199,9 +186,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             }
         }
 
-        // ------------------------------------------------------------------
-        // Browse for a file
-        // ------------------------------------------------------------------
         private void btnBrowse_Click(object sender, EventArgs e)
         {
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
@@ -211,9 +195,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             }
         }
 
-        // ------------------------------------------------------------------
-        // Upload new document
-        // ------------------------------------------------------------------
         private void btnUpload_Click(object sender, EventArgs e)
         {
             if (!_editingAllowed)
@@ -234,11 +215,10 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                 return;
             }
 
-            string fileName = System.IO.Path.GetFileName(_selectedFilePath);
             string query = @"INSERT INTO ApplicantDocuments
-                                (ApplicationID, RequirementTypeID, FileName, FilePath, DocumentStatus, Remarks, DateSubmitted)
+                                (ApplicationID, RequirementTypeID, FilePath, Status, UploadedAt)
                              VALUES
-                                (@AppID, @TypeID, @FileName, @FilePath, 'Submitted', @Remarks, NOW())";
+                                (@AppID, @TypeID, @FilePath, 'Submitted', NOW())";
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -247,9 +227,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                     MySqlCommand cmd = new MySqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@AppID", _applicationID);
                     cmd.Parameters.AddWithValue("@TypeID", selectedType.Id);
-                    cmd.Parameters.AddWithValue("@FileName", fileName);
                     cmd.Parameters.AddWithValue("@FilePath", _selectedFilePath);
-                    cmd.Parameters.AddWithValue("@Remarks", txtRemarks.Text.Trim());
                     cmd.ExecuteNonQuery();
                 }
 
@@ -265,9 +243,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             }
         }
 
-        // ------------------------------------------------------------------
-        // Replace existing document
-        // ------------------------------------------------------------------
         private void btnReplace_Click(object sender, EventArgs e)
         {
             if (!_editingAllowed)
@@ -288,10 +263,8 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                 return;
             }
 
-            string fileName = System.IO.Path.GetFileName(_selectedFilePath);
             string query = @"UPDATE ApplicantDocuments
-                             SET FileName = @FileName, FilePath = @FilePath,
-                                 DocumentStatus = 'Submitted', Remarks = @Remarks, DateSubmitted = NOW()
+                             SET FilePath = @FilePath, Status = 'Submitted', UploadedAt = NOW()
                              WHERE ApplicationID = @AppID AND RequirementTypeID = @TypeID";
             try
             {
@@ -299,9 +272,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                 {
                     conn.Open();
                     MySqlCommand cmd = new MySqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@FileName", fileName);
                     cmd.Parameters.AddWithValue("@FilePath", _selectedFilePath);
-                    cmd.Parameters.AddWithValue("@Remarks", txtRemarks.Text.Trim());
                     cmd.Parameters.AddWithValue("@AppID", _applicationID);
                     cmd.Parameters.AddWithValue("@TypeID", selectedType.Id);
                     cmd.ExecuteNonQuery();
@@ -324,9 +295,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             ClearInputs();
         }
 
-        // ------------------------------------------------------------------
-        // Helpers
-        // ------------------------------------------------------------------
         private bool ValidateInputs()
         {
             if (cmbDocumentType.SelectedItem == null)
