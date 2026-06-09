@@ -71,11 +71,5 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
             Reports reports = new Reports();
             reports.Show();
         }
-
-        private void btnJobVacancy_Click(object sender, EventArgs e)
-        {
-            JobVacancyManagement jvm = new JobVacancyManagement();
-            jvm.Show();
-        }
     }
 }

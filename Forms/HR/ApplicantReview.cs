@@ -15,7 +15,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
     {
         // stores the applicant id from the applicant list
         private int _applicantId;
-        private int _applicationID;
+
         public ApplicantReview(int applicantId) // receives the applicant id when the form is opened
         {
             InitializeComponent();
@@ -52,8 +52,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
 
                                 string status = reader["Status"]?.ToString() ?? "Submitted";
                                 cmbStatus.SelectedItem = status;
-
-                                _applicationID = reader["ApplicationID"] != DBNull.Value ? Convert.ToInt32(reader["ApplicationID"]) : 0;
                             }
                         }
                     }
@@ -119,35 +117,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
         private void btnBack_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-
-        private void btnScreen_Click(object sender, EventArgs e)
-        {
-            if (_applicationID == 0)
-            {
-                MessageBox.Show("No application found for this applicant.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            Screening screen = new Screening(_applicationID);
-            screen.ShowDialog();
-        }
-
-        private void btnSchedule_Click(object sender, EventArgs e)
-        {
-            if (_applicationID == 0) { MessageBox.Show("No application found."); return; }
-            new InterviewSchedule(_applicationID).ShowDialog();
-        }
-
-        private void btnEvaluate_Click(object sender, EventArgs e)
-        {
-            if (_applicationID == 0) { MessageBox.Show("No application found."); return; }
-            new InterviewEvaluation(_applicationID).ShowDialog();
-        }
-
-        private void btnDecide_Click(object sender, EventArgs e)
-        {
-            if (_applicationID == 0) { MessageBox.Show("No application found."); return; }
-            new HiringDecision(_applicationID).ShowDialog();
         }
     }
 }

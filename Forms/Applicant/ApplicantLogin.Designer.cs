@@ -151,21 +151,10 @@
             panel1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
-
-            // btnBack
-            btnBack = new Button();
-            btnBack.Location = new Point(30, 400);
-            btnBack.Name = "btnBack";
-            btnBack.Size = new Size(330, 32);
-            btnBack.TabIndex = 11;
-            btnBack.Text = "Back to Main Menu";
-            btnBack.Font = new Font("Segoe UI", 9F);
-            btnBack.UseVisualStyleBackColor = true;
-            btnBack.Click += btnBack_Click;
         }
 
-
         #endregion
+
         private Button btnLogin;
         private Button btnRegister;
         private Label lblTitle;
@@ -176,7 +165,6 @@
         private CheckBox chkKeepSignedIn;
         private CheckBox chkShowPassword;
         private LinkLabel lnkForgotPassword;
-        private Button btnBack;
         private Panel panel1;
     }
 }

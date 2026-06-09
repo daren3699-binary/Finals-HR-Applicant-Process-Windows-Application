@@ -34,7 +34,6 @@
             btnRefresh = new Button();
             btnBack = new Button();
             dgvApplicants = new DataGridView();
-            lblInstruction = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvApplicants).BeginInit();
             SuspendLayout();
             // 
@@ -99,22 +98,11 @@
             dgvApplicants.TabIndex = 5;
             dgvApplicants.CellDoubleClick += dgvApplicants_CellDoubleClick;
             // 
-            // lblInstruction
-            // 
-            lblInstruction.AutoSize = true;
-            lblInstruction.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblInstruction.Location = new Point(23, 33);
-            lblInstruction.Name = "lblInstruction";
-            lblInstruction.Size = new Size(315, 17);
-            lblInstruction.TabIndex = 6;
-            lblInstruction.Text = "(Double-Click Applicant Row to review the applicant.)";
-            // 
             // ApplicantList
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(lblInstruction);
             Controls.Add(dgvApplicants);
             Controls.Add(btnBack);
             Controls.Add(btnRefresh);
@@ -137,6 +125,5 @@
         private Button btnRefresh;
         private Button btnBack;
         private DataGridView dgvApplicants;
-        private Label lblInstruction;
     }
 }
