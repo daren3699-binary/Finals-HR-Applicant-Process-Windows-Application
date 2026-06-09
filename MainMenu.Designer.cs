@@ -58,8 +58,9 @@
             // btnApplicant
             // 
             btnApplicant.BackColor = Color.SteelBlue;
+            btnApplicant.FlatStyle = FlatStyle.Flat;
             btnApplicant.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnApplicant.ForeColor = SystemColors.ControlText;
+            btnApplicant.ForeColor = Color.White;
             btnApplicant.Location = new Point(12, 126);
             btnApplicant.Name = "btnApplicant";
             btnApplicant.Size = new Size(738, 55);
@@ -71,7 +72,9 @@
             // btnHR
             // 
             btnHR.BackColor = Color.Maroon;
+            btnHR.FlatStyle = FlatStyle.Flat;
             btnHR.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnHR.ForeColor = Color.White;
             btnHR.Location = new Point(12, 228);
             btnHR.Name = "btnHR";
             btnHR.Size = new Size(738, 56);
@@ -84,7 +87,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(762, 392);
+            ClientSize = new Size(762, 370);
             Controls.Add(btnHR);
             Controls.Add(btnApplicant);
             Controls.Add(lblSubtitle);

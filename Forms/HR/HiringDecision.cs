@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 using FinalsHRApplicantProcessWindowsApplication.Database;
 using FinalsHRApplicantProcessWindowsApplication.Helpers;
@@ -6,21 +7,23 @@ using MySql.Data.MySqlClient;
 
 namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
 {
-    public partial class InterviewSchedule : Form
+    public partial class HiringDecision : Form
     {
         private int _applicationID;
 
-        public InterviewSchedule(int applicationID)
+        public HiringDecision(int applicationID)
         {
             InitializeComponent();
             _applicationID = applicationID;
             btnSave.Click += btnSave_Click;
             btnBack.Click += btnBack_Click;
+            Load += HiringDecision_Load;
         }
 
-        private void InterviewSchedule_Load(object sender, EventArgs e)
+        private void HiringDecision_Load(object sender, EventArgs e)
         {
             LoadApplicantInfo();
+            CheckRoleAccess();
         }
 
         private void LoadApplicantInfo()
@@ -50,18 +53,36 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
             catch (Exception ex) { MessageBox.Show($"Error: {ex.Message}"); }
         }
 
+        private void CheckRoleAccess()
+        {
+            bool canAccept = Session.CurrentRole == "HR Manager" || Session.CurrentRole == "Admin";
+            if (!canAccept)
+            {
+                cmbDecision.Items.Remove("Accepted");
+                lblWarning.Text = "⚠ You do not have permission to accept applicants.";
+                lblWarning.ForeColor = Color.Red;
+            }
+        }
+
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (dtpInterviewDate.Value <= DateTime.Now)
+            if (cmbDecision.SelectedItem == null)
             {
-                MessageBox.Show("Interview date must be in the future.", "Invalid Date", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please select a decision.", "Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            if (cmbMode.SelectedItem == null)
+
+            string decision = cmbDecision.SelectedItem.ToString();
+            // backend guard, double checks even if dropdown was manipulated
+            if (decision == "Accepted" && Session.CurrentRole != "HR Manager" && Session.CurrentRole != "Admin")
             {
-                MessageBox.Show("Please select a mode.", "Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Only HR Manager or Admin can accept applicants.", "Access denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+
+            // "on-hold" display in Database
+            string newStatus = decision == "Accepted" ? "Accepted" :
+                               decision == "Rejected" ? "Rejected" : "On Hold";
 
             try
             {
@@ -69,39 +90,40 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
                 {
                     conn.Open();
 
-                    string insertQuery = @"INSERT INTO InterviewSchedules
-                                          (ApplicationID, InterviewDate, Mode, Location, InterviewerID, Status)
-                                          VALUES (@appId, @date, @mode, @loc, @by, 'Scheduled')";
-
+                    string insertQuery = @"INSERT INTO HiringDecisions
+                                          (ApplicationID, Decision, Remarks, DecidedBy)
+                                          VALUES (@appId, @decision, @remarks, @by)";
                     using (var cmd = new MySqlCommand(insertQuery, conn))
                     {
                         cmd.Parameters.AddWithValue("@appID", _applicationID);
-                        cmd.Parameters.AddWithValue("@date", dtpInterviewDate.Value);
-                        cmd.Parameters.AddWithValue("@mode", cmbMode.SelectedItem.ToString());
-                        cmd.Parameters.AddWithValue("@loc", txtLocation.Text.Trim());
+                        cmd.Parameters.AddWithValue("@decision", newStatus);
+                        cmd.Parameters.AddWithValue("@remarks", txtRemarks.Text.Trim());
                         cmd.Parameters.AddWithValue("@by", Session.CurrentUserId);
                         cmd.ExecuteNonQuery();
                     }
 
-                    string updateQuery = "UPDATE Applications SET Status='For Interview' WHERE ApplicationID=@id";
+                    string updateQuery = "UPDATE Applications SET Status=@status WHERE ApplicationID=@id";
                     using (var cmd = new MySqlCommand(updateQuery, conn))
                     {
+                        cmd.Parameters.AddWithValue("@status", newStatus);
                         cmd.Parameters.AddWithValue("@id", _applicationID);
                         cmd.ExecuteNonQuery();
                     }
 
                     string historyQuery = @"INSERT INTO ApplicationStatusHistory
                                            (ApplicationID, Status, Remarks, ChangedBy)
-                                           VALUES (@id, 'For Interview', 'Interview scheduled.', @by)";
+                                           VALUES (@id, @status, @remarks, @by)";
                     using (var cmd = new MySqlCommand(historyQuery, conn))
                     {
                         cmd.Parameters.AddWithValue("@id", _applicationID);
+                        cmd.Parameters.AddWithValue("@status", newStatus);
+                        cmd.Parameters.AddWithValue("@remarks", txtRemarks.Text.Trim());
                         cmd.Parameters.AddWithValue("@by", Session.CurrentUsername);
                         cmd.ExecuteNonQuery();
                     }
-                    MessageBox.Show("Interview scheduled successfully!", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.Close();
                 }
+                MessageBox.Show($"Decision saved: {newStatus}", "Saved");
+                this.Close();
             }
             catch (Exception ex) { MessageBox.Show($"Error: {ex.Message}"); }
         }

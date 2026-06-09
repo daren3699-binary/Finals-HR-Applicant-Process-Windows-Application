@@ -3,6 +3,11 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+<<<<<<< HEAD
+=======
+using MySql.Data.MySqlClient;
+using FinalsHRApplicantProcessWindowsApplication.Helpers;
+>>>>>>> 45489992f4560fa5969106d267631716921be9ac
 
 namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 {
