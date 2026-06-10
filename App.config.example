@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<configuration>
-  <connectionStrings>
-    <add name="HRAppDB"
-         connectionString="Server=localhost;Database=hr_applicant_db;Uid=root;Pwd=Binary_3699;"
-         providerName="MySql.Data.MySqlClient" />
-  </connectionStrings>
-</configuration>

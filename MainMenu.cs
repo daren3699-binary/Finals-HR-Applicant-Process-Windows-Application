@@ -7,7 +7,6 @@ using System.Text;
 using System.Windows.Forms;
 using FinalsHRApplicantProcessWindowsApplication.Forms.HR;
 using FinalsHRApplicantProcessWindowsApplication.Forms.Applicant;
-using FinalsHRApplicantProcessWindowsApplication.Helpers;
 
 namespace FinalsHRApplicantProcessWindowsApplication
 {
@@ -20,19 +19,8 @@ namespace FinalsHRApplicantProcessWindowsApplication
 
         private void btnApplicant_Click(object sender, EventArgs e)
         {
-            int savedID = SessionManager.LoadSession();
-
-            if (savedID != -1)
-            {
-                ApplicantDashboard dashboard = new ApplicantDashboard(savedID);
-                dashboard.Show();
-            }
-            else
-            {
-                ApplicantLogin login = new ApplicantLogin();
-                login.Show();
-            }
-
+            ApplicantLogin applicantLogin = new ApplicantLogin();
+            applicantLogin.Show();
             this.Hide();
         }
 
