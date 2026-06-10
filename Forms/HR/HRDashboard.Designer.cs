@@ -37,6 +37,7 @@
             lblPending = new Label();
             lblTotalApplicants = new Label();
             grpbxRecruitSummary = new GroupBox();
+            btnMaintenance = new Button();
             grpbxRecruitSummary.SuspendLayout();
             SuspendLayout();
             // 
@@ -52,7 +53,7 @@
             // 
             // btnApplicantList
             // 
-            btnApplicantList.Location = new Point(537, 131);
+            btnApplicantList.Location = new Point(537, 109);
             btnApplicantList.Name = "btnApplicantList";
             btnApplicantList.Size = new Size(172, 29);
             btnApplicantList.TabIndex = 4;
@@ -82,7 +83,7 @@
             // 
             // btnJobVacancy
             // 
-            btnJobVacancy.Location = new Point(537, 191);
+            btnJobVacancy.Location = new Point(537, 144);
             btnJobVacancy.Name = "btnJobVacancy";
             btnJobVacancy.Size = new Size(172, 29);
             btnJobVacancy.TabIndex = 7;
@@ -130,12 +131,23 @@
             grpbxRecruitSummary.TabStop = false;
             grpbxRecruitSummary.Text = "Recruitment Summary";
             // 
+            // btnMaintenance
+            // 
+            btnMaintenance.Location = new Point(537, 179);
+            btnMaintenance.Name = "btnMaintenance";
+            btnMaintenance.Size = new Size(172, 29);
+            btnMaintenance.TabIndex = 9;
+            btnMaintenance.Text = "Maintenance Panel";
+            btnMaintenance.UseVisualStyleBackColor = true;
+            btnMaintenance.Click += btnMaintenance_Click;
+            // 
             // HRDashboard
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.WhiteSmoke;
             ClientSize = new Size(718, 421);
+            Controls.Add(btnMaintenance);
             Controls.Add(grpbxRecruitSummary);
             Controls.Add(btnJobVacancy);
             Controls.Add(btnReports);
@@ -162,5 +174,6 @@
         private Label lblPending;
         private Label lblTotalApplicants;
         private GroupBox grpbxRecruitSummary;
+        private Button btnMaintenance;
     }
 }

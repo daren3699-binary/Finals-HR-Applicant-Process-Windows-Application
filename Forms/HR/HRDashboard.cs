@@ -40,6 +40,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
         private void HRDashboard_Load(object sender, EventArgs e)
         {
             lblWelcome.Text = $"Welcome, {Session.CurrentUsername}! ({Session.CurrentRole})";
+            btnMaintenance.Visible = Session.CurrentRole == "Admin";
 
             try
             {
@@ -76,6 +77,12 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
         {
             JobVacancyManagement jvm = new JobVacancyManagement();
             jvm.Show();
+        }
+
+        private void btnMaintenance_Click(object sender, EventArgs e)
+        {
+            Maintenance m = new Maintenance();
+            m.Show();
         }
     }
 }
