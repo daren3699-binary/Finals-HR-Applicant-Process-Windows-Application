@@ -42,10 +42,10 @@
             // lblTitle
             // 
             lblTitle.AutoSize = true;
-            lblTitle.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTitle.Location = new Point(132, 28);
+            lblTitle.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTitle.Location = new Point(118, 30);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(186, 28);
+            lblTitle.Size = new Size(218, 31);
             lblTitle.TabIndex = 0;
             lblTitle.Text = "Interview Schedule";
             // 
@@ -103,12 +103,15 @@
             // 
             // btnSave
             // 
-            btnSave.Location = new Point(155, 329);
+            btnSave.BackColor = Color.SteelBlue;
+            btnSave.FlatStyle = FlatStyle.Flat;
+            btnSave.ForeColor = Color.White;
+            btnSave.Location = new Point(155, 327);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(141, 33);
             btnSave.TabIndex = 7;
             btnSave.Text = "Save Schedule";
-            btnSave.UseVisualStyleBackColor = true;
+            btnSave.UseVisualStyleBackColor = false;
             // 
             // btnBack
             // 
@@ -123,7 +126,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(456, 450);
+            ClientSize = new Size(463, 434);
             Controls.Add(btnBack);
             Controls.Add(btnSave);
             Controls.Add(txtLocation);

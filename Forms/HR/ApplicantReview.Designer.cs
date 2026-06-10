@@ -37,15 +37,19 @@
             txtRemarks = new TextBox();
             btnSave = new Button();
             btnBack = new Button();
+            btnScreen = new Button();
+            btnSchedule = new Button();
+            btnEvaluate = new Button();
+            btnDecide = new Button();
             SuspendLayout();
             // 
             // lblTitle
             // 
             lblTitle.AutoSize = true;
-            lblTitle.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTitle.Location = new Point(145, 22);
+            lblTitle.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTitle.Location = new Point(134, 30);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(166, 28);
+            lblTitle.Size = new Size(199, 31);
             lblTitle.TabIndex = 0;
             lblTitle.Text = "Applicant Review";
             // 
@@ -70,7 +74,7 @@
             // lblStatus
             // 
             lblStatus.AutoSize = true;
-            lblStatus.Location = new Point(24, 167);
+            lblStatus.Location = new Point(35, 167);
             lblStatus.Name = "lblStatus";
             lblStatus.Size = new Size(133, 20);
             lblStatus.TabIndex = 3;
@@ -89,32 +93,35 @@
             // 
             cmbStatus.FormattingEnabled = true;
             cmbStatus.Items.AddRange(new object[] { "Submitted", "Under Review", "For Interview", "Hired", "Rejected" });
-            cmbStatus.Location = new Point(183, 164);
+            cmbStatus.Location = new Point(174, 164);
             cmbStatus.Name = "cmbStatus";
-            cmbStatus.Size = new Size(246, 28);
+            cmbStatus.Size = new Size(255, 28);
             cmbStatus.TabIndex = 5;
             // 
             // txtRemarks
             // 
-            txtRemarks.Location = new Point(183, 216);
+            txtRemarks.Location = new Point(113, 216);
             txtRemarks.Multiline = true;
             txtRemarks.Name = "txtRemarks";
-            txtRemarks.Size = new Size(246, 125);
+            txtRemarks.Size = new Size(316, 125);
             txtRemarks.TabIndex = 6;
             // 
             // btnSave
             // 
-            btnSave.Location = new Point(183, 350);
+            btnSave.BackColor = Color.SteelBlue;
+            btnSave.FlatStyle = FlatStyle.Flat;
+            btnSave.ForeColor = Color.White;
+            btnSave.Location = new Point(334, 347);
             btnSave.Name = "btnSave";
-            btnSave.Size = new Size(94, 29);
+            btnSave.Size = new Size(95, 29);
             btnSave.TabIndex = 7;
             btnSave.Text = "Save";
-            btnSave.UseVisualStyleBackColor = true;
+            btnSave.UseVisualStyleBackColor = false;
             btnSave.Click += btnSave_Click;
             // 
             // btnBack
             // 
-            btnBack.Location = new Point(183, 385);
+            btnBack.Location = new Point(113, 347);
             btnBack.Name = "btnBack";
             btnBack.Size = new Size(94, 29);
             btnBack.TabIndex = 8;
@@ -122,11 +129,55 @@
             btnBack.UseVisualStyleBackColor = true;
             btnBack.Click += btnBack_Click;
             // 
+            // btnScreen
+            // 
+            btnScreen.Location = new Point(24, 430);
+            btnScreen.Name = "btnScreen";
+            btnScreen.Size = new Size(200, 29);
+            btnScreen.TabIndex = 9;
+            btnScreen.Text = "Screen Applicant";
+            btnScreen.UseVisualStyleBackColor = true;
+            btnScreen.Click += btnScreen_Click;
+            // 
+            // btnSchedule
+            // 
+            btnSchedule.Location = new Point(24, 465);
+            btnSchedule.Name = "btnSchedule";
+            btnSchedule.Size = new Size(200, 29);
+            btnSchedule.TabIndex = 10;
+            btnSchedule.Text = "Schedule Interview";
+            btnSchedule.UseVisualStyleBackColor = true;
+            btnSchedule.Click += btnSchedule_Click;
+            // 
+            // btnEvaluate
+            // 
+            btnEvaluate.Location = new Point(244, 430);
+            btnEvaluate.Name = "btnEvaluate";
+            btnEvaluate.Size = new Size(200, 29);
+            btnEvaluate.TabIndex = 11;
+            btnEvaluate.Text = "Interview Evaluation";
+            btnEvaluate.UseVisualStyleBackColor = true;
+            btnEvaluate.Click += btnEvaluate_Click;
+            // 
+            // btnDecide
+            // 
+            btnDecide.Location = new Point(244, 465);
+            btnDecide.Name = "btnDecide";
+            btnDecide.Size = new Size(200, 29);
+            btnDecide.TabIndex = 12;
+            btnDecide.Text = "Hiring Decision";
+            btnDecide.UseVisualStyleBackColor = true;
+            btnDecide.Click += btnDecide_Click;
+            // 
             // ApplicantReview
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(456, 442);
+            ClientSize = new Size(456, 533);
+            Controls.Add(btnDecide);
+            Controls.Add(btnEvaluate);
+            Controls.Add(btnSchedule);
+            Controls.Add(btnScreen);
             Controls.Add(btnBack);
             Controls.Add(btnSave);
             Controls.Add(txtRemarks);
@@ -154,5 +205,9 @@
         private TextBox txtRemarks;
         private Button btnSave;
         private Button btnBack;
+        private Button btnScreen;
+        private Button btnSchedule;
+        private Button btnEvaluate;
+        private Button btnDecide;
     }
 }
