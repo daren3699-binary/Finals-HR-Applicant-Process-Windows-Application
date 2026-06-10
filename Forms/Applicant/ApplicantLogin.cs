@@ -111,5 +111,12 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             registrationForm.Show();
             this.Hide();
         }
+
+        private void btnBackToMainMenu_Click(object sender, EventArgs e)
+        {
+            MainMenu menu = new MainMenu();
+            menu.Show();
+            this.Hide();
+        }
     }
 }

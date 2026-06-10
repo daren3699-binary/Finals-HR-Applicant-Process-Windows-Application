@@ -28,107 +28,118 @@
             chkShowPassword = new CheckBox();
             lnkForgotPassword = new LinkLabel();
             panel1 = new Panel();
+            btnBackToMainMenu = new Button();
             panel1.SuspendLayout();
             SuspendLayout();
-
-            // panel1
-            panel1.Name = "panel1";
-            panel1.Size = new Size(400, 420);
-            panel1.Location = new Point(20, 20);
-            panel1.TabIndex = 7;
-            panel1.BorderStyle = BorderStyle.FixedSingle;
-            panel1.Padding = new Padding(20);
-
-            // lblTitle
-            lblTitle.AutoSize = false;
-            lblTitle.Size = new Size(340, 45);
-            lblTitle.Location = new Point(30, 25);
-            lblTitle.TextAlign = ContentAlignment.MiddleLeft;
-            lblTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTitle.Name = "lblTitle";
-            lblTitle.TabIndex = 2;
-            lblTitle.Text = "Sign in";
-
-            // lblEmail
-            lblEmail.AutoSize = true;
-            lblEmail.Location = new Point(30, 90);
-            lblEmail.Name = "lblEmail";
-            lblEmail.TabIndex = 5;
-            lblEmail.Font = new Font("Segoe UI", 9F);
-            lblEmail.Text = "Email:";
-
-            // txtEmail
-            txtEmail.Location = new Point(30, 110);
-            txtEmail.Name = "txtEmail";
-            txtEmail.Size = new Size(330, 27);
-            txtEmail.TabIndex = 3;
-            txtEmail.Font = new Font("Segoe UI", 9F);
-
-            // lblPassword
-            lblPassword.AutoSize = true;
-            lblPassword.Location = new Point(30, 155);
-            lblPassword.Name = "lblPassword";
-            lblPassword.TabIndex = 6;
-            lblPassword.Font = new Font("Segoe UI", 9F);
-            lblPassword.Text = "Password:";
-
-            // txtPassword
-            txtPassword.Location = new Point(30, 175);
-            txtPassword.Name = "txtPassword";
-            txtPassword.PasswordChar = '*';
-            txtPassword.Size = new Size(330, 27);
-            txtPassword.TabIndex = 4;
-            txtPassword.Font = new Font("Segoe UI", 9F);
-
-            // chkShowPassword
-            chkShowPassword.AutoSize = true;
-            chkShowPassword.Location = new Point(30, 215);
-            chkShowPassword.Name = "chkShowPassword";
-            chkShowPassword.TabIndex = 8;
-            chkShowPassword.Font = new Font("Segoe UI", 9F);
-            chkShowPassword.Text = "Show Password";
-            chkShowPassword.UseVisualStyleBackColor = true;
-            chkShowPassword.CheckedChanged += chkShowPassword_CheckedChanged;
-
-            // chkKeepSignedIn
-            chkKeepSignedIn.AutoSize = true;
-            chkKeepSignedIn.Location = new Point(30, 245);
-            chkKeepSignedIn.Name = "chkKeepSignedIn";
-            chkKeepSignedIn.TabIndex = 9;
-            chkKeepSignedIn.Font = new Font("Segoe UI", 9F);
-            chkKeepSignedIn.Text = "Keep me signed in";
-            chkKeepSignedIn.UseVisualStyleBackColor = true;
-
-            // lnkForgotPassword
-            lnkForgotPassword.AutoSize = true;
-            lnkForgotPassword.Location = new Point(30, 278);
-            lnkForgotPassword.Name = "lnkForgotPassword";
-            lnkForgotPassword.TabIndex = 10;
-            lnkForgotPassword.TabStop = true;
-            lnkForgotPassword.Font = new Font("Segoe UI", 9F);
-            lnkForgotPassword.Text = "Forgot Password?";
-            lnkForgotPassword.LinkClicked += lnkForgotPassword_LinkClicked;
-
+            // 
             // btnLogin
+            // 
+            btnLogin.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnLogin.Location = new Point(30, 315);
             btnLogin.Name = "btnLogin";
             btnLogin.Size = new Size(330, 32);
             btnLogin.TabIndex = 0;
             btnLogin.Text = "Sign In";
-            btnLogin.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnLogin.UseVisualStyleBackColor = true;
             btnLogin.Click += btnLogin_Click;
-
+            // 
             // btnRegister
+            // 
+            btnRegister.Font = new Font("Segoe UI", 9F);
             btnRegister.Location = new Point(30, 360);
             btnRegister.Name = "btnRegister";
             btnRegister.Size = new Size(330, 32);
             btnRegister.TabIndex = 1;
             btnRegister.Text = "Don't have an account? Register";
-            btnRegister.Font = new Font("Segoe UI", 9F);
             btnRegister.UseVisualStyleBackColor = true;
             btnRegister.Click += btnRegister_Click;
-
+            // 
+            // lblTitle
+            // 
+            lblTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTitle.Location = new Point(30, 25);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new Size(340, 45);
+            lblTitle.TabIndex = 2;
+            lblTitle.Text = "Sign in";
+            lblTitle.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // txtEmail
+            // 
+            txtEmail.Font = new Font("Segoe UI", 9F);
+            txtEmail.Location = new Point(30, 110);
+            txtEmail.Name = "txtEmail";
+            txtEmail.Size = new Size(330, 27);
+            txtEmail.TabIndex = 3;
+            // 
+            // txtPassword
+            // 
+            txtPassword.Font = new Font("Segoe UI", 9F);
+            txtPassword.Location = new Point(30, 175);
+            txtPassword.Name = "txtPassword";
+            txtPassword.PasswordChar = '*';
+            txtPassword.Size = new Size(330, 27);
+            txtPassword.TabIndex = 4;
+            // 
+            // lblEmail
+            // 
+            lblEmail.AutoSize = true;
+            lblEmail.Font = new Font("Segoe UI", 9F);
+            lblEmail.Location = new Point(30, 90);
+            lblEmail.Name = "lblEmail";
+            lblEmail.Size = new Size(49, 20);
+            lblEmail.TabIndex = 5;
+            lblEmail.Text = "Email:";
+            // 
+            // lblPassword
+            // 
+            lblPassword.AutoSize = true;
+            lblPassword.Font = new Font("Segoe UI", 9F);
+            lblPassword.Location = new Point(30, 155);
+            lblPassword.Name = "lblPassword";
+            lblPassword.Size = new Size(73, 20);
+            lblPassword.TabIndex = 6;
+            lblPassword.Text = "Password:";
+            // 
+            // chkKeepSignedIn
+            // 
+            chkKeepSignedIn.AutoSize = true;
+            chkKeepSignedIn.Font = new Font("Segoe UI", 9F);
+            chkKeepSignedIn.Location = new Point(30, 245);
+            chkKeepSignedIn.Name = "chkKeepSignedIn";
+            chkKeepSignedIn.Size = new Size(154, 24);
+            chkKeepSignedIn.TabIndex = 9;
+            chkKeepSignedIn.Text = "Keep me signed in";
+            chkKeepSignedIn.UseVisualStyleBackColor = true;
+            // 
+            // chkShowPassword
+            // 
+            chkShowPassword.AutoSize = true;
+            chkShowPassword.Font = new Font("Segoe UI", 9F);
+            chkShowPassword.Location = new Point(30, 215);
+            chkShowPassword.Name = "chkShowPassword";
+            chkShowPassword.Size = new Size(132, 24);
+            chkShowPassword.TabIndex = 8;
+            chkShowPassword.Text = "Show Password";
+            chkShowPassword.UseVisualStyleBackColor = true;
+            chkShowPassword.CheckedChanged += chkShowPassword_CheckedChanged;
+            // 
+            // lnkForgotPassword
+            // 
+            lnkForgotPassword.AutoSize = true;
+            lnkForgotPassword.Font = new Font("Segoe UI", 9F);
+            lnkForgotPassword.Location = new Point(30, 278);
+            lnkForgotPassword.Name = "lnkForgotPassword";
+            lnkForgotPassword.Size = new Size(125, 20);
+            lnkForgotPassword.TabIndex = 10;
+            lnkForgotPassword.TabStop = true;
+            lnkForgotPassword.Text = "Forgot Password?";
+            lnkForgotPassword.LinkClicked += lnkForgotPassword_LinkClicked;
+            // 
+            // panel1
+            // 
+            panel1.BorderStyle = BorderStyle.FixedSingle;
+            panel1.Controls.Add(btnBackToMainMenu);
             panel1.Controls.Add(lblTitle);
             panel1.Controls.Add(lblEmail);
             panel1.Controls.Add(txtEmail);
@@ -139,8 +150,24 @@
             panel1.Controls.Add(lnkForgotPassword);
             panel1.Controls.Add(btnLogin);
             panel1.Controls.Add(btnRegister);
-
+            panel1.Location = new Point(20, 20);
+            panel1.Name = "panel1";
+            panel1.Padding = new Padding(20);
+            panel1.Size = new Size(400, 443);
+            panel1.TabIndex = 7;
+            // 
+            // btnBackToMainMenu
+            // 
+            btnBackToMainMenu.Location = new Point(30, 406);
+            btnBackToMainMenu.Name = "btnBackToMainMenu";
+            btnBackToMainMenu.Size = new Size(330, 29);
+            btnBackToMainMenu.TabIndex = 11;
+            btnBackToMainMenu.Text = "Back to the Main Menu?";
+            btnBackToMainMenu.UseVisualStyleBackColor = true;
+            btnBackToMainMenu.Click += btnBackToMainMenu_Click;
+            // 
             // ApplicantLogin
+            // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 500);
@@ -150,18 +177,8 @@
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
 
-            // btnBack
-            btnBack = new Button();
-            btnBack.Location = new Point(30, 400);
-            btnBack.Name = "btnBack";
-            btnBack.Size = new Size(330, 32);
-            btnBack.TabIndex = 11;
-            btnBack.Text = "Back to Main Menu";
-            btnBack.Font = new Font("Segoe UI", 9F);
-            btnBack.UseVisualStyleBackColor = true;
-            btnBack.Click += btnBack_Click;
+
         }
 
 
@@ -178,5 +195,6 @@
         private LinkLabel lnkForgotPassword;
         private Button btnBack;
         private Panel panel1;
+        private Button btnBackToMainMenu;
     }
 }

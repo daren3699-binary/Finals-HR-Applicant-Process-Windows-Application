@@ -34,6 +34,7 @@
             txtUsername = new TextBox();
             txtPassword = new TextBox();
             btnHRLogin = new Button();
+            btnBack = new Button();
             SuspendLayout();
             // 
             // lblTitle
@@ -89,17 +90,28 @@
             btnHRLogin.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             btnHRLogin.Location = new Point(222, 280);
             btnHRLogin.Name = "btnHRLogin";
-            btnHRLogin.Size = new Size(178, 38);
+            btnHRLogin.Size = new Size(178, 32);
             btnHRLogin.TabIndex = 5;
             btnHRLogin.Text = "Login";
             btnHRLogin.UseVisualStyleBackColor = true;
             btnHRLogin.Click += btnHRLogin_Click;
+            // 
+            // btnBack
+            // 
+            btnBack.Location = new Point(222, 325);
+            btnBack.Name = "btnBack";
+            btnBack.Size = new Size(174, 29);
+            btnBack.TabIndex = 6;
+            btnBack.Text = "Back to Main Menu?";
+            btnBack.UseVisualStyleBackColor = true;
+            btnBack.Click += btnBack_Click;
             // 
             // HRLogin
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(614, 366);
+            Controls.Add(btnBack);
             Controls.Add(btnHRLogin);
             Controls.Add(txtPassword);
             Controls.Add(txtUsername);
@@ -120,5 +132,6 @@
         private TextBox txtUsername;
         private TextBox txtPassword;
         private Button btnHRLogin;
+        private Button btnBack;
     }
 }

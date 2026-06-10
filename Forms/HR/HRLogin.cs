@@ -95,5 +95,12 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
                 MessageBox.Show($"Database error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            MainMenu menu = new MainMenu();
+            menu.Show();
+            this.Hide();
+        }
     }
 }
