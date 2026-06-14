@@ -31,7 +31,6 @@
             lblTitle = new Label();
             lblFilter = new Label();
             cmbFilter = new ComboBox();
-            btnGenerate = new Button();
             btnExport = new Button();
             btnBack = new Button();
             dgvReport = new DataGridView();
@@ -60,21 +59,12 @@
             // cmbFilter
             // 
             cmbFilter.FormattingEnabled = true;
-            cmbFilter.Items.AddRange(new object[] { "All", "Submitted", "Under Review", "For Interview", "Hired", "Rejected" });
+            cmbFilter.Items.AddRange(new object[] { "All", "Submitted", "Under Review", "For Interview", "Accepted", "Rejected" });
             cmbFilter.Location = new Point(211, 91);
             cmbFilter.Name = "cmbFilter";
-            cmbFilter.Size = new Size(214, 28);
+            cmbFilter.Size = new Size(352, 28);
             cmbFilter.TabIndex = 2;
-            // 
-            // btnGenerate
-            // 
-            btnGenerate.Location = new Point(431, 91);
-            btnGenerate.Name = "btnGenerate";
-            btnGenerate.Size = new Size(132, 29);
-            btnGenerate.TabIndex = 3;
-            btnGenerate.Text = "Generate Report";
-            btnGenerate.UseVisualStyleBackColor = true;
-            btnGenerate.Click += btnGenerate_Click;
+            cmbFilter.SelectedIndexChanged += cmbFilter_SelectedIndexChanged;
             // 
             // btnExport
             // 
@@ -116,7 +106,6 @@
             Controls.Add(dgvReport);
             Controls.Add(btnBack);
             Controls.Add(btnExport);
-            Controls.Add(btnGenerate);
             Controls.Add(cmbFilter);
             Controls.Add(lblFilter);
             Controls.Add(lblTitle);
@@ -133,7 +122,6 @@
         private Label lblTitle;
         private Label lblFilter;
         private ComboBox cmbFilter;
-        private Button btnGenerate;
         private Button btnExport;
         private Button btnBack;
         private DataGridView dgvReport;

@@ -19,8 +19,9 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
 
         private void Reports_Load(object sender, EventArgs e)
         {
-            LoadReport("");
+            cmbFilter.SelectedIndex = 0; // default to "All"
         }
+
         private void LoadReport(string statusFilter)
         {
             try
@@ -63,7 +64,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
             this.Close();
         }
 
-        private void btnGenerate_Click(object sender, EventArgs e)
+        private void cmbFilter_SelectedIndexChanged(object sender, EventArgs e)
         {
             string filter = cmbFilter.SelectedItem?.ToString() ?? "";
             LoadReport(filter == "All" ? "" : filter);
