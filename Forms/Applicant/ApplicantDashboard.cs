@@ -27,7 +27,19 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
         {
             pnlHeader.BorderStyle = BorderStyle.None;
             this.WindowState = FormWindowState.Maximized;
+            LoadSidebarIcons();
             btnHome_Click(sender, e);
+        }
+
+        private void LoadSidebarIcons()
+        {
+            Color iconColor = Color.FromArgb(70, 70, 70);
+
+            btnHome.Image = SidebarIcons.Home(iconColor);
+            btnJobVacancies.Image = SidebarIcons.Briefcase(iconColor);
+            btnAppStatus.Image = SidebarIcons.Clipboard(iconColor);
+            btnMyDocuments.Image = SidebarIcons.Folder(iconColor);
+            btnMyProfile.Image = SidebarIcons.Person(iconColor);
         }
 
         private void btnHome_Click(object sender, EventArgs e)
@@ -69,7 +81,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                     }
 
                     lblWelcome.Text = "Hello, " + _applicantName + "!";
-                    btnProfileMenu.Text = _applicantName + "  v";
 
                     string appQuery = @"SELECT a.Status, a.DateApplied, j.JobTitle 
                                         FROM Applications a 
@@ -158,31 +169,25 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             pnlContent.Controls.Add(myDocs);
         }
 
-        private void btnProfileMenu_Click(object sender, EventArgs e)
+        private void btnMyProfile_Click(object sender, EventArgs e)
         {
-            ContextMenuStrip menu = new ContextMenuStrip();
-            menu.Font = new Font("Segoe UI", 10F);
-
-            ToolStripMenuItem itemProfile = new ToolStripMenuItem("My Profile");
-            itemProfile.Click += (s, ev) => { new MyProfile(_applicantAccountID).ShowDialog(); };
-
-            ToolStripMenuItem itemLogout = new ToolStripMenuItem("Logout");
-            itemLogout.ForeColor = Color.FromArgb(180, 50, 50);
-            itemLogout.Click += (s, ev) =>
+            using (MyProfile profileForm = new MyProfile(_applicantAccountID))
             {
-                DialogResult result = MessageBox.Show("Are you sure you want to logout?", "Logout", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (result == DialogResult.Yes)
-                {
-                    SessionManager.ClearSession();
-                    new ApplicantLogin().Show();
-                    this.Close();
-                }
-            };
+                profileForm.ShowDialog();
+            }
 
-            menu.Items.Add(itemProfile);
-            menu.Items.Add(new ToolStripSeparator());
-            menu.Items.Add(itemLogout);
-            menu.Show(btnProfileMenu, new Point(0, btnProfileMenu.Height));
+            LoadApplicantNameAndStatus();
+        }
+
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Are you sure you want to logout?", "Logout", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                SessionManager.ClearSession();
+                new ApplicantLogin().Show();
+                this.Close();
+            }
         }
 
         private void lblSubWelcome_Click(object sender, EventArgs e) { }
