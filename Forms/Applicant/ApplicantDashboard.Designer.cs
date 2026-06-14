@@ -17,20 +17,22 @@
         {
             pnlHeader = new Panel();
             lblLogo = new Label();
-            btnProfileMenu = new Button();
+            btnLogout = new Button();
             pnlSidebar = new Panel();
             pnlSidebarBottom = new Panel();
+            btnMyProfile = new Button();
+            lblMenuEditProfile = new Label();
             btnMyDocuments = new Button();
-            btnMyApplication = new Button();
-            btnJobVacancies = new Button();
             btnAppStatus = new Button();
+            lblMenuMyApplication = new Label();
+            btnJobVacancies = new Button();
+            lblMenuApplyJob = new Label();
             btnHome = new Button();
-            lblSidebarUser = new Label();
+            lblMenuHomepage = new Label();
+            btnMyApplication = new Button();
             pnlContent = new Panel();
             lblSubWelcome = new Label();
             lblWelcome = new Label();
-
-            // Hardcoded Toolbox UI Components
             pnlLine = new Panel();
             cardStatus = new Panel();
             accentStatus = new Panel();
@@ -60,7 +62,6 @@
             btnGoApplication = new Button();
             btnGoStatus = new Button();
             btnGoJobs = new Button();
-
             pnlHeader.SuspendLayout();
             pnlSidebar.SuspendLayout();
             pnlContent.SuspendLayout();
@@ -75,9 +76,9 @@
             // pnlHeader
             // 
             pnlHeader.BackColor = Color.White;
-            pnlHeader.BorderStyle = BorderStyle.None;
+            pnlHeader.BorderStyle = BorderStyle.FixedSingle;
             pnlHeader.Controls.Add(lblLogo);
-            pnlHeader.Controls.Add(btnProfileMenu);
+            pnlHeader.Controls.Add(btnLogout);
             pnlHeader.Dock = DockStyle.Top;
             pnlHeader.ForeColor = SystemColors.Highlight;
             pnlHeader.Location = new Point(0, 0);
@@ -97,34 +98,37 @@
             lblLogo.TabIndex = 0;
             lblLogo.Text = "Applicant Portal";
             // 
-            // btnProfileMenu
+            // btnLogout
             // 
-            btnProfileMenu.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnProfileMenu.BackColor = Color.FromArgb(245, 245, 245);
-            btnProfileMenu.Cursor = Cursors.Hand;
-            btnProfileMenu.FlatAppearance.BorderColor = Color.FromArgb(220, 220, 220);
-            btnProfileMenu.FlatStyle = FlatStyle.Flat;
-            btnProfileMenu.Font = new Font("Segoe UI", 9F);
-            btnProfileMenu.ForeColor = Color.FromArgb(60, 60, 60);
-            btnProfileMenu.Location = new Point(1090, 18);
-            btnProfileMenu.Name = "btnProfileMenu";
-            btnProfileMenu.Size = new Size(160, 30);
-            btnProfileMenu.TabIndex = 1;
-            btnProfileMenu.Text = "User  v";
-            btnProfileMenu.TextAlign = ContentAlignment.MiddleCenter;
-            btnProfileMenu.UseVisualStyleBackColor = false;
-            btnProfileMenu.Click += btnProfileMenu_Click;
+            btnLogout.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnLogout.BackColor = Color.FromArgb(245, 245, 245);
+            btnLogout.Cursor = Cursors.Hand;
+            btnLogout.FlatAppearance.BorderColor = Color.FromArgb(220, 220, 220);
+            btnLogout.FlatStyle = FlatStyle.Flat;
+            btnLogout.Font = new Font("Segoe UI", 9F);
+            btnLogout.ForeColor = Color.FromArgb(180, 50, 50);
+            btnLogout.Location = new Point(1148, 18);
+            btnLogout.Name = "btnLogout";
+            btnLogout.Size = new Size(100, 30);
+            btnLogout.TabIndex = 1;
+            btnLogout.Text = "Logout";
+            btnLogout.UseVisualStyleBackColor = false;
+            btnLogout.Click += btnLogout_Click;
             // 
             // pnlSidebar
             // 
             pnlSidebar.BackColor = Color.FromArgb(250, 250, 250);
+            pnlSidebar.BorderStyle = BorderStyle.FixedSingle;
             pnlSidebar.Controls.Add(pnlSidebarBottom);
+            pnlSidebar.Controls.Add(btnMyProfile);
+            pnlSidebar.Controls.Add(lblMenuEditProfile);
             pnlSidebar.Controls.Add(btnMyDocuments);
-            pnlSidebar.Controls.Add(btnMyApplication);
-            pnlSidebar.Controls.Add(btnJobVacancies);
             pnlSidebar.Controls.Add(btnAppStatus);
+            pnlSidebar.Controls.Add(lblMenuMyApplication);
+            pnlSidebar.Controls.Add(btnJobVacancies);
+            pnlSidebar.Controls.Add(lblMenuApplyJob);
             pnlSidebar.Controls.Add(btnHome);
-            pnlSidebar.Controls.Add(lblSidebarUser);
+            pnlSidebar.Controls.Add(lblMenuHomepage);
             pnlSidebar.Dock = DockStyle.Left;
             pnlSidebar.Location = new Point(0, 65);
             pnlSidebar.Name = "pnlSidebar";
@@ -136,10 +140,41 @@
             // 
             pnlSidebarBottom.BackColor = Color.FromArgb(230, 230, 230);
             pnlSidebarBottom.Dock = DockStyle.Bottom;
-            pnlSidebarBottom.Location = new Point(0, 714);
+            pnlSidebarBottom.Location = new Point(0, 712);
             pnlSidebarBottom.Name = "pnlSidebarBottom";
-            pnlSidebarBottom.Size = new Size(220, 1);
+            pnlSidebarBottom.Size = new Size(218, 1);
             pnlSidebarBottom.TabIndex = 0;
+            // 
+            // btnMyProfile
+            // 
+            btnMyProfile.BackColor = Color.Transparent;
+            btnMyProfile.Cursor = Cursors.Hand;
+            btnMyProfile.FlatAppearance.BorderSize = 0;
+            btnMyProfile.FlatStyle = FlatStyle.Flat;
+            btnMyProfile.Font = new Font("Segoe UI", 10F);
+            btnMyProfile.ForeColor = Color.FromArgb(30, 30, 30);
+            btnMyProfile.ImageAlign = ContentAlignment.MiddleLeft;
+            btnMyProfile.Location = new Point(0, 355);
+            btnMyProfile.Name = "btnMyProfile";
+            btnMyProfile.Padding = new Padding(15, 0, 0, 0);
+            btnMyProfile.Size = new Size(220, 45);
+            btnMyProfile.TabIndex = 11;
+            btnMyProfile.Text = "My Profile";
+            btnMyProfile.TextAlign = ContentAlignment.MiddleLeft;
+            btnMyProfile.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnMyProfile.UseVisualStyleBackColor = false;
+            btnMyProfile.Click += btnMyProfile_Click;
+            // 
+            // lblMenuEditProfile
+            // 
+            lblMenuEditProfile.AutoSize = true;
+            lblMenuEditProfile.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+            lblMenuEditProfile.ForeColor = Color.FromArgb(170, 170, 170);
+            lblMenuEditProfile.Location = new Point(20, 333);
+            lblMenuEditProfile.Name = "lblMenuEditProfile";
+            lblMenuEditProfile.Size = new Size(122, 19);
+            lblMenuEditProfile.TabIndex = 10;
+            lblMenuEditProfile.Text = "EDIT MY PROFILE";
             // 
             // btnMyDocuments
             // 
@@ -149,14 +184,110 @@
             btnMyDocuments.FlatStyle = FlatStyle.Flat;
             btnMyDocuments.Font = new Font("Segoe UI", 10F);
             btnMyDocuments.ForeColor = Color.FromArgb(30, 30, 30);
-            btnMyDocuments.Location = new Point(0, 220);
+            btnMyDocuments.ImageAlign = ContentAlignment.MiddleLeft;
+            btnMyDocuments.Location = new Point(0, 275);
             btnMyDocuments.Name = "btnMyDocuments";
+            btnMyDocuments.Padding = new Padding(15, 0, 0, 0);
             btnMyDocuments.Size = new Size(220, 45);
             btnMyDocuments.TabIndex = 1;
-            btnMyDocuments.Text = "   My Documents";
+            btnMyDocuments.Text = "My Documents";
             btnMyDocuments.TextAlign = ContentAlignment.MiddleLeft;
+            btnMyDocuments.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnMyDocuments.UseVisualStyleBackColor = false;
             btnMyDocuments.Click += btnMyDocuments_Click;
+            // 
+            // btnAppStatus
+            // 
+            btnAppStatus.BackColor = Color.Transparent;
+            btnAppStatus.Cursor = Cursors.Hand;
+            btnAppStatus.FlatAppearance.BorderSize = 0;
+            btnAppStatus.FlatStyle = FlatStyle.Flat;
+            btnAppStatus.Font = new Font("Segoe UI", 10F);
+            btnAppStatus.ForeColor = Color.FromArgb(30, 30, 30);
+            btnAppStatus.ImageAlign = ContentAlignment.MiddleLeft;
+            btnAppStatus.Location = new Point(0, 230);
+            btnAppStatus.Name = "btnAppStatus";
+            btnAppStatus.Padding = new Padding(15, 0, 0, 0);
+            btnAppStatus.Size = new Size(220, 45);
+            btnAppStatus.TabIndex = 4;
+            btnAppStatus.Text = "Application Status";
+            btnAppStatus.TextAlign = ContentAlignment.MiddleLeft;
+            btnAppStatus.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnAppStatus.UseVisualStyleBackColor = false;
+            btnAppStatus.Click += btnAppStatus_Click;
+            // 
+            // lblMenuMyApplication
+            // 
+            lblMenuMyApplication.AutoSize = true;
+            lblMenuMyApplication.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+            lblMenuMyApplication.ForeColor = Color.FromArgb(170, 170, 170);
+            lblMenuMyApplication.Location = new Point(20, 208);
+            lblMenuMyApplication.Name = "lblMenuMyApplication";
+            lblMenuMyApplication.Size = new Size(126, 19);
+            lblMenuMyApplication.TabIndex = 9;
+            lblMenuMyApplication.Text = "MY APPLICATION";
+            // 
+            // btnJobVacancies
+            // 
+            btnJobVacancies.BackColor = Color.Transparent;
+            btnJobVacancies.Cursor = Cursors.Hand;
+            btnJobVacancies.FlatAppearance.BorderSize = 0;
+            btnJobVacancies.FlatStyle = FlatStyle.Flat;
+            btnJobVacancies.Font = new Font("Segoe UI", 10F);
+            btnJobVacancies.ForeColor = Color.FromArgb(30, 30, 30);
+            btnJobVacancies.ImageAlign = ContentAlignment.MiddleLeft;
+            btnJobVacancies.Location = new Point(0, 150);
+            btnJobVacancies.Name = "btnJobVacancies";
+            btnJobVacancies.Padding = new Padding(15, 0, 0, 0);
+            btnJobVacancies.Size = new Size(220, 45);
+            btnJobVacancies.TabIndex = 3;
+            btnJobVacancies.Text = "Job Vacancies";
+            btnJobVacancies.TextAlign = ContentAlignment.MiddleLeft;
+            btnJobVacancies.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnJobVacancies.UseVisualStyleBackColor = false;
+            btnJobVacancies.Click += btnJobVacancies_Click;
+            // 
+            // lblMenuApplyJob
+            // 
+            lblMenuApplyJob.AutoSize = true;
+            lblMenuApplyJob.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+            lblMenuApplyJob.ForeColor = Color.FromArgb(170, 170, 170);
+            lblMenuApplyJob.Location = new Point(20, 128);
+            lblMenuApplyJob.Name = "lblMenuApplyJob";
+            lblMenuApplyJob.Size = new Size(96, 19);
+            lblMenuApplyJob.TabIndex = 8;
+            lblMenuApplyJob.Text = "APPLY A JOB";
+            // 
+            // btnHome
+            // 
+            btnHome.BackColor = Color.Transparent;
+            btnHome.Cursor = Cursors.Hand;
+            btnHome.FlatAppearance.BorderSize = 0;
+            btnHome.FlatStyle = FlatStyle.Flat;
+            btnHome.Font = new Font("Segoe UI", 10F);
+            btnHome.ForeColor = Color.FromArgb(30, 30, 30);
+            btnHome.ImageAlign = ContentAlignment.MiddleLeft;
+            btnHome.Location = new Point(0, 70);
+            btnHome.Name = "btnHome";
+            btnHome.Padding = new Padding(15, 0, 0, 0);
+            btnHome.Size = new Size(220, 45);
+            btnHome.TabIndex = 5;
+            btnHome.Text = "Dashboard";
+            btnHome.TextAlign = ContentAlignment.MiddleLeft;
+            btnHome.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnHome.UseVisualStyleBackColor = false;
+            btnHome.Click += btnHome_Click;
+            // 
+            // lblMenuHomepage
+            // 
+            lblMenuHomepage.AutoSize = true;
+            lblMenuHomepage.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+            lblMenuHomepage.ForeColor = Color.FromArgb(170, 170, 170);
+            lblMenuHomepage.Location = new Point(20, 48);
+            lblMenuHomepage.Name = "lblMenuHomepage";
+            lblMenuHomepage.Size = new Size(86, 19);
+            lblMenuHomepage.TabIndex = 7;
+            lblMenuHomepage.Text = "HOMEPAGE";
             // 
             // btnMyApplication
             // 
@@ -175,71 +306,10 @@
             btnMyApplication.UseVisualStyleBackColor = false;
             btnMyApplication.Click += btnMyApplication_Click;
             // 
-            // btnJobVacancies
-            // 
-            btnJobVacancies.BackColor = Color.Transparent;
-            btnJobVacancies.Cursor = Cursors.Hand;
-            btnJobVacancies.FlatAppearance.BorderSize = 0;
-            btnJobVacancies.FlatStyle = FlatStyle.Flat;
-            btnJobVacancies.Font = new Font("Segoe UI", 10F);
-            btnJobVacancies.ForeColor = Color.FromArgb(30, 30, 30);
-            btnJobVacancies.Location = new Point(0, 130);
-            btnJobVacancies.Name = "btnJobVacancies";
-            btnJobVacancies.Size = new Size(220, 45);
-            btnJobVacancies.TabIndex = 3;
-            btnJobVacancies.Text = "   Job Vacancies";
-            btnJobVacancies.TextAlign = ContentAlignment.MiddleLeft;
-            btnJobVacancies.UseVisualStyleBackColor = false;
-            btnJobVacancies.Click += btnJobVacancies_Click;
-            // 
-            // btnAppStatus
-            // 
-            btnAppStatus.BackColor = Color.Transparent;
-            btnAppStatus.Cursor = Cursors.Hand;
-            btnAppStatus.FlatAppearance.BorderSize = 0;
-            btnAppStatus.FlatStyle = FlatStyle.Flat;
-            btnAppStatus.Font = new Font("Segoe UI", 10F);
-            btnAppStatus.ForeColor = Color.FromArgb(30, 30, 30);
-            btnAppStatus.Location = new Point(0, 85);
-            btnAppStatus.Name = "btnAppStatus";
-            btnAppStatus.Size = new Size(220, 45);
-            btnAppStatus.TabIndex = 4;
-            btnAppStatus.Text = "   Application Status";
-            btnAppStatus.TextAlign = ContentAlignment.MiddleLeft;
-            btnAppStatus.UseVisualStyleBackColor = false;
-            btnAppStatus.Click += btnAppStatus_Click;
-            // 
-            // btnHome
-            // 
-            btnHome.BackColor = Color.Transparent;
-            btnHome.Cursor = Cursors.Hand;
-            btnHome.FlatAppearance.BorderSize = 0;
-            btnHome.FlatStyle = FlatStyle.Flat;
-            btnHome.Font = new Font("Segoe UI", 10F);
-            btnHome.ForeColor = Color.FromArgb(30, 30, 30);
-            btnHome.Location = new Point(0, 40);
-            btnHome.Name = "btnHome";
-            btnHome.Size = new Size(220, 45);
-            btnHome.TabIndex = 5;
-            btnHome.Text = "   Home";
-            btnHome.TextAlign = ContentAlignment.MiddleLeft;
-            btnHome.UseVisualStyleBackColor = false;
-            btnHome.Click += btnHome_Click;
-            // 
-            // lblSidebarUser
-            // 
-            lblSidebarUser.AutoSize = true;
-            lblSidebarUser.Font = new Font("Segoe UI", 9F);
-            lblSidebarUser.ForeColor = Color.Gray;
-            lblSidebarUser.Location = new Point(20, 15);
-            lblSidebarUser.Name = "lblSidebarUser";
-            lblSidebarUser.Size = new Size(51, 20);
-            lblSidebarUser.TabIndex = 6;
-            lblSidebarUser.Text = "MENU";
-            // 
             // pnlContent
             // 
             pnlContent.BackColor = Color.FromArgb(247, 248, 250);
+            pnlContent.BorderStyle = BorderStyle.FixedSingle;
             pnlContent.Controls.Add(lblSubWelcome);
             pnlContent.Controls.Add(lblWelcome);
             pnlContent.Controls.Add(pnlLine);
@@ -261,17 +331,6 @@
             pnlContent.Size = new Size(1060, 715);
             pnlContent.TabIndex = 0;
             // 
-            // lblWelcome
-            // 
-            lblWelcome.AutoSize = true;
-            lblWelcome.Font = new Font("Segoe UI", 22F, FontStyle.Bold);
-            lblWelcome.ForeColor = Color.FromArgb(30, 30, 30);
-            lblWelcome.Location = new Point(40, 40);
-            lblWelcome.Name = "lblWelcome";
-            lblWelcome.Size = new Size(267, 50);
-            lblWelcome.TabIndex = 1;
-            lblWelcome.Text = "Hello, User!";
-            // 
             // lblSubWelcome
             // 
             lblSubWelcome.AutoSize = true;
@@ -279,9 +338,20 @@
             lblSubWelcome.ForeColor = Color.Gray;
             lblSubWelcome.Location = new Point(40, 85);
             lblSubWelcome.Name = "lblSubWelcome";
-            lblSubWelcome.Size = new Size(320, 23);
+            lblSubWelcome.Size = new Size(304, 23);
             lblSubWelcome.TabIndex = 0;
-            lblSubWelcome.Text = "Here\'s an overview of your application.";
+            lblSubWelcome.Text = "Here's an overview of your application.";
+            // 
+            // lblWelcome
+            // 
+            lblWelcome.AutoSize = true;
+            lblWelcome.Font = new Font("Segoe UI", 22F, FontStyle.Bold);
+            lblWelcome.ForeColor = Color.FromArgb(30, 30, 30);
+            lblWelcome.Location = new Point(40, 40);
+            lblWelcome.Name = "lblWelcome";
+            lblWelcome.Size = new Size(225, 50);
+            lblWelcome.TabIndex = 1;
+            lblWelcome.Text = "Hello, User!";
             // 
             // pnlLine
             // 
@@ -318,7 +388,8 @@
             lblTitleStatus.ForeColor = Color.Gray;
             lblTitleStatus.Location = new Point(18, 18);
             lblTitleStatus.Name = "lblTitleStatus";
-            lblTitleStatus.Size = new Size(137, 19);
+            lblTitleStatus.Size = new Size(143, 19);
+            lblTitleStatus.TabIndex = 1;
             lblTitleStatus.Text = "APPLICATION STATUS";
             // 
             // lblValueStatus
@@ -328,6 +399,7 @@
             lblValueStatus.Location = new Point(18, 45);
             lblValueStatus.Name = "lblValueStatus";
             lblValueStatus.Size = new Size(210, 60);
+            lblValueStatus.TabIndex = 2;
             lblValueStatus.Text = "Pending";
             // 
             // cardDate
@@ -357,7 +429,8 @@
             lblTitleDate.ForeColor = Color.Gray;
             lblTitleDate.Location = new Point(18, 18);
             lblTitleDate.Name = "lblTitleDate";
-            lblTitleDate.Size = new Size(97, 19);
+            lblTitleDate.Size = new Size(98, 19);
+            lblTitleDate.TabIndex = 1;
             lblTitleDate.Text = "DATE APPLIED";
             // 
             // lblValueDate
@@ -367,6 +440,7 @@
             lblValueDate.Location = new Point(18, 45);
             lblValueDate.Name = "lblValueDate";
             lblValueDate.Size = new Size(210, 60);
+            lblValueDate.TabIndex = 2;
             lblValueDate.Text = "N/A";
             // 
             // cardPosition
@@ -396,7 +470,8 @@
             lblTitlePosition.ForeColor = Color.Gray;
             lblTitlePosition.Location = new Point(18, 18);
             lblTitlePosition.Name = "lblTitlePosition";
-            lblTitlePosition.Size = new Size(131, 19);
+            lblTitlePosition.Size = new Size(128, 19);
+            lblTitlePosition.TabIndex = 1;
             lblTitlePosition.Text = "POSITION APPLIED";
             // 
             // lblValuePosition
@@ -406,6 +481,7 @@
             lblValuePosition.Location = new Point(18, 45);
             lblValuePosition.Name = "lblValuePosition";
             lblValuePosition.Size = new Size(210, 60);
+            lblValuePosition.TabIndex = 2;
             lblValuePosition.Text = "N/A";
             // 
             // cardMissing
@@ -435,7 +511,8 @@
             lblTitleMissing.ForeColor = Color.Gray;
             lblTitleMissing.Location = new Point(18, 18);
             lblTitleMissing.Name = "lblTitleMissing";
-            lblTitleMissing.Size = new Size(170, 19);
+            lblTitleMissing.Size = new Size(167, 19);
+            lblTitleMissing.TabIndex = 1;
             lblTitleMissing.Text = "MISSING REQUIREMENTS";
             // 
             // lblValueMissing
@@ -445,6 +522,7 @@
             lblValueMissing.Location = new Point(18, 45);
             lblValueMissing.Name = "lblValueMissing";
             lblValueMissing.Size = new Size(210, 60);
+            lblValueMissing.TabIndex = 2;
             lblValueMissing.Text = "None";
             // 
             // cardInterview
@@ -474,7 +552,8 @@
             lblTitleInterview.ForeColor = Color.Gray;
             lblTitleInterview.Location = new Point(18, 18);
             lblTitleInterview.Name = "lblTitleInterview";
-            lblTitleInterview.Size = new Size(153, 19);
+            lblTitleInterview.Size = new Size(149, 19);
+            lblTitleInterview.TabIndex = 1;
             lblTitleInterview.Text = "INTERVIEW SCHEDULE";
             // 
             // lblValueInterview
@@ -484,6 +563,7 @@
             lblValueInterview.Location = new Point(18, 42);
             lblValueInterview.Name = "lblValueInterview";
             lblValueInterview.Size = new Size(280, 70);
+            lblValueInterview.TabIndex = 2;
             lblValueInterview.Text = "Not scheduled";
             // 
             // lblActivityHeader
@@ -493,7 +573,8 @@
             lblActivityHeader.ForeColor = Color.FromArgb(30, 30, 30);
             lblActivityHeader.Location = new Point(40, 460);
             lblActivityHeader.Name = "lblActivityHeader";
-            lblActivityHeader.Size = new Size(152, 28);
+            lblActivityHeader.Size = new Size(157, 28);
+            lblActivityHeader.TabIndex = 8;
             lblActivityHeader.Text = "Recent Activity";
             // 
             // pnlActivity
@@ -514,7 +595,8 @@
             lblActivityNote.ForeColor = Color.Gray;
             lblActivityNote.Location = new Point(15, 15);
             lblActivityNote.Name = "lblActivityNote";
-            lblActivityNote.Size = new Size(462, 20);
+            lblActivityNote.Size = new Size(449, 20);
+            lblActivityNote.TabIndex = 0;
             lblActivityNote.Text = "No application submitted yet. Go to My Application to get started.";
             // 
             // lblActivityNote2
@@ -524,7 +606,8 @@
             lblActivityNote2.ForeColor = Color.Gray;
             lblActivityNote2.Location = new Point(15, 45);
             lblActivityNote2.Name = "lblActivityNote2";
-            lblActivityNote2.Size = new Size(158, 20);
+            lblActivityNote2.Size = new Size(159, 20);
+            lblActivityNote2.TabIndex = 1;
             lblActivityNote2.Text = "Current status: Pending";
             // 
             // lblActionsHeader
@@ -532,8 +615,10 @@
             lblActionsHeader.AutoSize = true;
             lblActionsHeader.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             lblActionsHeader.ForeColor = Color.FromArgb(30, 30, 30);
-            lblActionsHeader.Location = new System.Drawing.Point(40, 615); lblActionsHeader.Name = "lblActionsHeader";
-            lblActionsHeader.Size = new Size(141, 28);
+            lblActionsHeader.Location = new Point(40, 615);
+            lblActionsHeader.Name = "lblActionsHeader";
+            lblActionsHeader.Size = new Size(143, 28);
+            lblActionsHeader.TabIndex = 9;
             lblActionsHeader.Text = "Quick Actions";
             // 
             // btnGoApplication
@@ -620,7 +705,7 @@
 
         private Panel pnlHeader;
         private Label lblLogo;
-        private Button btnProfileMenu;
+        private Button btnLogout;
         private Panel pnlSidebar;
         private Button btnHome;
         private Button btnAppStatus;
@@ -628,7 +713,11 @@
         private Button btnMyApplication;
         private Button btnMyDocuments;
         private Panel pnlSidebarBottom;
-        private Label lblSidebarUser;
+        private Label lblMenuHomepage;
+        private Label lblMenuApplyJob;
+        private Label lblMenuMyApplication;
+        private Label lblMenuEditProfile;
+        private Button btnMyProfile;
         private Panel pnlContent;
         private Label lblWelcome;
         private Label lblSubWelcome;
