@@ -88,7 +88,7 @@
             // btnHRLogin
             // 
             btnHRLogin.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnHRLogin.Location = new Point(222, 280);
+            btnHRLogin.Location = new Point(222, 261);
             btnHRLogin.Name = "btnHRLogin";
             btnHRLogin.Size = new Size(178, 32);
             btnHRLogin.TabIndex = 5;
@@ -98,7 +98,7 @@
             // 
             // btnBack
             // 
-            btnBack.Location = new Point(222, 325);
+            btnBack.Location = new Point(222, 316);
             btnBack.Name = "btnBack";
             btnBack.Size = new Size(174, 29);
             btnBack.TabIndex = 6;

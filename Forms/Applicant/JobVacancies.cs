@@ -116,7 +116,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             };
 
             btnApply.Click += BtnApply_Click;
-
             card.Controls.Add(lblJobTitle);
             card.Controls.Add(lblJobDesc);
             card.Controls.Add(btnApply);
@@ -150,7 +149,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                     }
 
                     string insertQuery = "INSERT INTO Applications (ApplicantAccountID, JobID, Status, DateApplied) " +
-                                         "VALUES (@uid, @jid, 'Submitted', @date); SELECT LAST_INSERT_ID();";
+                                         "VALUES (@uid, @jid, 'Submitted', @date); SELEC    T LAST_INSERT_ID();";
 
                     int newApplicationId = 0;
                     using (MySqlCommand insertCmd = new MySqlCommand(insertQuery, conn))
