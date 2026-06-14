@@ -47,8 +47,15 @@
             lblDepartment = new Label();
             txtJobTitle = new TextBox();
             lblJobTitle = new Label();
+            btnViewApplicants = new Button();
+            pnlApplicants = new Panel();
+            btnCloseApplicants = new Button();
+            dgvJobApplicants = new DataGridView();
+            lblApplicantsHeader = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvVacancies).BeginInit();
             pnlForm.SuspendLayout();
+            pnlApplicants.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvJobApplicants).BeginInit();
             SuspendLayout();
             // 
             // lblTitle
@@ -71,7 +78,7 @@
             dgvVacancies.ReadOnly = true;
             dgvVacancies.RowHeadersWidth = 51;
             dgvVacancies.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvVacancies.Size = new Size(840, 280);
+            dgvVacancies.Size = new Size(620, 280);
             dgvVacancies.TabIndex = 1;
             // 
             // btnAddNew
@@ -106,9 +113,9 @@
             // 
             // btnBack
             // 
-            btnBack.Location = new Point(760, 360);
+            btnBack.Location = new Point(553, 359);
             btnBack.Name = "btnBack";
-            btnBack.Size = new Size(100, 30);
+            btnBack.Size = new Size(87, 30);
             btnBack.TabIndex = 5;
             btnBack.Text = "Back";
             btnBack.UseVisualStyleBackColor = true;
@@ -133,13 +140,13 @@
             pnlForm.Controls.Add(lblJobTitle);
             pnlForm.Location = new Point(20, 405);
             pnlForm.Name = "pnlForm";
-            pnlForm.Size = new Size(840, 140);
+            pnlForm.Size = new Size(1050, 120);
             pnlForm.TabIndex = 6;
             pnlForm.Visible = false;
             // 
             // btnCancel
             // 
-            btnCancel.Location = new Point(739, 12);
+            btnCancel.Location = new Point(961, 12);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(72, 29);
             btnCancel.TabIndex = 11;
@@ -152,7 +159,7 @@
             btnSave.BackColor = Color.SteelBlue;
             btnSave.FlatStyle = FlatStyle.Flat;
             btnSave.ForeColor = Color.White;
-            btnSave.Location = new Point(661, 12);
+            btnSave.Location = new Point(883, 12);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(72, 29);
             btnSave.TabIndex = 10;
@@ -165,13 +172,13 @@
             txtQualifications.Location = new Point(410, 86);
             txtQualifications.Multiline = true;
             txtQualifications.Name = "txtQualifications";
-            txtQualifications.Size = new Size(380, 40);
+            txtQualifications.Size = new Size(380, 29);
             txtQualifications.TabIndex = 9;
             // 
             // lblQualifications
             // 
             lblQualifications.AutoSize = true;
-            lblQualifications.Location = new Point(410, 68);
+            lblQualifications.Location = new Point(410, 60);
             lblQualifications.Name = "lblQualifications";
             lblQualifications.Size = new Size(103, 20);
             lblQualifications.TabIndex = 8;
@@ -182,13 +189,13 @@
             txtDescription.Location = new Point(15, 86);
             txtDescription.Multiline = true;
             txtDescription.Name = "txtDescription";
-            txtDescription.Size = new Size(380, 40);
+            txtDescription.Size = new Size(380, 29);
             txtDescription.TabIndex = 7;
             // 
             // lblDescription
             // 
             lblDescription.AutoSize = true;
-            lblDescription.Location = new Point(15, 68);
+            lblDescription.Location = new Point(15, 60);
             lblDescription.Name = "lblDescription";
             lblDescription.Size = new Size(88, 20);
             lblDescription.TabIndex = 6;
@@ -247,11 +254,70 @@
             lblJobTitle.TabIndex = 0;
             lblJobTitle.Text = "Job Title:";
             // 
+            // btnViewApplicants
+            // 
+            btnViewApplicants.Location = new Point(366, 360);
+            btnViewApplicants.Name = "btnViewApplicants";
+            btnViewApplicants.Size = new Size(181, 29);
+            btnViewApplicants.TabIndex = 8;
+            btnViewApplicants.Text = "View Applied Applicants";
+            btnViewApplicants.UseVisualStyleBackColor = true;
+            btnViewApplicants.Click += btnViewApplicants_Click;
+            // 
+            // pnlApplicants
+            // 
+            pnlApplicants.BorderStyle = BorderStyle.FixedSingle;
+            pnlApplicants.Controls.Add(btnCloseApplicants);
+            pnlApplicants.Controls.Add(dgvJobApplicants);
+            pnlApplicants.Controls.Add(lblApplicantsHeader);
+            pnlApplicants.Location = new Point(650, 60);
+            pnlApplicants.Name = "pnlApplicants";
+            pnlApplicants.Size = new Size(430, 330);
+            pnlApplicants.TabIndex = 9;
+            pnlApplicants.Visible = false;
+            // 
+            // btnCloseApplicants
+            // 
+            btnCloseApplicants.BackColor = Color.Firebrick;
+            btnCloseApplicants.FlatAppearance.BorderSize = 0;
+            btnCloseApplicants.FlatStyle = FlatStyle.Flat;
+            btnCloseApplicants.Location = new Point(400, 8);
+            btnCloseApplicants.Name = "btnCloseApplicants";
+            btnCloseApplicants.Size = new Size(25, 25);
+            btnCloseApplicants.TabIndex = 2;
+            btnCloseApplicants.Text = "X";
+            btnCloseApplicants.UseVisualStyleBackColor = false;
+            btnCloseApplicants.Click += btnCloseApplicants_Click;
+            // 
+            // dgvJobApplicants
+            // 
+            dgvJobApplicants.AllowUserToAddRows = false;
+            dgvJobApplicants.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvJobApplicants.Location = new Point(10, 40);
+            dgvJobApplicants.Name = "dgvJobApplicants";
+            dgvJobApplicants.ReadOnly = true;
+            dgvJobApplicants.RowHeadersWidth = 51;
+            dgvJobApplicants.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvJobApplicants.Size = new Size(408, 278);
+            dgvJobApplicants.TabIndex = 1;
+            // 
+            // lblApplicantsHeader
+            // 
+            lblApplicantsHeader.AutoSize = true;
+            lblApplicantsHeader.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblApplicantsHeader.Location = new Point(10, 10);
+            lblApplicantsHeader.Name = "lblApplicantsHeader";
+            lblApplicantsHeader.Size = new Size(129, 23);
+            lblApplicantsHeader.TabIndex = 0;
+            lblApplicantsHeader.Text = "Job Applicants";
+            // 
             // JobVacancyManagement
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(882, 553);
+            ClientSize = new Size(1082, 533);
+            Controls.Add(pnlApplicants);
+            Controls.Add(btnViewApplicants);
             Controls.Add(pnlForm);
             Controls.Add(btnBack);
             Controls.Add(btnOpenClose);
@@ -259,6 +325,7 @@
             Controls.Add(btnAddNew);
             Controls.Add(dgvVacancies);
             Controls.Add(lblTitle);
+            FormScreenCaptureMode = ScreenCaptureMode.HideContent;
             Name = "JobVacancyManagement";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Job Vacancy Management";
@@ -266,6 +333,9 @@
             ((System.ComponentModel.ISupportInitialize)dgvVacancies).EndInit();
             pnlForm.ResumeLayout(false);
             pnlForm.PerformLayout();
+            pnlApplicants.ResumeLayout(false);
+            pnlApplicants.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvJobApplicants).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -291,5 +361,10 @@
         private TextBox txtDescription;
         private Button btnCancel;
         private Button btnSave;
+        private Button btnViewApplicants;
+        private Panel pnlApplicants;
+        private Label lblApplicantsHeader;
+        private DataGridView dgvJobApplicants;
+        private Button btnCloseApplicants;
     }
 }

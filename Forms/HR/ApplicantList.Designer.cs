@@ -52,7 +52,7 @@
             // 
             txtSearch.Location = new Point(102, 53);
             txtSearch.Name = "txtSearch";
-            txtSearch.PlaceholderText = "Search by name or email...";
+            txtSearch.PlaceholderText = "Search by applicant, email, or job title...";
             txtSearch.Size = new Size(489, 27);
             txtSearch.TabIndex = 1;
             // 

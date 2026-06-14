@@ -30,15 +30,28 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
                 {
                     conn.Open();
 
-                    // linking Applicants table to ApplicantsAccounts to get the email
-                    string query = @"SELECT a.ApplicantID, a.FirstName, a.LastName, 
-                                     a.ContactNumber, aa.Email
-                                     FROM Applicants a
-                                     JOIN ApplicantAccounts aa 
-                                     ON a.ApplicantAccountID = aa.ApplicantAccountID
-                                     WHERE a.FirstName LIKE @search 
-                                     OR a.LastName LIKE @search 
-                                     OR aa.Email LIKE @search";
+
+                    string query = @"SELECT
+                                        ap.ApplicationID,
+                                        a.ApplicantID,
+                                        CONCAT(a.FirstName, ' ', a.LastName) AS ApplicantName,
+                                        aa.Email,
+                                        j.JobTitle,
+                                        ap.Status,
+                                        ap.SubmittedAt
+                                    FROM Applications ap
+                                    INNER JOIN Applicants a
+                                        ON ap.ApplicantID = a.ApplicantID
+                                    INNER JOIN ApplicantAccounts aa
+                                        ON a.ApplicantAccountID = aa.ApplicantAccountID
+                                    INNER JOIN JobVacancies j
+                                        ON ap.JobVacancyID = j.JobVacancyID
+                                    WHERE
+                                        a.FirstName LIKE @search
+                                        OR a.LastName LIKE @search
+                                        OR aa.Email LIKE @search
+                                        OR j.JobTitle LIKE @search
+                                    ORDER BY ap.CreatedAt DESC";
 
                     using (var cmd = new MySqlCommand(query, conn))
                     {
@@ -52,6 +65,8 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
 
                         // Binding the table to the grid displays the rows automatically
                         dgvApplicants.DataSource = table;
+                        dgvApplicants.Columns["ApplicationID"].Visible = false;
+                        dgvApplicants.Columns["ApplicantID"].Visible = false;
                     }
                 }
             }

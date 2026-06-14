@@ -21,6 +21,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
 
         private void JobVacancyManagement_Load(object sender, EventArgs e)
         {
+            dgvVacancies.Size = new Size(1050, 280);
             LoadDepartments();
             LoadVacancies();
         }
@@ -232,6 +233,76 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
         private void btnBack_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btnViewApplicants_Click(object sender, EventArgs e)
+        {
+            if (dgvVacancies.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Please select a vacancy first.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            int jobId = Convert.ToInt32(dgvVacancies.SelectedRows[0].Cells["JobVacancyID"].Value);
+            string jobTitle = dgvVacancies.SelectedRows[0].Cells["JobTitle"].Value.ToString();
+
+            dgvVacancies.Size = new Size(620, 280);
+            LoadJobApplicants(jobId, jobTitle);
+            pnlApplicants.Visible = true;
+        }
+
+        private void LoadJobApplicants(int jobId, string jobTitle)
+        {
+            try
+            {
+                using (var conn = DBConnection.GetConnection())
+                {
+                    conn.Open();
+                    string query = @"SELECT
+                                     CONCAT(a.FirstName, ' ', a.LastName) AS ApplicantName,
+                                     aa.Email,
+                                     ap.Status,
+                                     ap.SubmittedAt
+                                    FROM Applications ap
+                                    INNER JOIN Applicants a ON ap.ApplicantID = a.ApplicantID
+                                    INNER JOIN ApplicantAccounts aa ON a.ApplicantAccountID = aa.ApplicantAccountID
+                                    WHERE ap.JobVacancyID = @jobId";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@jobId", jobId);
+                        var adapter = new MySqlDataAdapter(cmd);
+                        var table = new DataTable();
+                        adapter.Fill(table);
+                        dgvJobApplicants.DataSource = table;
+                        lblApplicantsHeader.Text = $"Applicants for: {jobTitle}";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading applicants: " + ex.Message);
+            }
+        }
+
+        private void ToggleButtons(bool enabled)
+        {
+            btnAddNew.Enabled = enabled;
+            btnEdit.Enabled = enabled;
+            btnOpenClose.Enabled = enabled;
+            btnViewApplicants.Enabled = enabled;
+            dgvVacancies.Enabled = enabled;
+            if (!enabled)
+            {
+                pnlApplicants.Visible = false;
+                dgvVacancies.Size = new Size(1050, 280);
+            }
+        }
+
+        private void btnCloseApplicants_Click(object sender, EventArgs e)
+        {
+            pnlApplicants.Visible = false;
+            dgvVacancies.Size = new Size(1050, 280);
         }
     }
 }
