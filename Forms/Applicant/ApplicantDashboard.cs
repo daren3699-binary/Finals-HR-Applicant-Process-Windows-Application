@@ -73,7 +73,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 
                     string appQuery = @"SELECT a.Status, a.DateApplied, j.JobTitle 
                                         FROM Applications a 
-                                        JOIN JobVacancies j ON a.JobID = j.JobID 
+                                        JOIN JobVacancies j ON a.JobID = j.JobVacancyID
                                         WHERE a.ApplicantAccountID = @uid 
                                         ORDER BY a.DateApplied DESC LIMIT 1";
 

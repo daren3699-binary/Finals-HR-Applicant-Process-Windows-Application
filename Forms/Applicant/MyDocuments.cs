@@ -127,7 +127,15 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
         {
             dgvDocuments.Rows.Clear();
 
-            if (_applicationID <= 0) return;
+            if (_applicationID <= 0)
+            {
+                lblSubmittedCount.Text = "0";
+                lblMissingCount.Text = "0";
+                return;
+            }
+
+            int totalRequired = 0;
+            string countQuery = "SELECT COUNT(*) FROM RequirementTypes";
 
             string query = @"SELECT rt.RequirementName, ad.FilePath, ad.Status,
                                     ad.UploadedAt
@@ -143,6 +151,10 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                 using (var conn = DBConnection.GetConnection())
                 {
                     conn.Open();
+
+                    MySqlCommand countCmd = new MySqlCommand(countQuery, conn);
+                    totalRequired = Convert.ToInt32(countCmd.ExecuteScalar());
+
                     MySqlCommand cmd = new MySqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@AppID", _applicationID);
 
@@ -176,7 +188,8 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                 }
 
                 lblSubmittedCount.Text = submittedCount.ToString();
-                lblMissingCount.Text = (dgvDocuments.Rows.Count - submittedCount).ToString();
+                int missingCount = totalRequired - submittedCount;
+                lblMissingCount.Text = missingCount < 0 ? "0" : missingCount.ToString();
             }
             catch (Exception ex)
             {
