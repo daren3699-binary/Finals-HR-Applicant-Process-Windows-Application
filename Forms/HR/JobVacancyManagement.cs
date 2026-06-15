@@ -304,5 +304,15 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
             pnlApplicants.Visible = false;
             dgvVacancies.Size = new Size(1050, 280);
         }
+
+        private void dgvVacancies_SelectionChanged(object sender, EventArgs e)
+        {
+            if (!pnlApplicants.Visible) return;
+            if (dgvVacancies.SelectedRows.Count == 0) return;
+
+            int jobId = Convert.ToInt32(dgvVacancies.SelectedRows[0].Cells["JobVacancyID"].Value);
+            string jobTitle = dgvVacancies.SelectedRows[0].Cells["JobTitle"].Value.ToString();
+            LoadJobApplicants(jobId, jobTitle);
+        }
     }
 }

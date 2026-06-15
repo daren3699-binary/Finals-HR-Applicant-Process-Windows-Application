@@ -63,6 +63,43 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
             {
                 MessageBox.Show($"Database Error: {ex.Message}");
             }
+            LoadAppliedJobs();
+        }
+
+        private void LoadAppliedJobs()
+        {
+            try
+            {
+                using (var conn = DBConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    string query = @"SELECT
+                                        j.JobTitle,
+                                        d.DepartmentName,
+                                        ap.Status,
+                                        ap.SubmittedAt
+                                    FROM Applications ap
+                                    INNER JOIN JobVacancies j
+                                        ON ap.JobVacancyID = j.JobVacancyID
+                                    LEFT JOIN Departments d
+                                        ON j.DepartmentID = d.DepartmentID
+                                    WHERE ap.ApplicantID = @ApplicantID
+                                    ORDER BY ap.CreatedAt DESC";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ApplicantID", _applicantId);
+                        var adapter = new MySqlDataAdapter(cmd);
+                        DataTable table = new DataTable();
+                        adapter.Fill(table);
+                        dgvAppliedJobs.DataSource = table;
+                        dgvAppliedJobs.Columns["SubmittedAt"].HeaderText = "Date Submitted";
+                        dgvAppliedJobs.Columns["JobTitle"].HeaderText = "Job Vacancy";
+                    }
+                }
+            }
+            catch (Exception ex) { MessageBox.Show($"Error loading applied jobs: {ex.Message}"); }
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -149,5 +186,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
             if (_applicationID == 0) { MessageBox.Show("No application found."); return; }
             new HiringDecision(_applicationID).ShowDialog();
         }
+
     }
 }

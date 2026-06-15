@@ -149,7 +149,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                     }
 
                     string insertQuery = "INSERT INTO Applications (ApplicantAccountID, JobID, Status, DateApplied) " +
-                                         "VALUES (@uid, @jid, 'Submitted', @date); SELEC    T LAST_INSERT_ID();";
+                                         "VALUES (@uid, @jid, 'Submitted', @date); SELECT LAST_INSERT_ID();";
 
                     int newApplicationId = 0;
                     using (MySqlCommand insertCmd = new MySqlCommand(insertQuery, conn))
@@ -161,12 +161,11 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                         newApplicationId = Convert.ToInt32(insertCmd.ExecuteScalar());
                     }
 
-                    string historyQuery = "INSERT INTO ApplicationStatusHistory (ApplicationID, Status, ChangeDate, Remarks) " +
-                                          "VALUES (@appId, 'Submitted', @date, 'Application submitted by user.')";
+                    string historyQuery = "INSERT INTO ApplicationStatusHistory (ApplicationID, Status, Remarks, ChangedBy) " +
+                                          "VALUES (@appId, 'Submitted', 'Application submitted by user.', 'Applicant')";
                     using (MySqlCommand historyCmd = new MySqlCommand(historyQuery, conn))
                     {
                         historyCmd.Parameters.AddWithValue("@appId", newApplicationId);
-                        historyCmd.Parameters.AddWithValue("@date", DateTime.Now);
                         historyCmd.ExecuteNonQuery();
                     }
 

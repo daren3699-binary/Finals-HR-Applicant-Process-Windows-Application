@@ -95,7 +95,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
                                           VALUES (@appId, @decision, @remarks, @by)";
                     using (var cmd = new MySqlCommand(insertQuery, conn))
                     {
-                        cmd.Parameters.AddWithValue("@appID", _applicationID);
+                        cmd.Parameters.AddWithValue("@appId", _applicationID);
                         cmd.Parameters.AddWithValue("@decision", newStatus);
                         cmd.Parameters.AddWithValue("@remarks", txtRemarks.Text.Trim());
                         cmd.Parameters.AddWithValue("@by", Session.CurrentUserId);
