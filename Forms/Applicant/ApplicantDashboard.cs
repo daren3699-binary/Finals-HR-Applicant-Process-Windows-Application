@@ -82,11 +82,15 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 
                     lblWelcome.Text = "Hello, " + _applicantName + "!";
 
-                    string appQuery = @"SELECT a.Status, a.DateApplied, j.JobTitle 
-                                        FROM Applications a 
+                    string appQuery = @"SELECT a.ApplicationID, a.Status, a.DateApplied, j.JobTitle
+                                        FROM Applications a
                                         JOIN JobVacancies j ON a.JobID = j.JobVacancyID
-                                        WHERE a.ApplicantAccountID = @uid 
+                                        WHERE a.ApplicantAccountID = @uid
                                         ORDER BY a.DateApplied DESC LIMIT 1";
+
+                    int applicationID = 0;
+                    string currentStatus = "";
+                    string jobTitle = "";
 
                     using (MySqlCommand appCmd = new MySqlCommand(appQuery, conn))
                     {
@@ -95,9 +99,10 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                         {
                             if (reader.Read())
                             {
-                                string currentStatus = reader.GetString("Status");
+                                applicationID = reader.GetInt32("ApplicationID");
+                                currentStatus = reader.GetString("Status");
                                 DateTime dateApplied = reader.GetDateTime("DateApplied");
-                                string jobTitle = reader.GetString("JobTitle");
+                                jobTitle = reader.GetString("JobTitle");
 
                                 lblValueStatus.Text = currentStatus;
                                 lblValueDate.Text = dateApplied.ToString("MMMM dd, yyyy");
@@ -106,26 +111,70 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                                 lblActivityNote.Text = "You have an active application for the " + jobTitle + " role.";
                                 lblActivityNote2.Text = "Current status: " + currentStatus;
 
-                                if (currentStatus == "Submitted")
-                                    accentStatus.BackColor = Color.FromArgb(70, 130, 180);
-                                else if (currentStatus == "Under Review")
-                                    accentStatus.BackColor = Color.FromArgb(255, 193, 7);
-                                else if (currentStatus == "Accepted")
-                                    accentStatus.BackColor = Color.FromArgb(92, 184, 92);
-                                else if (currentStatus == "Rejected")
-                                    accentStatus.BackColor = Color.FromArgb(180, 50, 50);
+                                accentStatus.BackColor = GetStatusColor(currentStatus);
                             }
                             else
                             {
                                 lblValueStatus.Text = "No Active Application";
                                 lblValueDate.Text = "N/A";
                                 lblValuePosition.Text = "N/A";
-
                                 lblActivityNote.Text = "No application submitted yet. Go to Job Vacancies to get started.";
                                 lblActivityNote2.Text = "Current status: Unsubmitted";
                                 accentStatus.BackColor = Color.FromArgb(150, 150, 150);
                             }
                         }
+                    }
+
+                    if (applicationID > 0)
+                    {
+                        int totalRequired = 0;
+                        int submitted = 0;
+
+                        string countQuery = "SELECT COUNT(*) FROM RequirementTypes";
+                        using (MySqlCommand countCmd = new MySqlCommand(countQuery, conn))
+                            totalRequired = Convert.ToInt32(countCmd.ExecuteScalar());
+
+                        string submittedQuery = "SELECT COUNT(*) FROM ApplicantDocuments WHERE ApplicationID = @appId AND Status = 'Submitted'";
+                        using (MySqlCommand submittedCmd = new MySqlCommand(submittedQuery, conn))
+                        {
+                            submittedCmd.Parameters.AddWithValue("@appId", applicationID);
+                            submitted = Convert.ToInt32(submittedCmd.ExecuteScalar());
+                        }
+
+                        int missing = totalRequired - submitted;
+                        lblValueMissing.Text = missing < 0 ? "0" : missing.ToString();
+
+                        string interviewQuery = @"SELECT InterviewDate, InterviewTime, Mode, Location
+                                                  FROM InterviewSchedules
+                                                  WHERE ApplicationID = @appId
+                                                  ORDER BY InterviewDate DESC LIMIT 1";
+
+                        using (MySqlCommand intCmd = new MySqlCommand(interviewQuery, conn))
+                        {
+                            intCmd.Parameters.AddWithValue("@appId", applicationID);
+                            using (MySqlDataReader intReader = intCmd.ExecuteReader())
+                            {
+                                if (intReader.Read())
+                                {
+                                    string date = intReader.GetDateTime("InterviewDate").ToString("MMM dd, yyyy");
+                                    string mode = intReader["Mode"]?.ToString() ?? "";
+                                    string location = intReader["Location"]?.ToString() ?? "";
+                                    string details = date + (string.IsNullOrWhiteSpace(mode) ? "" : " | " + mode);
+                                    if (!string.IsNullOrWhiteSpace(location))
+                                        details += " | " + location;
+                                    lblValueInterview.Text = details;
+                                }
+                                else
+                                {
+                                    lblValueInterview.Text = "No interview scheduled.";
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        lblValueMissing.Text = "0";
+                        lblValueInterview.Text = "No interview scheduled.";
                     }
                 }
             }
@@ -134,9 +183,28 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                 lblValueStatus.Text = "Database Disconnected";
                 lblValueDate.Text = "N/A";
                 lblValuePosition.Text = "N/A";
+                lblValueMissing.Text = "N/A";
+                lblValueInterview.Text = "N/A";
                 lblActivityNote.Text = "Error connecting to storage: " + ex.Message;
                 lblActivityNote2.Text = "Current status: Offline";
                 accentStatus.BackColor = Color.Maroon;
+            }
+        }
+
+        private Color GetStatusColor(string status)
+        {
+            switch (status)
+            {
+                case "Submitted": return Color.FromArgb(70, 130, 180);
+                case "Under Review": return Color.FromArgb(255, 193, 7);
+                case "Shortlisted": return Color.FromArgb(100, 180, 100);
+                case "For Interview": return Color.FromArgb(55, 138, 221);
+                case "For Assessment": return Color.FromArgb(150, 100, 200);
+                case "For Final Review": return Color.FromArgb(255, 160, 50);
+                case "Accepted": return Color.FromArgb(92, 184, 92);
+                case "Rejected": return Color.FromArgb(180, 50, 50);
+                case "Withdrawn": return Color.FromArgb(150, 150, 150);
+                default: return Color.FromArgb(150, 150, 150);
             }
         }
 

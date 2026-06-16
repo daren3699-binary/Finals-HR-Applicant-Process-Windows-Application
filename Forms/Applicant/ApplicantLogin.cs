@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using ApplicantRegistration;
 using MySql.Data.MySqlClient;
@@ -36,9 +32,10 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             txtPassword.PasswordChar = chkShowPassword.Checked ? '\0' : '*';
         }
 
-        private void lnkForgotPassword_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void lnkChangePassword_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            MessageBox.Show("Please contact HR to reset your password.", "Forgot Password", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            ChangePasswordForm changePasswordForm = new ChangePasswordForm();
+            changePasswordForm.ShowDialog(this);
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
@@ -58,8 +55,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                 {
                     conn.Open();
 
-                    string query = "SELECT ApplicantAccountID, IsActive FROM ApplicantAccounts " +
-                                   "WHERE Email = @Email AND PasswordHash = @Password";
+                    string query = "SELECT ApplicantAccountID, IsActive FROM ApplicantAccounts WHERE Email = @Email AND PasswordHash = @Password";
 
                     using (var cmd = new MySqlCommand(query, conn))
                     {
@@ -84,8 +80,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                                     SessionManager.SaveSession(accountID);
                                 else
                                     SessionManager.ClearSession();
-
-                                MessageBox.Show("Login successful! Welcome.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                                 ApplicantDashboard dashboard = new ApplicantDashboard(accountID);
                                 dashboard.Show();

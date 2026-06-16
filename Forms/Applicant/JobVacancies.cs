@@ -44,16 +44,12 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 
                     string query = "SELECT JobVacancyID, JobTitle, Qualifications FROM JobVacancies WHERE Status = 'Open'";
                     if (!string.IsNullOrEmpty(searchFilter))
-                    {
                         query += " AND (JobTitle LIKE @search OR Qualifications LIKE @search)";
-                    }
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
                         if (!string.IsNullOrEmpty(searchFilter))
-                        {
                             cmd.Parameters.AddWithValue("@search", "%" + searchFilter + "%");
-                        }
 
                         using (MySqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -99,8 +95,23 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                 Font = new Font("Segoe UI", 9F),
                 ForeColor = Color.Gray,
                 Location = new Point(20, 45),
-                Size = new Size(750, 50)
+                Size = new Size(630, 50)
             };
+
+            Button btnViewDetails = new Button
+            {
+                Text = "View Details",
+                Font = new Font("Segoe UI", 9F),
+                BackColor = Color.White,
+                ForeColor = Color.FromArgb(70, 130, 180),
+                FlatStyle = FlatStyle.Flat,
+                Location = new Point(670, 35),
+                Size = new Size(110, 35),
+                Cursor = Cursors.Hand,
+                Tag = jobId
+            };
+            btnViewDetails.FlatAppearance.BorderColor = Color.FromArgb(70, 130, 180);
+            btnViewDetails.Click += BtnViewDetails_Click;
 
             Button btnApply = new Button
             {
@@ -114,13 +125,117 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                 Cursor = Cursors.Hand,
                 Tag = jobId
             };
-
             btnApply.Click += BtnApply_Click;
+
             card.Controls.Add(lblJobTitle);
             card.Controls.Add(lblJobDesc);
+            card.Controls.Add(btnViewDetails);
             card.Controls.Add(btnApply);
 
             flpJobsContainer.Controls.Add(card);
+        }
+
+        private void BtnViewDetails_Click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            int jobId = Convert.ToInt32(btn.Tag);
+
+            try
+            {
+                using (MySqlConnection conn = DBConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    string query = "SELECT JobTitle, Qualifications, Department, EmploymentType, Slots FROM JobVacancies WHERE JobVacancyID = @jid";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@jid", jobId);
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                string title = reader["JobTitle"]?.ToString() ?? "";
+                                string qualifications = reader["Qualifications"]?.ToString() ?? "";
+                                string department = reader["Department"]?.ToString() ?? "N/A";
+                                string empType = reader["EmploymentType"]?.ToString() ?? "N/A";
+                                string slots = reader["Slots"]?.ToString() ?? "N/A";
+
+                                Form detailForm = new Form
+                                {
+                                    Text = title,
+                                    Size = new Size(520, 420),
+                                    StartPosition = FormStartPosition.CenterParent,
+                                    FormBorderStyle = FormBorderStyle.FixedDialog,
+                                    MaximizeBox = false,
+                                    MinimizeBox = false,
+                                    BackColor = Color.White
+                                };
+
+                                Label lblDetailTitle = new Label
+                                {
+                                    Text = title,
+                                    Font = new Font("Segoe UI", 14F, FontStyle.Bold),
+                                    Location = new Point(20, 20),
+                                    AutoSize = true
+                                };
+
+                                Label lblDeptLabel = new Label { Text = "Department:", Font = new Font("Segoe UI", 9F, FontStyle.Bold), Location = new Point(20, 70), AutoSize = true };
+                                Label lblDept = new Label { Text = department, Font = new Font("Segoe UI", 9F), Location = new Point(140, 70), AutoSize = true };
+
+                                Label lblTypeLabel = new Label { Text = "Employment Type:", Font = new Font("Segoe UI", 9F, FontStyle.Bold), Location = new Point(20, 100), AutoSize = true };
+                                Label lblType = new Label { Text = empType, Font = new Font("Segoe UI", 9F), Location = new Point(140, 100), AutoSize = true };
+
+                                Label lblSlotsLabel = new Label { Text = "Open Slots:", Font = new Font("Segoe UI", 9F, FontStyle.Bold), Location = new Point(20, 130), AutoSize = true };
+                                Label lblSlots = new Label { Text = slots, Font = new Font("Segoe UI", 9F), Location = new Point(140, 130), AutoSize = true };
+
+                                Label lblQualLabel = new Label { Text = "Qualifications:", Font = new Font("Segoe UI", 9F, FontStyle.Bold), Location = new Point(20, 170), AutoSize = true };
+
+                                TextBox txtQual = new TextBox
+                                {
+                                    Text = qualifications,
+                                    Multiline = true,
+                                    ReadOnly = true,
+                                    ScrollBars = ScrollBars.Vertical,
+                                    Location = new Point(20, 195),
+                                    Size = new Size(460, 130),
+                                    BackColor = Color.FromArgb(247, 248, 250),
+                                    BorderStyle = BorderStyle.FixedSingle,
+                                    Font = new Font("Segoe UI", 9F)
+                                };
+
+                                Button btnClose = new Button
+                                {
+                                    Text = "Close",
+                                    Location = new Point(370, 340),
+                                    Size = new Size(110, 32),
+                                    BackColor = Color.FromArgb(70, 130, 180),
+                                    ForeColor = Color.White,
+                                    FlatStyle = FlatStyle.Flat,
+                                    Font = new Font("Segoe UI", 9F, FontStyle.Bold)
+                                };
+                                btnClose.Click += (s, ev) => detailForm.Close();
+
+                                detailForm.Controls.Add(lblDetailTitle);
+                                detailForm.Controls.Add(lblDeptLabel);
+                                detailForm.Controls.Add(lblDept);
+                                detailForm.Controls.Add(lblTypeLabel);
+                                detailForm.Controls.Add(lblType);
+                                detailForm.Controls.Add(lblSlotsLabel);
+                                detailForm.Controls.Add(lblSlots);
+                                detailForm.Controls.Add(lblQualLabel);
+                                detailForm.Controls.Add(txtQual);
+                                detailForm.Controls.Add(btnClose);
+
+                                detailForm.ShowDialog();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading job details: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void BtnApply_Click(object sender, EventArgs e)
@@ -149,7 +264,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                     }
 
                     string insertQuery = "INSERT INTO Applications (ApplicantAccountID, JobID, Status, DateApplied) " +
-                                         "VALUES (@uid, @jid, 'Submitted', @date); SELEC    T LAST_INSERT_ID();";
+                                         "VALUES (@uid, @jid, 'Submitted', @date); SELECT LAST_INSERT_ID();";
 
                     int newApplicationId = 0;
                     using (MySqlCommand insertCmd = new MySqlCommand(insertQuery, conn))
