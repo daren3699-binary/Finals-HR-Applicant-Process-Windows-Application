@@ -146,7 +146,10 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                 {
                     conn.Open();
 
-                    string query = "SELECT JobTitle, Qualifications, Department, EmploymentType, Slots FROM JobVacancies WHERE JobVacancyID = @jid";
+                    string query = @"SELECT j.JobTitle, j.Qualifications, d.DepartmentName, j.EmploymentType
+                                     FROM JobVacancies j
+                                     LEFT JOIN Departments d ON j.DepartmentID = d.DepartmentID
+                                     WHERE j.JobVacancyID = @jid";
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@jid", jobId);
@@ -156,9 +159,8 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                             {
                                 string title = reader["JobTitle"]?.ToString() ?? "";
                                 string qualifications = reader["Qualifications"]?.ToString() ?? "";
-                                string department = reader["Department"]?.ToString() ?? "N/A";
+                                string department = reader["DepartmentName"]?.ToString() ?? "N/A";
                                 string empType = reader["EmploymentType"]?.ToString() ?? "N/A";
-                                string slots = reader["Slots"]?.ToString() ?? "N/A";
 
                                 Form detailForm = new Form
                                 {
@@ -185,10 +187,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                                 Label lblTypeLabel = new Label { Text = "Employment Type:", Font = new Font("Segoe UI", 9F, FontStyle.Bold), Location = new Point(20, 100), AutoSize = true };
                                 Label lblType = new Label { Text = empType, Font = new Font("Segoe UI", 9F), Location = new Point(140, 100), AutoSize = true };
 
-                                Label lblSlotsLabel = new Label { Text = "Open Slots:", Font = new Font("Segoe UI", 9F, FontStyle.Bold), Location = new Point(20, 130), AutoSize = true };
-                                Label lblSlots = new Label { Text = slots, Font = new Font("Segoe UI", 9F), Location = new Point(140, 130), AutoSize = true };
-
-                                Label lblQualLabel = new Label { Text = "Qualifications:", Font = new Font("Segoe UI", 9F, FontStyle.Bold), Location = new Point(20, 170), AutoSize = true };
+                                Label lblQualLabel = new Label { Text = "Qualifications:", Font = new Font("Segoe UI", 9F, FontStyle.Bold), Location = new Point(20, 140), AutoSize = true };
 
                                 TextBox txtQual = new TextBox
                                 {
@@ -196,8 +195,8 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                                     Multiline = true,
                                     ReadOnly = true,
                                     ScrollBars = ScrollBars.Vertical,
-                                    Location = new Point(20, 195),
-                                    Size = new Size(460, 130),
+                                    Location = new Point(20, 165),
+                                    Size = new Size(460, 160),
                                     BackColor = Color.FromArgb(247, 248, 250),
                                     BorderStyle = BorderStyle.FixedSingle,
                                     Font = new Font("Segoe UI", 9F)
@@ -220,8 +219,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                                 detailForm.Controls.Add(lblDept);
                                 detailForm.Controls.Add(lblTypeLabel);
                                 detailForm.Controls.Add(lblType);
-                                detailForm.Controls.Add(lblSlotsLabel);
-                                detailForm.Controls.Add(lblSlots);
                                 detailForm.Controls.Add(lblQualLabel);
                                 detailForm.Controls.Add(txtQual);
                                 detailForm.Controls.Add(btnClose);
@@ -248,6 +245,20 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                 using (MySqlConnection conn = DBConnection.GetConnection())
                 {
                     conn.Open();
+
+                    string statusQuery = "SELECT Status FROM JobVacancies WHERE JobVacancyID = @jid";
+                    using (MySqlCommand statusCmd = new MySqlCommand(statusQuery, conn))
+                    {
+                        statusCmd.Parameters.AddWithValue("@jid", jobId);
+                        object result = statusCmd.ExecuteScalar();
+                        string jobStatus = result?.ToString() ?? "";
+                        if (jobStatus != "Open")
+                        {
+                            MessageBox.Show("This job vacancy is no longer open for applications.", "Job Closed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            LoadJobVacancies();
+                            return;
+                        }
+                    }
 
                     string checkQuery = "SELECT COUNT(*) FROM Applications WHERE ApplicantAccountID = @uid AND JobID = @jid";
                     using (MySqlCommand checkCmd = new MySqlCommand(checkQuery, conn))
