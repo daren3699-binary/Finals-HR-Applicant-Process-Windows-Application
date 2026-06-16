@@ -20,10 +20,19 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
 
         private void Reports_Load(object sender, EventArgs e)
         {
-            cmbFilter.SelectedIndex = 0; // default to "All"
+            cmbApplicantFilter.SelectedIndex = 0;
+            cmbInterviewsFilter.SelectedIndex = 0;
+            cmbVacancyFilter.SelectedIndex = 0;
+            cmbReqFilter.SelectedIndex = 0;
+
+            LoadApplicantReport("");
+            LoadInterviewReport("");
+            LoadVacancyReport("");
+            LoadRequirementsReport("");
         }
 
-        private void LoadReport(string statusFilter)
+
+        private void LoadApplicantReport(string statusFilter)
         {
             try
             {
@@ -47,10 +56,9 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
                     {
                         if (!string.IsNullOrEmpty(statusFilter)) cmd.Parameters.AddWithValue("@status", statusFilter);
 
-                        var adapter = new MySqlDataAdapter(cmd);
-                        var table = new DataTable();
-                        adapter.Fill(table);
-                        dgvReport.DataSource = table;
+                        DataTable table = new DataTable();
+                        new MySqlDataAdapter(cmd).Fill(table);
+                        dgvApplicantReport.DataSource = table;
                     }
                 }
             }
@@ -60,50 +68,209 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
             }
         }
 
-        private void btnBack_Click(object sender, EventArgs e)
+        private void LoadInterviewReport(string statusFilter)
         {
-            this.Close();
-        }
-
-        private void cmbFilter_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string filter = cmbFilter.SelectedItem?.ToString() ?? "";
-            LoadReport(filter == "All" ? "" : filter);
-        }
-
-        private void btnExport_Click(object sender, EventArgs e)
-        {
-            if (dgvReport.Rows.Count == 0)
+            try
             {
-                MessageBox.Show("No data to export", "Empty", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                using (var conn = DBConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    string query = @"SELECT
+                                        i.InterviewID,
+                                        CONCAT(a.FirstName,' ',a.LastName) AS ApplicantName,
+                                        j.JobTitle,
+                                        i.InterviewDate,
+                                        i.Mode,
+                                        i.Location,
+                                        i.Status
+                                    FROM InterviewSchedules i
+                                    JOIN Applications ap
+                                        ON i.ApplicationID = ap.ApplicationID
+                                    JOIN Applicants a
+                                        ON ap.ApplicantID = a.ApplicantID
+                                    JOIN JobVacancies j
+                                        ON ap.JobVacancyID = j.JobVacancyID";
+
+                    if (!string.IsNullOrEmpty(statusFilter)) query += " WHERE i.Status = @status";
+                    query += " ORDER BY i.InterviewDate DESC";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        if (!string.IsNullOrEmpty(statusFilter)) cmd.Parameters.AddWithValue("@status", statusFilter);
+                        DataTable table = new DataTable();
+                        new MySqlDataAdapter(cmd).Fill(table);
+                        dgvInterviewsReport.DataSource = table;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Database Error: {ex.Message}");
+            }
+        }
+
+        private void LoadVacancyReport(string statusFilter)
+        {
+            try
+            {
+                using (var conn = DBConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    string query = @"SELECT
+                                        j.JobVacancyID,
+                                        j.JobTitle,
+                                        d.DepartmentName,
+                                        j.EmploymentType,
+                                        j.Status,
+                                        j.CreatedAt,
+                                        COUNT(ap.ApplicationID) AS ApplicantCount
+                                    FROM JobVacancies j
+                                    LEFT JOIN Departments d
+                                        ON j.DepartmentID = d.DepartmentID
+                                    LEFT JOIN Applications ap
+                                        ON j.JobVacancyID = ap.JobVacancyID";
+
+                    if (!string.IsNullOrEmpty(statusFilter)) query += " WHERE j.Status = @status";
+                    query += @" GROUP BY j.JobVacancyID
+                                ORDER BY j.CreatedAt DESC";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        if (!string.IsNullOrEmpty(statusFilter)) cmd.Parameters.AddWithValue("@status", statusFilter);
+                        DataTable table = new DataTable();
+                        new MySqlDataAdapter(cmd).Fill(table);
+                        dgvVacancyReport.DataSource = table;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Database Error: {ex.Message}");
+            }
+        }
+
+        private void LoadRequirementsReport(string statusFilter)
+        {
+            try
+            {
+                using (var conn = DBConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    string query = @"SELECT
+                                        CONCAT(a.FirstName,' ',a.LastName) AS ApplicantName,
+                                        rt.RequirementName,
+                                        ad.Status,
+                                        ad.UploadDate
+                                    FROM ApplicantDocuments ad
+                                    JOIN Applicants a
+                                        ON ad.ApplicantID = a.ApplicantID
+                                    JOIN RequirementTypes rt
+                                        ON ad.RequirementTypeID = rt.RequirementTypeID";
+
+                    if (!string.IsNullOrEmpty(statusFilter)) query += " WHERE ad.Status = @status";
+                    query += " ORDER BY ApplicantName";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        if (!string.IsNullOrEmpty(statusFilter)) cmd.Parameters.AddWithValue("@status", statusFilter);
+
+                        DataTable table = new DataTable();
+                        new MySqlDataAdapter(cmd).Fill(table);
+                        dgvReqReport.DataSource = table;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Database Error: {ex.Message}");
+            }
+        }
+
+        private void ExportGrid(DataGridView grid, string filenamePrefix)
+        {
+            if (grid.Rows.Count == 0)
+            {
+                MessageBox.Show("No data to export.");
                 return;
             }
 
             SaveFileDialog saveDialog = new SaveFileDialog();
             saveDialog.Filter = "CSV Files (*.csv)|*.csv";
-            saveDialog.FileName = "HR_Report_" + DateTime.Now.ToString("yyyyMMdd");
+            saveDialog.FileName = filenamePrefix + "_" + DateTime.Now.ToString("yyyyMMdd");
 
-            if (saveDialog.ShowDialog() == DialogResult.OK)
+            if (saveDialog.ShowDialog() != DialogResult.OK) return;
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (DataGridViewColumn col in grid.Columns) sb.Append(col.HeaderText + ",");
+
+            sb.AppendLine();
+
+            foreach (DataGridViewRow row in grid.Rows)
             {
-                // the syntax StringBuilder builds the CSV text line by line
-                var sb = new StringBuilder();
+                if (row.IsNewRow) continue;
 
-                // writes column headers
-                foreach (DataGridViewColumn col in dgvReport.Columns) sb.Append(col.HeaderText + ",");
+                foreach (DataGridViewCell cell in row.Cells) sb.Append(cell.Value?.ToString() + ",");
                 sb.AppendLine();
-
-                // writes each row
-                foreach (DataGridViewRow row in dgvReport.Rows)
-                {
-                    if (row.IsNewRow) continue;
-                    foreach (DataGridViewCell cell in row.Cells) sb.Append(cell.Value?.ToString() + ",");
-                    sb.AppendLine();
-                }
-
-                File.WriteAllText(saveDialog.FileName, sb.ToString());
-                MessageBox.Show("Exported successfully!", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                
             }
+
+            File.WriteAllText(saveDialog.FileName, sb.ToString());
+
+            MessageBox.Show("Export successful.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        // Filter ComboBox Events
+        private void cmbApplicantFilter_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string filter = cmbApplicantFilter.SelectedItem?.ToString() ?? "";
+            LoadApplicantReport(filter == "All" ? "" : filter);
+        }
+
+        private void cmbInterviewsFilter_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string filter = cmbInterviewsFilter.SelectedItem?.ToString() ?? "";
+            LoadInterviewReport(filter == "All" ? "" : filter);
+        }
+
+        private void cmbVacancyFilter_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string filter = cmbVacancyFilter.SelectedItem?.ToString() ?? "";
+            LoadVacancyReport(filter == "All" ? "" : filter);
+        }
+
+        private void cmbReqFilter_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string filter = cmbReqFilter.SelectedItem?.ToString() ?? "";
+            LoadRequirementsReport(filter == "All" ? "" : filter);
+        }
+
+        // Export Button Events
+        private void btnApplicantExport_Click(object sender, EventArgs e)
+        {
+            ExportGrid(dgvApplicantReport, "ApplicantReport");
+        }
+
+        private void btnInterviewExport_Click(object sender, EventArgs e)
+        {
+            ExportGrid(dgvInterviewsReport, "InterviewReport");
+        }
+
+        private void btnVacancyExport_Click(object sender, EventArgs e)
+        {
+            ExportGrid(dgvVacancyReport, "JobVacancyReport");
+        }
+
+        private void btnReqExport_Click(object sender, EventArgs e)
+        {
+            ExportGrid(dgvReqReport, "MissingRequirementsReport");
+        }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
