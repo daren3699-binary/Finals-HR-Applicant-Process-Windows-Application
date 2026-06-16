@@ -276,12 +276,11 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                         newApplicationId = Convert.ToInt32(insertCmd.ExecuteScalar());
                     }
 
-                    string historyQuery = "INSERT INTO ApplicationStatusHistory (ApplicationID, Status, ChangeDate, Remarks) " +
-                                          "VALUES (@appId, 'Submitted', @date, 'Application submitted by user.')";
+                    string historyQuery = "INSERT INTO ApplicationStatusHistory (ApplicationID, Status, Remarks, ChangedBy) " +
+                                          "VALUES (@appId, 'Submitted', 'Application submitted by user.', 'Applicant')";
                     using (MySqlCommand historyCmd = new MySqlCommand(historyQuery, conn))
                     {
                         historyCmd.Parameters.AddWithValue("@appId", newApplicationId);
-                        historyCmd.Parameters.AddWithValue("@date", DateTime.Now);
                         historyCmd.ExecuteNonQuery();
                     }
 

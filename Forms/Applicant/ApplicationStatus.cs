@@ -189,7 +189,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                         lblStep6Desc.Text = "Not yet determined.";
                     }
 
-                    string interviewQuery = @"SELECT i.InterviewDate, i.InterviewTime, i.Mode, i.Location, u.FullName
+                    string interviewQuery = @"SELECT i.InterviewDate, DATE_FORMAT(i.InterviewDate, '%h:%i %p'), AS InterviewTime, i.Mode, i.Location, u.Username
                                               FROM InterviewSchedules i
                                               LEFT JOIN Users u ON i.InterviewerID = u.UserID
                                               WHERE i.ApplicationID = @appId
@@ -203,12 +203,11 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                             if (intReader.Read())
                             {
                                 lblInterviewDate.Text = intReader.GetDateTime("InterviewDate").ToString("MMMM dd, yyyy");
-                                lblInterviewTime.Text = intReader.GetTimeSpan("InterviewTime").ToString(@"hh\:mm") + " " +
-                                    (intReader.GetTimeSpan("InterviewTime").Hours < 12 ? "AM" : "PM");
+                                lblInterviewTime.Text = intReader["InterviewTime"]?.ToString() ?? "-";
                                 string mode = intReader["Mode"]?.ToString() ?? "-";
                                 string location = intReader["Location"]?.ToString() ?? "";
                                 lblInterviewMode.Text = string.IsNullOrWhiteSpace(location) ? mode : mode + " — " + location;
-                                lblInterviewInterviewer.Text = intReader["FullName"]?.ToString() ?? "-";
+                                lblInterviewInterviewer.Text = intReader["Username"]?.ToString() ?? "-";
                             }
                             else
                             {

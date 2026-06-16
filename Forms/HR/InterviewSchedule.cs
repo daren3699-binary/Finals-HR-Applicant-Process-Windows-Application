@@ -75,7 +75,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
 
                     using (var cmd = new MySqlCommand(insertQuery, conn))
                     {
-                        cmd.Parameters.AddWithValue("@appID", _applicationID);
+                        cmd.Parameters.AddWithValue("@appId", _applicationID);
                         cmd.Parameters.AddWithValue("@date", dtpInterviewDate.Value);
                         cmd.Parameters.AddWithValue("@mode", cmbMode.SelectedItem.ToString());
                         cmd.Parameters.AddWithValue("@loc", txtLocation.Text.Trim());

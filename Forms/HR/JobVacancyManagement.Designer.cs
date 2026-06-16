@@ -80,6 +80,7 @@
             dgvVacancies.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvVacancies.Size = new Size(620, 280);
             dgvVacancies.TabIndex = 1;
+            dgvVacancies.SelectionChanged += dgvVacancies_SelectionChanged;
             // 
             // btnAddNew
             // 
