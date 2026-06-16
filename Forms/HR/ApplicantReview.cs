@@ -1,13 +1,14 @@
-﻿using System;
+﻿using FinalsHRApplicantProcessWindowsApplication.Database;
+using FinalsHRApplicantProcessWindowsApplication.Helpers;
+using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using FinalsHRApplicantProcessWindowsApplication.Database;
-using FinalsHRApplicantProcessWindowsApplication.Helpers;
-using MySql.Data.MySqlClient;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
 {
@@ -110,6 +111,24 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
                 return;
             }
 
+            string selectedStatus = cmbStatus.SelectedItem.ToString();
+            if (cmbStatus.Items.Contains(selectedStatus))
+            {
+                selectedStatus = cmbStatus.SelectedItem.ToString();
+            }
+            //role guard - HR Staff cannot set Accepted
+            if (selectedStatus == "Accepted" && Session.CurrentRole != "HR Manager" && Session.CurrentRole != "Admin")
+            {
+                MessageBox.Show("Only HR Manager and Admin can accept appliants", "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (_applicationID == 0)
+            {
+                MessageBox.Show("No application found for this applicant.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             try
             {
                 using (var conn = DBConnection.GetConnection())
@@ -117,32 +136,30 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
                     conn.Open();
 
                     // updates the application status
-                    string updateQuery = @"UPDATE Applications SET Status = @status
-                                          WHERE ApplicantID = @id
-                                          ORDER BY CreatedAt DESC LIMIT 1";
+                    string updateQuery = "UPDATE Applications SET Status = @status WHERE ApplicationID = @id";
 
                     using (var cmd = new MySqlCommand(updateQuery, conn))
                     {
-                        cmd.Parameters.AddWithValue("@status", cmbStatus.SelectedItem.ToString());
-                        cmd.Parameters.AddWithValue("@id", _applicantId);
+                        cmd.Parameters.AddWithValue("@status", selectedStatus);
+                        cmd.Parameters.AddWithValue("@id", _applicationID);
                         cmd.ExecuteNonQuery();
                     }
 
                     // logs to ApplicationStatusHistory
                     string historyQuery = @"INSERT INTO ApplicationStatusHistory 
-                                           (ApplicationID, Status, Remarks, ChangedBy)
-                                           SELECT ApplicationID, @status, @remarks, @changedBy
-                                           FROM Applications WHERE ApplicantID = @id
-                                           ORDER BY CreatedAt DESC LIMIT 1";
+                                            (ApplicationID, Status, Remarks, ChangedBy)
+                                            VALUES (@id, @status, @remarks, @changedBy)";
 
                     using (var cmd2 = new MySqlCommand(historyQuery, conn))
                     {
-                        cmd2.Parameters.AddWithValue("@status", cmbStatus.SelectedItem.ToString());
+                        cmd2.Parameters.AddWithValue("@id", _applicationID);
+                        cmd2.Parameters.AddWithValue("@status", selectedStatus);
                         cmd2.Parameters.AddWithValue("@remarks", txtRemarks.Text.Trim());
                         cmd2.Parameters.AddWithValue("@changedBy", Session.CurrentUsername);
-                        cmd2.Parameters.AddWithValue("@id", _applicantId);
                         cmd2.ExecuteNonQuery();
                     }
+
+                    AuditLogger.Log("HR", Session.CurrentUserId, $"Status changed to {selectedStatus}", "Applications", _applicationID);
 
                     MessageBox.Show("Status updated successfully!", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }

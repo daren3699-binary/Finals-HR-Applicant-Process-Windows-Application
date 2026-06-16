@@ -93,35 +93,59 @@ namespace ApplicantRegistration
 
             try
             {
-                MySqlConnection conn = DBConnection.GetConnection();
-                conn.Open();
-
-                string checkQuery = "SELECT COUNT(*) FROM ApplicantAccounts WHERE Email = @email";
-                MySqlCommand checkCmd = new MySqlCommand(checkQuery, conn);
-                checkCmd.Parameters.AddWithValue("@email", email);
-                int count = Convert.ToInt32(checkCmd.ExecuteScalar());
-
-                if (count > 0)
+                using (MySqlConnection conn = DBConnection.GetConnection())
                 {
-                    MessageBox.Show("Email is already registered. Please use a different email.");
-                    conn.Close();
-                    return;
+                    conn.Open();
+
+                    string checkQuery = "SELECT COUNT(*) FROM ApplicantAccounts WHERE Email = @email";
+                    using (MySqlCommand checkCmd = new MySqlCommand(checkQuery, conn))
+                    {
+                        checkCmd.Parameters.AddWithValue("@email", email);
+                        int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+                        if (count > 0)
+                        {
+                            MessageBox.Show("Email is already registered. Please use a different email.");
+                            return;
+                        }
+                    }
+
+                    string insertAccount = @"INSERT INTO ApplicantAccounts 
+                                            (FirstName, Surname, MiddleInitial, DateOfBirth, Sex, ContactInfo, Email, PasswordHash) 
+                                            VALUES (@firstname, @surname, @middleinitial, @dob, @sex, @contactinfo, @email, @password)";
+
+                    using (MySqlCommand insertCmd = new MySqlCommand(insertAccount, conn))
+                    {
+                        insertCmd.Parameters.AddWithValue("@firstname", firstName);
+                        insertCmd.Parameters.AddWithValue("@surname", surname);
+                        insertCmd.Parameters.AddWithValue("@middleinitial", middleInitial);
+                        insertCmd.Parameters.AddWithValue("@dob", dateOfBirth);
+                        insertCmd.Parameters.AddWithValue("@sex", sex);
+                        insertCmd.Parameters.AddWithValue("@contactinfo", contactInfo);
+                        insertCmd.Parameters.AddWithValue("@email", email);
+                        insertCmd.Parameters.AddWithValue("@password", password);
+                        insertCmd.ExecuteNonQuery();
+                    }
+
+                    // get the new account ID
+                    int newAccountID = 0;
+                    using (MySqlCommand idCmd = new MySqlCommand("SELECT LAST_INSERT_ID()", conn))
+                    {
+                        newAccountID = Convert.ToInt32(idCmd.ExecuteScalar());
+                    }
+
+                    // create the Applicants row so ApplicantID exists for future applications
+                    string insertApplicant = @"INSERT INTO Applicants 
+                                               (ApplicantAccountID, FirstName, LastName) 
+                                               VALUES (@aid, @first, @last)";
+                    using (MySqlCommand apCmd = new MySqlCommand(insertApplicant, conn))
+                    {
+                        apCmd.Parameters.AddWithValue("@aid", newAccountID);
+                        apCmd.Parameters.AddWithValue("@first", firstName);
+                        apCmd.Parameters.AddWithValue("@last", surname);
+                        apCmd.ExecuteNonQuery();
+                    }
                 }
-
-                string insertQuery = "INSERT INTO ApplicantAccounts (FirstName, Surname, MiddleInitial, DateOfBirth, Sex, ContactInfo, Email, PasswordHash) VALUES (@firstname, @surname, @middleinitial, @dob, @sex, @contactinfo, @email, @password)";
-                MySqlCommand insertCmd = new MySqlCommand(insertQuery, conn);
-                insertCmd.Parameters.AddWithValue("@firstname", firstName);
-                insertCmd.Parameters.AddWithValue("@surname", surname);
-                insertCmd.Parameters.AddWithValue("@middleinitial", middleInitial);
-                insertCmd.Parameters.AddWithValue("@dob", dateOfBirth);
-                insertCmd.Parameters.AddWithValue("@sex", sex);
-                insertCmd.Parameters.AddWithValue("@contactinfo", contactInfo);
-                insertCmd.Parameters.AddWithValue("@email", email);
-                insertCmd.Parameters.AddWithValue("@password", password);
-                insertCmd.ExecuteNonQuery();
-
-                conn.Close();
-                MessageBox.Show("Registration successful! You can now log in.");
+                MessageBox.Show("Registration successful! You can now log in.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {

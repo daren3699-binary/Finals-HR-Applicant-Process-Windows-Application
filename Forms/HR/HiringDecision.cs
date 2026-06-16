@@ -121,6 +121,8 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
                         cmd.Parameters.AddWithValue("@by", Session.CurrentUsername);
                         cmd.ExecuteNonQuery();
                     }
+
+                    AuditLogger.Log("HR", Session.CurrentUserId, $"Hiring decision: {newStatus}", "HiringDecisions", _applicationID);
                 }
                 MessageBox.Show($"Decision saved: {newStatus}", "Saved");
                 this.Close();

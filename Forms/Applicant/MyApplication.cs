@@ -151,6 +151,16 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                         cmd.Parameters.AddWithValue("@id", _applicationID);
                         cmd.ExecuteNonQuery();
                     }
+
+                    string history = @"INSERT INTO ApplicationStatusHistory 
+                                       (ApplicationID, Status, Remarks, ChangedBy)
+                                       VALUES (@id, 'Withdrawn', 'Applicant withdrew the application.', 'Applicant')";
+
+                    using (MySqlCommand hCmd = new MySqlCommand(history, conn))
+                    {
+                        hCmd.Parameters.AddWithValue("@id", _applicationID);
+                        hCmd.ExecuteNonQuery();
+                    }
                 }
 
                 MessageBox.Show("Your application has been withdrawn.", "Withdrawn", MessageBoxButtons.OK, MessageBoxIcon.Information);
