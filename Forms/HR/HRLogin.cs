@@ -61,24 +61,11 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
                                 Session.CurrentRole = role;
 
                                 MessageBox.Show($"Welcome, {uname}! Role: {role}.", "Login Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                AuditLogger.Log("HR", userId, "HR user logged in", "Users", userId);
 
                                 HRDashboard dashboard = new HRDashboard();
                                 dashboard.Show();
                                 this.Hide();
-
-                                // TODO: Route based on role
-                                // if (roleName == "Admin" || roleName == "HR Manager")
-                                // {
-                                //     HRDashboard dashboard = new HRDashboard(userId, roleName);
-                                //     dashboard.Show();
-                                //     this.Hide();
-                                // }
-                                // else if (roleName == "HR Staff")
-                                // {
-                                //     HRSDashboard dashboard = new HRDashboard(userId, roleName);
-                                //     dashboard.Show();
-                                //     this.Hide();
-                                // }
                             }
                             else
                             {
