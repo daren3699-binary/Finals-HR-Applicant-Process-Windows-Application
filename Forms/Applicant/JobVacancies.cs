@@ -274,12 +274,52 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                         }
                     }
 
-                    string insertQuery = "INSERT INTO Applications (ApplicantAccountID, JobID, Status, DateApplied) " +
-                                         "VALUES (@uid, @jid, 'Submitted', @date); SELECT LAST_INSERT_ID();";
+                    string activeQuery = @"SELECT j.JobTitle, a.Status
+                                           FROM Applications a
+                                           JOIN JobVacancies j ON a.JobID = j.JobVacancyID
+                                           WHERE a.ApplicantAccountID = @uid
+                                             AND a.Status NOT IN ('Rejected', 'Withdrawn', 'Accepted')
+                                           LIMIT 1";
+                    using (MySqlCommand activeCmd = new MySqlCommand(activeQuery, conn))
+                    {
+                        activeCmd.Parameters.AddWithValue("@uid", _applicantAccountID);
+                        using (MySqlDataReader activeReader = activeCmd.ExecuteReader())
+                        {
+                            if (activeReader.Read())
+                            {
+                                string activeTitle = activeReader.GetString("JobTitle");
+                                string activeStatus = activeReader.GetString("Status");
+                                MessageBox.Show(
+                                    "You already have an active application for \"" + activeTitle + "\" (Status: " + activeStatus + "). " +
+                                    "You must wait until that application is resolved (Accepted, Rejected, or Withdrawn) before applying to a new job.",
+                                    "Active Application Exists", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                return;
+                            }
+                        }
+                    }
+
+                    int applicantId = 0;
+                    string resolveQuery = "SELECT ApplicantID FROM Applicants WHERE ApplicantAccountID = @uid";
+                    using (MySqlCommand resolveCmd = new MySqlCommand(resolveQuery, conn))
+                    {
+                        resolveCmd.Parameters.AddWithValue("@uid", _applicantAccountID);
+                        object resolveResult = resolveCmd.ExecuteScalar();
+                        applicantId = resolveResult != null ? Convert.ToInt32(resolveResult) : 0;
+                    }
+
+                    if (applicantId == 0)
+                    {
+                        MessageBox.Show("Your profile record could not be found. Please open My Profile and save it once before applying.", "Profile Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    string insertQuery = "INSERT INTO Applications (ApplicantID, ApplicantAccountID, JobVacancyID, JobID, Status, DateApplied) " +
+                                         "VALUES (@applicantId, @uid, @jid, @jid, 'Submitted', @date); SELECT LAST_INSERT_ID();";
 
                     int newApplicationId = 0;
                     using (MySqlCommand insertCmd = new MySqlCommand(insertQuery, conn))
                     {
+                        insertCmd.Parameters.AddWithValue("@applicantId", applicantId);
                         insertCmd.Parameters.AddWithValue("@uid", _applicantAccountID);
                         insertCmd.Parameters.AddWithValue("@jid", jobId);
                         insertCmd.Parameters.AddWithValue("@date", DateTime.Now);

@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using FinalsHRApplicantProcessWindowsApplication.Database;
+using FinalsHRApplicantProcessWindowsApplication.Helpers;
 
 namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 {
@@ -66,7 +67,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                     using (MySqlCommand verifyCmd = new MySqlCommand(verifyQuery, conn))
                     {
                         verifyCmd.Parameters.AddWithValue("@email", email);
-                        verifyCmd.Parameters.AddWithValue("@current", currentPassword);
+                        verifyCmd.Parameters.AddWithValue("@current", PasswordHelper.Hash(currentPassword));
                         int match = Convert.ToInt32(verifyCmd.ExecuteScalar());
 
                         if (match == 0)
@@ -79,7 +80,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                     string updateQuery = "UPDATE ApplicantAccounts SET PasswordHash = @newpwd WHERE Email = @email";
                     using (MySqlCommand updateCmd = new MySqlCommand(updateQuery, conn))
                     {
-                        updateCmd.Parameters.AddWithValue("@newpwd", newPassword);
+                        updateCmd.Parameters.AddWithValue("@newpwd", PasswordHelper.Hash(newPassword));
                         updateCmd.Parameters.AddWithValue("@email", email);
                         updateCmd.ExecuteNonQuery();
                     }

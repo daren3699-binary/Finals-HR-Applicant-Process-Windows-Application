@@ -137,11 +137,11 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             int totalRequired = 0;
             string countQuery = "SELECT COUNT(*) FROM RequirementTypes";
 
-            string query = @"SELECT rt.RequirementName, ad.FilePath, ad.Status,
+            string query = @"SELECT rt.RequirementName, ad.FilePath, ad.Status, ad.Remarks,
                                     ad.UploadedAt
-                             FROM ApplicantDocuments ad
-                             JOIN RequirementTypes rt ON ad.RequirementTypeID = rt.RequirementTypeID
-                             WHERE ad.ApplicationID = @AppID
+                             FROM RequirementTypes rt
+                             LEFT JOIN ApplicantDocuments ad
+                                    ON ad.RequirementTypeID = rt.RequirementTypeID AND ad.ApplicationID = @AppID
                              ORDER BY rt.RequirementName";
 
             int submittedCount = 0;
@@ -162,15 +162,18 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                     {
                         while (reader.Read())
                         {
-                            string docStatus = reader.GetString("Status");
+                            bool hasDocument = !reader.IsDBNull(reader.GetOrdinal("Status"));
+                            string docStatus = hasDocument ? reader.GetString("Status") : "Missing";
+                            string filePath = hasDocument && !reader.IsDBNull(reader.GetOrdinal("FilePath")) ? reader.GetString("FilePath") : "Not submitted";
+                            string remarks = reader.IsDBNull(reader.GetOrdinal("Remarks")) ? "" : reader.GetString("Remarks");
                             string dateStr = reader.IsDBNull(reader.GetOrdinal("UploadedAt")) ? ""
                                 : reader.GetDateTime("UploadedAt").ToString("MM/dd/yyyy");
 
                             int rowIndex = dgvDocuments.Rows.Add(
                                 reader.GetString("RequirementName"),
-                                reader.GetString("FilePath"),
+                                filePath,
                                 docStatus,
-                                "",
+                                remarks,
                                 dateStr
                             );
 
@@ -228,9 +231,9 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             }
 
             string query = @"INSERT INTO ApplicantDocuments
-                                (ApplicationID, RequirementTypeID, FilePath, Status, UploadedAt)
+                                (ApplicationID, RequirementTypeID, FilePath, Status, Remarks, UploadedAt)
                              VALUES
-                                (@AppID, @TypeID, @FilePath, 'Submitted', NOW())";
+                                (@AppID, @TypeID, @FilePath, 'Submitted', @Remarks, NOW())";
             try
             {
                 using (var conn = DBConnection.GetConnection())
@@ -240,6 +243,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                     cmd.Parameters.AddWithValue("@AppID", _applicationID);
                     cmd.Parameters.AddWithValue("@TypeID", selectedType.Id);
                     cmd.Parameters.AddWithValue("@FilePath", _selectedFilePath);
+                    cmd.Parameters.AddWithValue("@Remarks", txtRemarks.Text.Trim());
                     cmd.ExecuteNonQuery();
                 }
 
@@ -276,7 +280,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             }
 
             string query = @"UPDATE ApplicantDocuments
-                             SET FilePath = @FilePath, Status = 'Submitted', UploadedAt = NOW()
+                             SET FilePath = @FilePath, Status = 'Submitted', Remarks = @Remarks, UploadedAt = NOW()
                              WHERE ApplicationID = @AppID AND RequirementTypeID = @TypeID";
             try
             {
@@ -287,6 +291,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                     cmd.Parameters.AddWithValue("@FilePath", _selectedFilePath);
                     cmd.Parameters.AddWithValue("@AppID", _applicationID);
                     cmd.Parameters.AddWithValue("@TypeID", selectedType.Id);
+                    cmd.Parameters.AddWithValue("@Remarks", txtRemarks.Text.Trim());
                     cmd.ExecuteNonQuery();
                 }
 
