@@ -144,7 +144,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                         int missing = totalRequired - submitted;
                         lblValueMissing.Text = missing < 0 ? "0" : missing.ToString();
 
-                        string interviewQuery = @"SELECT InterviewDate, InterviewTime, Mode, Location
+                        string interviewQuery = @"SELECT InterviewDate, DATE_FORMAT(InterviewDate, '%h:%i %p') AS InterviewTime, Mode, Location
                                                   FROM InterviewSchedules
                                                   WHERE ApplicationID = @appId
                                                   ORDER BY InterviewDate DESC LIMIT 1";
@@ -157,9 +157,10 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                                 if (intReader.Read())
                                 {
                                     string date = intReader.GetDateTime("InterviewDate").ToString("MMM dd, yyyy");
+                                    string time = intReader["InterviewTime"]?.ToString() ?? "";
                                     string mode = intReader["Mode"]?.ToString() ?? "";
                                     string location = intReader["Location"]?.ToString() ?? "";
-                                    string details = date + (string.IsNullOrWhiteSpace(mode) ? "" : " | " + mode);
+                                    string details = date + (string.IsNullOrWhiteSpace(time) ? "" : " " + time) + (string.IsNullOrWhiteSpace(mode) ? "" : " | " + mode);
                                     if (!string.IsNullOrWhiteSpace(location))
                                         details += " | " + location;
                                     lblValueInterview.Text = details;

@@ -8,8 +8,6 @@ namespace ApplicantRegistration
 {
     public partial class ApplicantRegistration : Form
     {
-        // Remove the hardcoded connectionString field entirely
-
         public ApplicantRegistration()
         {
             InitializeComponent();
@@ -108,7 +106,7 @@ namespace ApplicantRegistration
                     return;
                 }
 
-                string insertQuery = "INSERT INTO ApplicantAccounts (FirstName, Surname, MiddleInitial, DateOfBirth, Sex, ContactInfo, Email, PasswordHash) VALUES (@firstname, @surname, @middleinitial, @dob, @sex, @contactinfo, @email, @password)";
+                string insertQuery = "INSERT INTO ApplicantAccounts (FirstName, Surname, MiddleInitial, DateOfBirth, Sex, ContactInfo, Email, PasswordHash) VALUES (@firstname, @surname, @middleinitial, @dob, @sex, @contactinfo, @email, @password); SELECT LAST_INSERT_ID();";
                 MySqlCommand insertCmd = new MySqlCommand(insertQuery, conn);
                 insertCmd.Parameters.AddWithValue("@firstname", firstName);
                 insertCmd.Parameters.AddWithValue("@surname", surname);
@@ -118,7 +116,18 @@ namespace ApplicantRegistration
                 insertCmd.Parameters.AddWithValue("@contactinfo", contactInfo);
                 insertCmd.Parameters.AddWithValue("@email", email);
                 insertCmd.Parameters.AddWithValue("@password", password);
-                insertCmd.ExecuteNonQuery();
+                int newAccountId = Convert.ToInt32(insertCmd.ExecuteScalar());
+
+                string profileQuery = "INSERT INTO Applicants (ApplicantAccountID, FirstName, LastName, MiddleName, DateOfBirth, Gender, ContactNumber) VALUES (@accId, @firstname, @lastname, @middlename, @dob, @gender, @contact)";
+                MySqlCommand profileCmd = new MySqlCommand(profileQuery, conn);
+                profileCmd.Parameters.AddWithValue("@accId", newAccountId);
+                profileCmd.Parameters.AddWithValue("@firstname", firstName);
+                profileCmd.Parameters.AddWithValue("@lastname", surname);
+                profileCmd.Parameters.AddWithValue("@middlename", middleInitial);
+                profileCmd.Parameters.AddWithValue("@dob", dateOfBirth);
+                profileCmd.Parameters.AddWithValue("@gender", sex);
+                profileCmd.Parameters.AddWithValue("@contact", contactInfo);
+                profileCmd.ExecuteNonQuery();
 
                 conn.Close();
                 MessageBox.Show("Registration successful! You can now log in.");

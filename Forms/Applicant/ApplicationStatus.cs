@@ -189,7 +189,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                         lblStep6Desc.Text = "Not yet determined.";
                     }
 
-                    string interviewQuery = @"SELECT i.InterviewDate, DATE_FORMAT(i.InterviewDate, '%h:%i %p'), AS InterviewTime, i.Mode, i.Location, u.Username
+                    string interviewQuery = @"SELECT i.InterviewDate, DATE_FORMAT(i.InterviewDate, '%h:%i %p') AS InterviewTime, i.Mode, i.Location, u.Username
                                               FROM InterviewSchedules i
                                               LEFT JOIN Users u ON i.InterviewerID = u.UserID
                                               WHERE i.ApplicationID = @appId
