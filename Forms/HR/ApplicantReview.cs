@@ -8,6 +8,8 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Diagnostics;
+using System.IO;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
@@ -21,6 +23,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
         {
             InitializeComponent();
             _applicantId = applicantId;
+            dgvDocuments.CellDoubleClick += dgvDocuments_CellDoubleClick;
 
         }
 
@@ -52,7 +55,10 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
                                 lblEmail.Text = $"Email: {reader["Email"]}";
 
                                 string status = reader["Status"]?.ToString() ?? "Submitted";
-                                cmbStatus.SelectedItem = status;
+                                if (cmbStatus.Items.Contains(status))
+                                    cmbStatus.SelectedItem = status;
+                                else
+                                    cmbStatus.Text = status;
 
                                 _applicationID = reader["ApplicationID"] != DBNull.Value ? Convert.ToInt32(reader["ApplicationID"]) : 0;
                             }
@@ -65,7 +71,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
                 MessageBox.Show($"Database Error: {ex.Message}");
             }
             LoadAppliedJobs();
-            LoadDocumments();
+            LoadDocuments();
         }
 
         private void LoadAppliedJobs()
@@ -104,8 +110,10 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
             catch (Exception ex) { MessageBox.Show($"Error loading applied jobs: {ex.Message}"); }
         }
 
-        private void LoadDocumments()
+        private void LoadDocuments()
         {
+            if (_applicationID == 0) return;
+
             try
             {
                 using (var conn = DBConnection.GetConnection())
@@ -113,33 +121,37 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
                     conn.Open();
 
                     string query = @"SELECT
+                                        ad.DocumentID,
                                         rt.RequirementName,
-                                        ad.Status,
                                         ad.FilePath,
+                                        ad.Status,
                                         ad.UploadedAt
                                     FROM ApplicantDocuments ad
-                                    JOIN RequirementTypes rt
+                                    INNER JOIN RequirementTypes rt
                                         ON ad.RequirementTypeID = rt.RequirementTypeID
-                                    WHERE ad.ApplicationID = @appId";
+                                    WHERE ad.ApplicationID = @ApplicationID
+                                    ORDER BY ad.UploadedAt DESC";
 
                     using (var cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@appId", _applicationID);
+                        cmd.Parameters.AddWithValue("@ApplicationID", _applicationID);
 
                         DataTable table = new DataTable();
-
-                        using (var adapter = new MySqlDataAdapter(cmd))
-                        {
-                            adapter.Fill(table);
-                        }
+                        MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                        adapter.Fill(table);
 
                         dgvDocuments.DataSource = table;
+
+                        if (dgvDocuments.Columns.Contains("DocumentID")) dgvDocuments.Columns["DocumentID"].Visible = false;
+
+                        dgvDocuments.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error loading documents: " + ex.Message);
+                MessageBox.Show(
+                    "Error loading documents: " + ex.Message);
             }
         }
 
@@ -152,7 +164,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
             }
 
             string selectedStatus = cmbStatus.SelectedItem.ToString();
-            
+
             //role guard - HR Staff cannot set Accepted
             if (selectedStatus == "Accepted" && Session.CurrentRole != "HR Manager" && Session.CurrentRole != "Admin")
             {
@@ -237,9 +249,60 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
 
         private void btnDecide_Click(object sender, EventArgs e)
         {
+            if (Session.CurrentRole != "HR Manager" && Session.CurrentRole != "Admin")
+            {
+                MessageBox.Show("Only HR Manager and Admin can make hiring decisions.",
+                    "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
             if (_applicationID == 0) { MessageBox.Show("No application found."); return; }
             new HiringDecision(_applicationID).ShowDialog();
         }
 
+        private void btnViewProfile_Click(object sender, EventArgs e)
+        {
+            new ViewApplicantProfile(_applicantId).ShowDialog();
+        }
+
+        private void dgvDocuments_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            string filePath = dgvDocuments.Rows[e.RowIndex].Cells["FilePath"].Value?.ToString();
+
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                MessageBox.Show("No file path found.");
+                return;
+            }
+
+            if (!File.Exists(filePath))
+            {
+                MessageBox.Show("File not found:\n\n" + filePath);
+                return;
+            }
+
+            try
+            {
+                Process.Start(new ProcessStartInfo()
+                {
+                    FileName = filePath,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Unable to open file:\n" + ex.Message);
+            }
+        }
+
+        /*private bool IsLockedStatus(string status)
+        {
+            return status == "Under Review"
+                || status == "For Interview"
+                || status == "Interviewed"
+                || status == "Accepted"
+                || status == "Rejected";
+        }*/
     }
 }

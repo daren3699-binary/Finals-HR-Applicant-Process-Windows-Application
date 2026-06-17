@@ -183,6 +183,11 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                         SetDotColor(pnlStatus6, colorWarning);
                         lblStep6Desc.Text = "Waiting for HR Manager final decision.";
                     }
+                    else if (currentStatus == "On Hold")
+                    {
+                        SetDotColor(pnlStatus6, colorWarning);
+                        lblStep6Desc.Text = "Your application is currently on hold pending further review.";
+                    }
                     else
                     {
                         SetDotColor(pnlStatus6, colorPending);

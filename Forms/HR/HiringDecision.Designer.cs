@@ -30,7 +30,6 @@
         {
             lblTitle = new Label();
             lblApplicant = new Label();
-            lblWarning = new Label();
             lblDecision = new Label();
             cmbDecision = new ComboBox();
             lblRemarks = new Label();
@@ -57,16 +56,6 @@
             lblApplicant.Size = new Size(76, 20);
             lblApplicant.TabIndex = 1;
             lblApplicant.Text = "Applicant:";
-            // 
-            // lblWarning
-            // 
-            lblWarning.AutoSize = true;
-            lblWarning.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblWarning.Location = new Point(86, 297);
-            lblWarning.Name = "lblWarning";
-            lblWarning.Size = new Size(293, 20);
-            lblWarning.TabIndex = 2;
-            lblWarning.Text = "⚠ Only HR Manager/Admin can accept.";
             // 
             // lblDecision
             // 
@@ -135,7 +124,6 @@
             Controls.Add(lblRemarks);
             Controls.Add(cmbDecision);
             Controls.Add(lblDecision);
-            Controls.Add(lblWarning);
             Controls.Add(lblApplicant);
             Controls.Add(lblTitle);
             Name = "HiringDecision";
@@ -148,7 +136,6 @@
 
         private Label lblTitle;
         private Label lblApplicant;
-        private Label lblWarning;
         private Label lblDecision;
         private ComboBox cmbDecision;
         private Label lblRemarks;

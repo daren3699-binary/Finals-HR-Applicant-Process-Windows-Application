@@ -41,6 +41,7 @@
             btnSchedule = new Button();
             btnEvaluate = new Button();
             btnDecide = new Button();
+            btnViewProfile = new Button();
             pnlOtherForms = new Panel();
             label1 = new Label();
             lblAppliedJobs = new Label();
@@ -105,7 +106,7 @@
             // cmbStatus
             // 
             cmbStatus.FormattingEnabled = true;
-            cmbStatus.Items.AddRange(new object[] { "Submitted", "Under Review", "For Interview", "Hired", "Rejected" });
+            cmbStatus.Items.AddRange(new object[] { "Submitted", "Under Review", "Shortlisted", "For Interview", "For Assessment", "For Final Review", "Accepted", "Rejected", "Withdrawn" });
             cmbStatus.Location = new Point(436, 453);
             cmbStatus.Name = "cmbStatus";
             cmbStatus.Size = new Size(417, 28);
@@ -196,6 +197,13 @@
             pnlOtherForms.Name = "pnlOtherForms";
             pnlOtherForms.Size = new Size(225, 621);
             pnlOtherForms.TabIndex = 13;
+            btnViewProfile.Location = new Point(12, 356);
+            btnViewProfile.Name = "btnViewProfile";
+            btnViewProfile.Size = new Size(200, 29);
+            btnViewProfile.Text = "View Applicant Profile";
+            btnViewProfile.UseVisualStyleBackColor = true;
+            btnViewProfile.Click += btnViewProfile_Click;
+            pnlOtherForms.Controls.Add(btnViewProfile);
             // 
             // label1
             // 
@@ -297,6 +305,7 @@
         private Button btnSchedule;
         private Button btnEvaluate;
         private Button btnDecide;
+        private Button btnViewProfile;
         private Panel pnlOtherForms;
         private Label label1;
         private Label lblAppliedJobs;
