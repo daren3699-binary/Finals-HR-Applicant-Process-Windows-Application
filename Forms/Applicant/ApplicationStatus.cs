@@ -27,13 +27,34 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             dot.BackColor = color;
         }
 
+        private void ResetAllPending()
+        {
+            Color colorPending = Color.FromArgb(220, 220, 220);
+
+            SetDotColor(pnlStatus1, colorPending);
+            SetDotColor(pnlStatus2, colorPending);
+            SetDotColor(pnlStatus3, colorPending);
+            SetDotColor(pnlStatus4, colorPending);
+            SetDotColor(pnlStatus5, colorPending);
+            SetDotColor(pnlStatus6, colorPending);
+            SetDotColor(pnlStatus7, colorPending); // NEW: Hired step
+
+            lblStep1Desc.Text = "No application submitted yet.";
+            lblStep2Desc.Text = "Pending submission.";
+            lblStep3Desc.Text = "Pending submission.";
+            lblStep4Desc.Text = "Pending submission.";
+            lblStep5Desc.Text = "Pending submission.";
+            lblStep6Desc.Text = "Pending submission.";
+            lblStep7Desc.Text = "Pending submission."; // NEW
+        }
+
         private void LoadStatus()
         {
-            Color colorDone = Color.FromArgb(29, 158, 117);
-            Color colorActive = Color.FromArgb(55, 138, 221);
-            Color colorPending = Color.FromArgb(220, 220, 220);
-            Color colorRejected = Color.FromArgb(226, 75, 74);
-            Color colorWarning = Color.FromArgb(255, 193, 7);
+            Color colorDone = Color.FromArgb(29, 158, 117);   // green
+            Color colorActive = Color.FromArgb(55, 138, 221);   // blue
+            Color colorPending = Color.FromArgb(220, 220, 220);  // grey
+            Color colorRejected = Color.FromArgb(226, 75, 74);    // red
+            Color colorWarning = Color.FromArgb(255, 193, 7);    // amber
 
             try
             {
@@ -41,11 +62,33 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                 {
                     conn.Open();
 
-                    string appQuery = @"SELECT a.ApplicationID, a.Status, a.DateApplied, j.JobTitle
-                                        FROM Applications a
-                                        JOIN JobVacancies j ON a.JobID = j.JobVacancyID
-                                        WHERE a.ApplicantAccountID = @uid
-                                        ORDER BY a.DateApplied DESC LIMIT 1";
+                    // ── 1. Fetch the most recent application for this applicant ──────────
+                    // FIX: Prioritise non-terminal active applications over old ones so
+                    //      a later Draft does not shadow an Accepted/Hired record.
+                    //      We ORDER BY a priority expression: terminal statuses last,
+                    //      then by DateApplied DESC as a tiebreaker.
+                    string appQuery = @"
+                        SELECT a.ApplicationID, a.Status, a.DateApplied, j.JobTitle
+                        FROM   Applications a
+                        JOIN   JobVacancies  j ON a.JobID = j.JobVacancyID
+                        WHERE  a.ApplicantAccountID = @uid
+                        ORDER BY
+                            CASE a.Status
+                                WHEN 'Hired'          THEN 0
+                                WHEN 'Accepted'       THEN 1
+                                WHEN 'For Final Review' THEN 2
+                                WHEN 'For Assessment' THEN 3
+                                WHEN 'For Interview'  THEN 4
+                                WHEN 'Shortlisted'    THEN 5
+                                WHEN 'Under Review'   THEN 6
+                                WHEN 'Submitted'      THEN 7
+                                WHEN 'Rejected'       THEN 8
+                                WHEN 'Withdrawn'      THEN 9
+                                WHEN 'Draft'          THEN 10
+                                ELSE 11
+                            END ASC,
+                            a.DateApplied DESC
+                        LIMIT 1";
 
                     int applicationID = 0;
                     string currentStatus = "";
@@ -67,20 +110,10 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                         }
                     }
 
+                    // ── 2. No application at all ─────────────────────────────────────────
                     if (applicationID == 0)
                     {
-                        SetDotColor(pnlStatus1, colorPending);
-                        SetDotColor(pnlStatus2, colorPending);
-                        SetDotColor(pnlStatus3, colorPending);
-                        SetDotColor(pnlStatus4, colorPending);
-                        SetDotColor(pnlStatus5, colorPending);
-                        SetDotColor(pnlStatus6, colorPending);
-                        lblStep1Desc.Text = "No application submitted yet.";
-                        lblStep2Desc.Text = "Pending submission.";
-                        lblStep3Desc.Text = "Pending submission.";
-                        lblStep4Desc.Text = "Pending submission.";
-                        lblStep5Desc.Text = "Pending submission.";
-                        lblStep6Desc.Text = "Pending submission.";
+                        ResetAllPending();
                         txtHRNotes.Text = "You have not submitted an application yet.\r\nGo to Job Vacancies to apply.";
                         lblInterviewDate.Text = "-";
                         lblInterviewTime.Text = "-";
@@ -89,13 +122,14 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                         return;
                     }
 
-                    string[] statusOrder = { "Submitted", "Under Review", "Shortlisted", "For Interview", "For Assessment", "For Final Review", "Accepted", "Rejected", "Withdrawn" };
-                    int currentIndex = Array.IndexOf(statusOrder, currentStatus);
-
+                    // ── 3. Step 1 — Application Submitted ────────────────────────────────
                     SetDotColor(pnlStatus1, colorDone);
                     lblStep1Desc.Text = "Submitted on " + dateApplied.ToString("MMMM dd, yyyy") + " for " + jobTitle + ".";
 
-                    string[] pastReview = { "Under Review", "Shortlisted", "For Interview", "For Assessment", "For Final Review", "Accepted", "Rejected", "Withdrawn" };
+                    // ── 4. Step 2 — Under Review ─────────────────────────────────────────
+                    string[] pastReview = { "Under Review", "Shortlisted", "For Interview",
+                                            "For Assessment", "For Final Review",
+                                            "Accepted", "Hired", "Rejected", "Withdrawn" };
                     if (Array.Exists(pastReview, s => s == currentStatus))
                     {
                         SetDotColor(pnlStatus2, colorDone);
@@ -109,10 +143,13 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                     else
                     {
                         SetDotColor(pnlStatus2, colorPending);
-                        lblStep2Desc.Text = "Pending submission.";
+                        lblStep2Desc.Text = "Pending review.";
                     }
 
-                    string[] pastShortlist = { "Shortlisted", "For Interview", "For Assessment", "For Final Review", "Accepted", "Rejected", "Withdrawn" };
+                    // ── 5. Step 3 — Shortlisted ──────────────────────────────────────────
+                    string[] pastShortlist = { "Shortlisted", "For Interview",
+                                               "For Assessment", "For Final Review",
+                                               "Accepted", "Hired", "Rejected", "Withdrawn" };
                     if (Array.Exists(pastShortlist, s => s == currentStatus))
                     {
                         SetDotColor(pnlStatus3, colorDone);
@@ -126,10 +163,12 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                     else
                     {
                         SetDotColor(pnlStatus3, colorPending);
-                        lblStep3Desc.Text = "Pending review.";
+                        lblStep3Desc.Text = "Pending screening.";
                     }
 
-                    string[] pastInterview = { "For Assessment", "For Final Review", "Accepted", "Rejected", "Withdrawn" };
+                    // ── 6. Step 4 — For Interview ─────────────────────────────────────────
+                    string[] pastInterview = { "For Assessment", "For Final Review",
+                                               "Accepted", "Hired", "Rejected", "Withdrawn" };
                     if (currentStatus == "For Interview")
                     {
                         SetDotColor(pnlStatus4, colorActive);
@@ -146,7 +185,9 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                         lblStep4Desc.Text = "Pending interview scheduling.";
                     }
 
-                    string[] pastAssessment = { "For Final Review", "Accepted", "Rejected", "Withdrawn" };
+                    // ── 7. Step 5 — For Assessment ────────────────────────────────────────
+                    string[] pastAssessment = { "For Final Review",
+                                                "Accepted", "Hired", "Rejected", "Withdrawn" };
                     if (currentStatus == "For Assessment")
                     {
                         SetDotColor(pnlStatus5, colorActive);
@@ -163,10 +204,12 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                         lblStep5Desc.Text = "Pending assessment.";
                     }
 
-                    if (currentStatus == "Accepted")
+                    // ── 8. Step 6 — Final Decision (Accepted / Rejected / Withdrawn) ──────
+                    // NOTE: "Accepted" is no longer the LAST step — it feeds into Hired below.
+                    if (currentStatus == "Accepted" || currentStatus == "Hired")
                     {
                         SetDotColor(pnlStatus6, colorDone);
-                        lblStep6Desc.Text = "Congratulations! Your application has been accepted.";
+                        lblStep6Desc.Text = "Congratulations! HR Manager has accepted your application.";
                     }
                     else if (currentStatus == "Rejected")
                     {
@@ -194,11 +237,39 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                         lblStep6Desc.Text = "Not yet determined.";
                     }
 
-                    string interviewQuery = @"SELECT i.InterviewDate, DATE_FORMAT(i.InterviewDate, '%h:%i %p') AS InterviewTime, i.Mode, i.Location, u.Username
-                                              FROM InterviewSchedules i
-                                              LEFT JOIN Users u ON i.InterviewerID = u.UserID
-                                              WHERE i.ApplicationID = @appId
-                                              ORDER BY i.InterviewDate DESC LIMIT 1";
+                    // ── 9. Step 7 — HIRED (NEW) ───────────────────────────────────────────
+                    if (currentStatus == "Hired")
+                    {
+                        SetDotColor(pnlStatus7, colorDone);
+                        lblStep7Desc.Text = "You are now officially hired. Welcome to the team!";
+                    }
+                    else if (currentStatus == "Accepted")
+                    {
+                        // Accepted but onboarding not yet confirmed
+                        SetDotColor(pnlStatus7, colorWarning);
+                        lblStep7Desc.Text = "Awaiting final onboarding confirmation from HR.";
+                    }
+                    else if (currentStatus == "Rejected" || currentStatus == "Withdrawn")
+                    {
+                        SetDotColor(pnlStatus7, colorRejected);
+                        lblStep7Desc.Text = "Application closed.";
+                    }
+                    else
+                    {
+                        SetDotColor(pnlStatus7, colorPending);
+                        lblStep7Desc.Text = "Not yet determined.";
+                    }
+
+                    // ── 10. Interview details ──────────────────────────────────────────────
+                    string interviewQuery = @"
+                        SELECT i.InterviewDate,
+                               DATE_FORMAT(i.InterviewDate, '%h:%i %p') AS InterviewTime,
+                               i.Mode, i.Location, u.Username
+                        FROM   InterviewSchedules i
+                        LEFT JOIN Users u ON i.InterviewerID = u.UserID
+                        WHERE  i.ApplicationID = @appId
+                        ORDER  BY i.InterviewDate DESC
+                        LIMIT  1";
 
                     using (MySqlCommand intCmd = new MySqlCommand(interviewQuery, conn))
                     {
@@ -207,11 +278,16 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                         {
                             if (intReader.Read())
                             {
-                                lblInterviewDate.Text = intReader.GetDateTime("InterviewDate").ToString("MMMM dd, yyyy");
+                                lblInterviewDate.Text = intReader.GetDateTime("InterviewDate")
+                                                                 .ToString("MMMM dd, yyyy");
                                 lblInterviewTime.Text = intReader["InterviewTime"]?.ToString() ?? "-";
+
                                 string mode = intReader["Mode"]?.ToString() ?? "-";
                                 string location = intReader["Location"]?.ToString() ?? "";
-                                lblInterviewMode.Text = string.IsNullOrWhiteSpace(location) ? mode : mode + " — " + location;
+                                lblInterviewMode.Text = string.IsNullOrWhiteSpace(location)
+                                                        ? mode
+                                                        : mode + " — " + location;
+
                                 lblInterviewInterviewer.Text = intReader["Username"]?.ToString() ?? "-";
                             }
                             else
@@ -224,24 +300,27 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                         }
                     }
 
-                    string historyQuery = @"SELECT Status, Remarks, ChangedBy, ChangedAt
-                                            FROM ApplicationStatusHistory
-                                            WHERE ApplicationID = @appId
-                                            ORDER BY ChangedAt ASC";
+                    // ── 11. Status history / HR notes ─────────────────────────────────────
+                    string historyQuery = @"
+                        SELECT Status, Remarks, ChangedBy, ChangedAt
+                        FROM   ApplicationStatusHistory
+                        WHERE  ApplicationID = @appId
+                        ORDER  BY ChangedAt ASC";
 
                     using (MySqlCommand histCmd = new MySqlCommand(historyQuery, conn))
                     {
                         histCmd.Parameters.AddWithValue("@appId", applicationID);
                         using (MySqlDataReader histReader = histCmd.ExecuteReader())
                         {
-                            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                            var sb = new System.Text.StringBuilder();
                             bool hasHistory = false;
 
                             while (histReader.Read())
                             {
                                 hasHistory = true;
                                 string entryStatus = histReader.GetString("Status");
-                                string changedAt = histReader.GetDateTime("ChangedAt").ToString("MMM dd, yyyy hh:mm tt");
+                                string changedAt = histReader.GetDateTime("ChangedAt")
+                                                               .ToString("MMM dd, yyyy hh:mm tt");
                                 string changedBy = histReader["ChangedBy"]?.ToString() ?? "";
                                 string remarks = histReader["Remarks"]?.ToString() ?? "";
 
@@ -253,10 +332,11 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                                 sb.AppendLine();
                             }
 
-                            if (hasHistory)
-                                txtHRNotes.Text = sb.ToString().TrimEnd();
-                            else
-                                txtHRNotes.Text = "Status: " + currentStatus + "\r\nPosition: " + jobTitle + "\r\nDate Applied: " + dateApplied.ToString("MMMM dd, yyyy");
+                            txtHRNotes.Text = hasHistory
+                                ? sb.ToString().TrimEnd()
+                                : "Status: " + currentStatus + "\r\n"
+                                + "Position: " + jobTitle + "\r\n"
+                                + "Date Applied: " + dateApplied.ToString("MMMM dd, yyyy");
                         }
                     }
                 }
