@@ -37,16 +37,16 @@
             tabReports = new TabControl();
             tabApplicantReport = new TabPage();
             tabInterviewReport = new TabPage();
-            tabJobVacancyReport = new TabPage();
-            tabPage4 = new TabPage();
             dgvInterviewsReport = new DataGridView();
             cmbInterviewsFilter = new ComboBox();
             btnInterviewExport = new Button();
             lblInterviewFilter = new Label();
+            tabJobVacancyReport = new TabPage();
             dgvVacancyReport = new DataGridView();
             cmbVacancyFilter = new ComboBox();
             btnVacancyExport = new Button();
             lblVacancyFilter = new Label();
+            tabReqReport = new TabPage();
             dgvReqReport = new DataGridView();
             cmbReqFilter = new ComboBox();
             btnReqExport = new Button();
@@ -55,10 +55,10 @@
             tabReports.SuspendLayout();
             tabApplicantReport.SuspendLayout();
             tabInterviewReport.SuspendLayout();
-            tabJobVacancyReport.SuspendLayout();
-            tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvInterviewsReport).BeginInit();
+            tabJobVacancyReport.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvVacancyReport).BeginInit();
+            tabReqReport.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvReqReport).BeginInit();
             SuspendLayout();
             // 
@@ -89,7 +89,7 @@
             cmbApplicantFilter.Name = "cmbApplicantFilter";
             cmbApplicantFilter.Size = new Size(473, 28);
             cmbApplicantFilter.TabIndex = 2;
-            cmbApplicantFilter.SelectedIndexChanged += cmbFilter_SelectedIndexChanged;
+            cmbApplicantFilter.SelectedIndexChanged += cmbApplicantFilter_SelectedIndexChanged;
             // 
             // btnApplicantExport
             // 
@@ -99,7 +99,7 @@
             btnApplicantExport.TabIndex = 4;
             btnApplicantExport.Text = "Export to CSV";
             btnApplicantExport.UseVisualStyleBackColor = true;
-            btnApplicantExport.Click += btnExport_Click;
+            btnApplicantExport.Click += btnApplicantExport_Click;
             // 
             // btnBack
             // 
@@ -128,7 +128,7 @@
             tabReports.Controls.Add(tabApplicantReport);
             tabReports.Controls.Add(tabInterviewReport);
             tabReports.Controls.Add(tabJobVacancyReport);
-            tabReports.Controls.Add(tabPage4);
+            tabReports.Controls.Add(tabReqReport);
             tabReports.Location = new Point(23, 60);
             tabReports.Name = "tabReports";
             tabReports.SelectedIndex = 0;
@@ -163,34 +163,6 @@
             tabInterviewReport.Text = "Interviews";
             tabInterviewReport.UseVisualStyleBackColor = true;
             // 
-            // tabJobVacancyReport
-            // 
-            tabJobVacancyReport.Controls.Add(dgvVacancyReport);
-            tabJobVacancyReport.Controls.Add(cmbVacancyFilter);
-            tabJobVacancyReport.Controls.Add(btnVacancyExport);
-            tabJobVacancyReport.Controls.Add(lblVacancyFilter);
-            tabJobVacancyReport.Location = new Point(4, 29);
-            tabJobVacancyReport.Name = "tabJobVacancyReport";
-            tabJobVacancyReport.Padding = new Padding(3);
-            tabJobVacancyReport.Size = new Size(739, 320);
-            tabJobVacancyReport.TabIndex = 2;
-            tabJobVacancyReport.Text = "Job Vacancies";
-            tabJobVacancyReport.UseVisualStyleBackColor = true;
-            // 
-            // tabPage4
-            // 
-            tabPage4.Controls.Add(dgvReqReport);
-            tabPage4.Controls.Add(cmbReqFilter);
-            tabPage4.Controls.Add(btnReqExport);
-            tabPage4.Controls.Add(lblReqFilter);
-            tabPage4.Location = new Point(4, 29);
-            tabPage4.Name = "tabPage4";
-            tabPage4.Padding = new Padding(3);
-            tabPage4.Size = new Size(739, 320);
-            tabPage4.TabIndex = 3;
-            tabPage4.Text = "Missing Requirements";
-            tabPage4.UseVisualStyleBackColor = true;
-            // 
             // dgvInterviewsReport
             // 
             dgvInterviewsReport.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
@@ -211,6 +183,7 @@
             cmbInterviewsFilter.Name = "cmbInterviewsFilter";
             cmbInterviewsFilter.Size = new Size(473, 28);
             cmbInterviewsFilter.TabIndex = 8;
+            cmbInterviewsFilter.SelectedIndexChanged += cmbInterviewsFilter_SelectedIndexChanged;
             // 
             // btnInterviewExport
             // 
@@ -220,6 +193,7 @@
             btnInterviewExport.TabIndex = 9;
             btnInterviewExport.Text = "Export to CSV";
             btnInterviewExport.UseVisualStyleBackColor = true;
+            btnInterviewExport.Click += btnInterviewExport_Click;
             // 
             // lblInterviewFilter
             // 
@@ -229,6 +203,20 @@
             lblInterviewFilter.Size = new Size(109, 20);
             lblInterviewFilter.TabIndex = 7;
             lblInterviewFilter.Text = "Filter by Status:";
+            // 
+            // tabJobVacancyReport
+            // 
+            tabJobVacancyReport.Controls.Add(dgvVacancyReport);
+            tabJobVacancyReport.Controls.Add(cmbVacancyFilter);
+            tabJobVacancyReport.Controls.Add(btnVacancyExport);
+            tabJobVacancyReport.Controls.Add(lblVacancyFilter);
+            tabJobVacancyReport.Location = new Point(4, 29);
+            tabJobVacancyReport.Name = "tabJobVacancyReport";
+            tabJobVacancyReport.Padding = new Padding(3);
+            tabJobVacancyReport.Size = new Size(739, 320);
+            tabJobVacancyReport.TabIndex = 2;
+            tabJobVacancyReport.Text = "Job Vacancies";
+            tabJobVacancyReport.UseVisualStyleBackColor = true;
             // 
             // dgvVacancyReport
             // 
@@ -250,6 +238,7 @@
             cmbVacancyFilter.Name = "cmbVacancyFilter";
             cmbVacancyFilter.Size = new Size(473, 28);
             cmbVacancyFilter.TabIndex = 8;
+            cmbVacancyFilter.SelectedIndexChanged += cmbVacancyFilter_SelectedIndexChanged;
             // 
             // btnVacancyExport
             // 
@@ -259,6 +248,7 @@
             btnVacancyExport.TabIndex = 9;
             btnVacancyExport.Text = "Export to CSV";
             btnVacancyExport.UseVisualStyleBackColor = true;
+            btnVacancyExport.Click += btnVacancyExport_Click;
             // 
             // lblVacancyFilter
             // 
@@ -268,6 +258,20 @@
             lblVacancyFilter.Size = new Size(109, 20);
             lblVacancyFilter.TabIndex = 7;
             lblVacancyFilter.Text = "Filter by Status:";
+            // 
+            // tabReqReport
+            // 
+            tabReqReport.Controls.Add(dgvReqReport);
+            tabReqReport.Controls.Add(cmbReqFilter);
+            tabReqReport.Controls.Add(btnReqExport);
+            tabReqReport.Controls.Add(lblReqFilter);
+            tabReqReport.Location = new Point(4, 29);
+            tabReqReport.Name = "tabReqReport";
+            tabReqReport.Padding = new Padding(3);
+            tabReqReport.Size = new Size(739, 320);
+            tabReqReport.TabIndex = 3;
+            tabReqReport.Text = "Missing Requirements";
+            tabReqReport.UseVisualStyleBackColor = true;
             // 
             // dgvReqReport
             // 
@@ -289,6 +293,7 @@
             cmbReqFilter.Name = "cmbReqFilter";
             cmbReqFilter.Size = new Size(473, 28);
             cmbReqFilter.TabIndex = 8;
+            cmbReqFilter.SelectedIndexChanged += cmbReqFilter_SelectedIndexChanged;
             // 
             // btnReqExport
             // 
@@ -298,6 +303,7 @@
             btnReqExport.TabIndex = 9;
             btnReqExport.Text = "Export to CSV";
             btnReqExport.UseVisualStyleBackColor = true;
+            btnReqExport.Click += btnReqExport_Click;
             // 
             // lblReqFilter
             // 
@@ -325,12 +331,12 @@
             tabApplicantReport.PerformLayout();
             tabInterviewReport.ResumeLayout(false);
             tabInterviewReport.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvInterviewsReport).EndInit();
             tabJobVacancyReport.ResumeLayout(false);
             tabJobVacancyReport.PerformLayout();
-            tabPage4.ResumeLayout(false);
-            tabPage4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvInterviewsReport).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvVacancyReport).EndInit();
+            tabReqReport.ResumeLayout(false);
+            tabReqReport.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvReqReport).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -348,7 +354,7 @@
         private TabPage tabApplicantReport;
         private TabPage tabInterviewReport;
         private TabPage tabJobVacancyReport;
-        private TabPage tabPage4;
+        private TabPage tabReqReport;
         private DataGridView dgvInterviewsReport;
         private ComboBox cmbInterviewsFilter;
         private Button btnInterviewExport;
