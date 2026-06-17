@@ -96,18 +96,6 @@ namespace ApplicantRegistration
                 {
                     conn.Open();
 
-                    string checkQuery = "SELECT COUNT(*) FROM ApplicantAccounts WHERE Email = @email";
-                    using (MySqlCommand checkCmd = new MySqlCommand(checkQuery, conn))
-                    {
-                        checkCmd.Parameters.AddWithValue("@email", email);
-                        int count = Convert.ToInt32(checkCmd.ExecuteScalar());
-                        if (count > 0)
-                        {
-                            MessageBox.Show("Email is already registered. Please use a different email.");
-                            return;
-                        }
-                    }
-
                     string insertAccount = @"INSERT INTO ApplicantAccounts 
                                             (FirstName, Surname, MiddleInitial, DateOfBirth, Sex, ContactInfo, Email, PasswordHash) 
                                             VALUES (@firstname, @surname, @middleinitial, @dob, @sex, @contactinfo, @email, @password)";
@@ -149,6 +137,10 @@ namespace ApplicantRegistration
 
                 MessageBox.Show("Registration successful! You can now log in.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+            }
+            catch (MySqlException ex) when (ex.Number == 1062)
+            {
+                MessageBox.Show("Email is already registered. Please use a different email.");
             }
             catch (Exception ex)
             {

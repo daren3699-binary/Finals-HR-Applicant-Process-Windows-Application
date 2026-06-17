@@ -238,6 +238,8 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
         private void BtnApply_Click(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
+            if (!btn.Enabled) return;
+            btn.Enabled = false;
             int jobId = Convert.ToInt32(btn.Tag);
 
             try
@@ -349,9 +351,17 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                     LoadJobVacancies();
                 }
             }
+            catch (MySqlException ex) when (ex.Number == 1062)
+            {
+                MessageBox.Show("You have already submitted an application for this vacancy.", "Duplicate Application", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
             catch (Exception ex)
             {
                 MessageBox.Show("Error processing application: " + ex.Message, "System Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                btn.Enabled = true;
             }
         }
     }
