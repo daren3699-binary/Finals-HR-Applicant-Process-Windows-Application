@@ -121,7 +121,7 @@ namespace ApplicantRegistration
                         insertCmd.Parameters.AddWithValue("@sex", sex);
                         insertCmd.Parameters.AddWithValue("@contactinfo", contactInfo);
                         insertCmd.Parameters.AddWithValue("@email", email);
-                        insertCmd.Parameters.AddWithValue("@password", password);
+                        insertCmd.Parameters.AddWithValue("@password", PasswordHelper.Hash(password));
                         insertCmd.ExecuteNonQuery();
                     }
 
@@ -134,46 +134,23 @@ namespace ApplicantRegistration
 
                     // create the Applicants row so ApplicantID exists for future applications
                     string insertApplicant = @"INSERT INTO Applicants 
-                                               (ApplicantAccountID, FirstName, LastName) 
-                                               VALUES (@aid, @first, @last)";
+                                               (ApplicantAccountID, FirstName, LastName, MiddleName, DateOfBirth, Gender, ContactNumber) 
+                                               VALUES (@aid, @first, @last, @middle, @dob, @gender, @contact)";
                     using (MySqlCommand apCmd = new MySqlCommand(insertApplicant, conn))
                     {
                         apCmd.Parameters.AddWithValue("@aid", newAccountID);
                         apCmd.Parameters.AddWithValue("@first", firstName);
                         apCmd.Parameters.AddWithValue("@last", surname);
+                        apCmd.Parameters.AddWithValue("@middle", middleInitial);
+                        apCmd.Parameters.AddWithValue("@dob", dateOfBirth);
+                        apCmd.Parameters.AddWithValue("@gender", sex);
+                        apCmd.Parameters.AddWithValue("@contact", contactInfo);
                         apCmd.ExecuteNonQuery();
                     }
                 }
-<<<<<<< HEAD
+
                 MessageBox.Show("Registration successful! You can now log in.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-=======
 
-                string insertQuery = "INSERT INTO ApplicantAccounts (FirstName, Surname, MiddleInitial, DateOfBirth, Sex, ContactInfo, Email, PasswordHash) VALUES (@firstname, @surname, @middleinitial, @dob, @sex, @contactinfo, @email, @password); SELECT LAST_INSERT_ID();";
-                MySqlCommand insertCmd = new MySqlCommand(insertQuery, conn);
-                insertCmd.Parameters.AddWithValue("@firstname", firstName);
-                insertCmd.Parameters.AddWithValue("@surname", surname);
-                insertCmd.Parameters.AddWithValue("@middleinitial", middleInitial);
-                insertCmd.Parameters.AddWithValue("@dob", dateOfBirth);
-                insertCmd.Parameters.AddWithValue("@sex", sex);
-                insertCmd.Parameters.AddWithValue("@contactinfo", contactInfo);
-                insertCmd.Parameters.AddWithValue("@email", email);
-                insertCmd.Parameters.AddWithValue("@password", PasswordHelper.Hash(password));
-                int newAccountId = Convert.ToInt32(insertCmd.ExecuteScalar());
-
-                string profileQuery = "INSERT INTO Applicants (ApplicantAccountID, FirstName, LastName, MiddleName, DateOfBirth, Gender, ContactNumber) VALUES (@accId, @firstname, @lastname, @middlename, @dob, @gender, @contact)";
-                MySqlCommand profileCmd = new MySqlCommand(profileQuery, conn);
-                profileCmd.Parameters.AddWithValue("@accId", newAccountId);
-                profileCmd.Parameters.AddWithValue("@firstname", firstName);
-                profileCmd.Parameters.AddWithValue("@lastname", surname);
-                profileCmd.Parameters.AddWithValue("@middlename", middleInitial);
-                profileCmd.Parameters.AddWithValue("@dob", dateOfBirth);
-                profileCmd.Parameters.AddWithValue("@gender", sex);
-                profileCmd.Parameters.AddWithValue("@contact", contactInfo);
-                profileCmd.ExecuteNonQuery();
-
-                conn.Close();
-                MessageBox.Show("Registration successful! You can now log in.");
->>>>>>> 9a3e63a48d0b780794c116563e1977fbe782ffcf
             }
             catch (Exception ex)
             {
