@@ -120,6 +120,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
                         cmd.Parameters.AddWithValue("@by", Session.CurrentUsername);
                         cmd.ExecuteNonQuery();
                     }
+                    AuditLogger.Log("HR", Session.CurrentUserId, $"Evaluated interview: {result}", "InterviewEvaluations", _applicationID);
                 }
                 MessageBox.Show("Evaluation saved!", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();

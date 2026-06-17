@@ -41,19 +41,23 @@
             btnSchedule = new Button();
             btnEvaluate = new Button();
             btnDecide = new Button();
+            btnViewProfile = new Button();
             pnlOtherForms = new Panel();
             label1 = new Label();
             lblAppliedJobs = new Label();
             dgvAppliedJobs = new DataGridView();
+            dgvDocuments = new DataGridView();
+            lblApplicantDocuments = new Label();
             pnlOtherForms.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvAppliedJobs).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvDocuments).BeginInit();
             SuspendLayout();
             // 
             // lblTitle
             // 
             lblTitle.AutoSize = true;
             lblTitle.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTitle.Location = new Point(466, 43);
+            lblTitle.Location = new Point(466, 28);
             lblTitle.Name = "lblTitle";
             lblTitle.Size = new Size(199, 31);
             lblTitle.TabIndex = 0;
@@ -63,7 +67,7 @@
             // 
             lblName.AutoSize = true;
             lblName.Font = new Font("Segoe UI", 10.2F);
-            lblName.Location = new Point(279, 107);
+            lblName.Location = new Point(279, 75);
             lblName.Name = "lblName";
             lblName.Size = new Size(65, 23);
             lblName.TabIndex = 1;
@@ -73,7 +77,7 @@
             // 
             lblEmail.AutoSize = true;
             lblEmail.Font = new Font("Segoe UI", 10.2F);
-            lblEmail.Location = new Point(279, 139);
+            lblEmail.Location = new Point(279, 107);
             lblEmail.Name = "lblEmail";
             lblEmail.Size = new Size(60, 23);
             lblEmail.TabIndex = 2;
@@ -83,7 +87,7 @@
             // 
             lblStatus.AutoSize = true;
             lblStatus.Font = new Font("Segoe UI", 10.2F);
-            lblStatus.Location = new Point(279, 342);
+            lblStatus.Location = new Point(279, 459);
             lblStatus.Name = "lblStatus";
             lblStatus.Size = new Size(151, 23);
             lblStatus.TabIndex = 3;
@@ -93,7 +97,7 @@
             // 
             lblRemarks.AutoSize = true;
             lblRemarks.Font = new Font("Segoe UI", 10.2F);
-            lblRemarks.Location = new Point(279, 386);
+            lblRemarks.Location = new Point(279, 506);
             lblRemarks.Name = "lblRemarks";
             lblRemarks.Size = new Size(83, 23);
             lblRemarks.TabIndex = 4;
@@ -102,15 +106,15 @@
             // cmbStatus
             // 
             cmbStatus.FormattingEnabled = true;
-            cmbStatus.Items.AddRange(new object[] { "Submitted", "Under Review", "For Interview", "Hired", "Rejected" });
-            cmbStatus.Location = new Point(436, 339);
+            cmbStatus.Items.AddRange(new object[] { "Submitted", "Under Review", "Shortlisted", "For Interview", "For Assessment", "For Final Review", "Accepted", "Rejected", "Withdrawn" });
+            cmbStatus.Location = new Point(436, 453);
             cmbStatus.Name = "cmbStatus";
             cmbStatus.Size = new Size(417, 28);
             cmbStatus.TabIndex = 5;
             // 
             // txtRemarks
             // 
-            txtRemarks.Location = new Point(436, 383);
+            txtRemarks.Location = new Point(436, 505);
             txtRemarks.Multiline = true;
             txtRemarks.Name = "txtRemarks";
             txtRemarks.Size = new Size(417, 40);
@@ -121,7 +125,7 @@
             btnSave.BackColor = Color.SteelBlue;
             btnSave.FlatStyle = FlatStyle.Flat;
             btnSave.ForeColor = Color.White;
-            btnSave.Location = new Point(588, 443);
+            btnSave.Location = new Point(591, 560);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(95, 29);
             btnSave.TabIndex = 7;
@@ -131,7 +135,7 @@
             // 
             // btnBack
             // 
-            btnBack.Location = new Point(12, 487);
+            btnBack.Location = new Point(12, 571);
             btnBack.Name = "btnBack";
             btnBack.Size = new Size(94, 29);
             btnBack.TabIndex = 8;
@@ -191,8 +195,15 @@
             pnlOtherForms.Dock = DockStyle.Left;
             pnlOtherForms.Location = new Point(0, 0);
             pnlOtherForms.Name = "pnlOtherForms";
-            pnlOtherForms.Size = new Size(225, 553);
+            pnlOtherForms.Size = new Size(225, 621);
             pnlOtherForms.TabIndex = 13;
+            btnViewProfile.Location = new Point(12, 356);
+            btnViewProfile.Name = "btnViewProfile";
+            btnViewProfile.Size = new Size(200, 29);
+            btnViewProfile.Text = "View Applicant Profile";
+            btnViewProfile.UseVisualStyleBackColor = true;
+            btnViewProfile.Click += btnViewProfile_Click;
+            pnlOtherForms.Controls.Add(btnViewProfile);
             // 
             // label1
             // 
@@ -208,7 +219,7 @@
             // 
             lblAppliedJobs.AutoSize = true;
             lblAppliedJobs.Font = new Font("Segoe UI", 10.2F);
-            lblAppliedJobs.Location = new Point(279, 173);
+            lblAppliedJobs.Location = new Point(279, 141);
             lblAppliedJobs.Name = "lblAppliedJobs";
             lblAppliedJobs.Size = new Size(178, 23);
             lblAppliedJobs.TabIndex = 14;
@@ -219,7 +230,7 @@
             dgvAppliedJobs.AllowUserToAddRows = false;
             dgvAppliedJobs.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvAppliedJobs.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvAppliedJobs.Location = new Point(279, 196);
+            dgvAppliedJobs.Location = new Point(279, 164);
             dgvAppliedJobs.Name = "dgvAppliedJobs";
             dgvAppliedJobs.ReadOnly = true;
             dgvAppliedJobs.RowHeadersWidth = 51;
@@ -227,11 +238,36 @@
             dgvAppliedJobs.Size = new Size(574, 126);
             dgvAppliedJobs.TabIndex = 15;
             // 
+            // dgvDocuments
+            // 
+            dgvDocuments.AllowUserToAddRows = false;
+            dgvDocuments.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvDocuments.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvDocuments.Location = new Point(279, 321);
+            dgvDocuments.Name = "dgvDocuments";
+            dgvDocuments.ReadOnly = true;
+            dgvDocuments.RowHeadersWidth = 51;
+            dgvDocuments.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvDocuments.Size = new Size(574, 126);
+            dgvDocuments.TabIndex = 17;
+            // 
+            // lblApplicantDocuments
+            // 
+            lblApplicantDocuments.AutoSize = true;
+            lblApplicantDocuments.Font = new Font("Segoe UI", 10.2F);
+            lblApplicantDocuments.Location = new Point(279, 298);
+            lblApplicantDocuments.Name = "lblApplicantDocuments";
+            lblApplicantDocuments.Size = new Size(101, 23);
+            lblApplicantDocuments.TabIndex = 16;
+            lblApplicantDocuments.Text = "Documents:";
+            // 
             // ApplicantReview
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(882, 553);
+            ClientSize = new Size(889, 621);
+            Controls.Add(dgvDocuments);
+            Controls.Add(lblApplicantDocuments);
             Controls.Add(dgvAppliedJobs);
             Controls.Add(lblAppliedJobs);
             Controls.Add(pnlOtherForms);
@@ -249,6 +285,7 @@
             pnlOtherForms.ResumeLayout(false);
             pnlOtherForms.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvAppliedJobs).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvDocuments).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -268,9 +305,12 @@
         private Button btnSchedule;
         private Button btnEvaluate;
         private Button btnDecide;
+        private Button btnViewProfile;
         private Panel pnlOtherForms;
         private Label label1;
         private Label lblAppliedJobs;
         private DataGridView dgvAppliedJobs;
+        private DataGridView dgvDocuments;
+        private Label lblApplicantDocuments;
     }
 }

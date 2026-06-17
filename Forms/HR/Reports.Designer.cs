@@ -178,7 +178,7 @@
             // cmbInterviewsFilter
             // 
             cmbInterviewsFilter.FormattingEnabled = true;
-            cmbInterviewsFilter.Items.AddRange(new object[] { "", "All", "Scheduled", "", "Completed", "", "Cancelled" });
+            cmbInterviewsFilter.Items.AddRange(new object[] { "All", "Scheduled", "Completed", "Cancelled" });
             cmbInterviewsFilter.Location = new Point(121, 7);
             cmbInterviewsFilter.Name = "cmbInterviewsFilter";
             cmbInterviewsFilter.Size = new Size(473, 28);
@@ -288,7 +288,7 @@
             // cmbReqFilter
             // 
             cmbReqFilter.FormattingEnabled = true;
-            cmbReqFilter.Items.AddRange(new object[] { "All", "Incomplete", "Complete" });
+            cmbReqFilter.Items.AddRange(new object[] { "All", "Pending", "Missing", "Approved", "Rejected" });
             cmbReqFilter.Location = new Point(121, 7);
             cmbReqFilter.Name = "cmbReqFilter";
             cmbReqFilter.Size = new Size(473, 28);

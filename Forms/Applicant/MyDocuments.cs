@@ -1,8 +1,9 @@
+using FinalsHRApplicantProcessWindowsApplication.Database;
+using FinalsHRApplicantProcessWindowsApplication.Helpers;
+using MySql.Data.MySqlClient;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
-using FinalsHRApplicantProcessWindowsApplication.Database;
 
 namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 {
@@ -245,6 +246,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                     cmd.Parameters.AddWithValue("@FilePath", _selectedFilePath);
                     cmd.Parameters.AddWithValue("@Remarks", txtRemarks.Text.Trim());
                     cmd.ExecuteNonQuery();
+                    AuditLogger.Log("Applicant", _applicantAccountID, $"Uploaded document: {selectedType.Name}", "ApplicantDocuments", _applicationID);
                 }
 
                 MessageBox.Show("Document uploaded successfully.",
@@ -293,6 +295,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                     cmd.Parameters.AddWithValue("@TypeID", selectedType.Id);
                     cmd.Parameters.AddWithValue("@Remarks", txtRemarks.Text.Trim());
                     cmd.ExecuteNonQuery();
+                    AuditLogger.Log("Applicant", _applicantAccountID, $"Replaced document: {selectedType.Name}", "ApplicantDocuments", _applicationID);
                 }
 
                 MessageBox.Show("Document replaced successfully.",

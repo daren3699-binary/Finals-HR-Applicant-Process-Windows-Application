@@ -161,21 +161,37 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
 
                     string query = @"SELECT
                                         CONCAT(a.FirstName,' ',a.LastName) AS ApplicantName,
+                                        j.JobTitle,
                                         rt.RequirementName,
-                                        ad.Status,
-                                        ad.UploadDate
-                                    FROM ApplicantDocuments ad
+                                        COALESCE(ad.Status, 'Missing') AS Status,
+                                        ad.UploadedAt
+                                    FROM Applications ap
                                     JOIN Applicants a
-                                        ON ad.ApplicantID = a.ApplicantID
-                                    JOIN RequirementTypes rt
-                                        ON ad.RequirementTypeID = rt.RequirementTypeID";
+                                        ON ap.ApplicantID = a.ApplicantID
+                                    JOIN JobVacancies j
+                                        ON ap.JobVacancyID = j.JobVacancyID
+                                    CROSS JOIN RequirementTypes rt
+                                    LEFT JOIN ApplicantDocuments ad
+                                        ON ad.ApplicationID = ap.ApplicationID
+                                        AND ad.RequirementTypeID = rt.RequirementTypeID";
 
-                    if (!string.IsNullOrEmpty(statusFilter)) query += " WHERE ad.Status = @status";
-                    query += " ORDER BY ApplicantName";
+                    if (!string.IsNullOrEmpty(statusFilter))
+                    {
+                        if (statusFilter == "Missing")
+                        {
+                            query += " WHERE ad.Status IS NULL";
+                        }
+                        else
+                        {
+                            query += " WHERE ad.Status = @status";
+                        }
+                    }
+
+                    query += " ORDER BY ApplicantName, rt.RequirementName";
 
                     using (var cmd = new MySqlCommand(query, conn))
                     {
-                        if (!string.IsNullOrEmpty(statusFilter)) cmd.Parameters.AddWithValue("@status", statusFilter);
+                        if (!string.IsNullOrEmpty(statusFilter) && statusFilter != "Missing") cmd.Parameters.AddWithValue("@status", statusFilter);
 
                         DataTable table = new DataTable();
                         new MySqlDataAdapter(cmd).Fill(table);

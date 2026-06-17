@@ -1,8 +1,9 @@
-﻿using MySql.Data.MySqlClient;
+﻿using FinalsHRApplicantProcessWindowsApplication.Database;
+using FinalsHRApplicantProcessWindowsApplication.Helpers;
+using MySql.Data.MySqlClient;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using FinalsHRApplicantProcessWindowsApplication.Database;
 
 namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 {
@@ -158,6 +159,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                     {
                         historyCmd.Parameters.AddWithValue("@id", _applicationID);
                         historyCmd.ExecuteNonQuery();
+                        AuditLogger.Log("Applicant", _applicantAccountID, "Withdrew application", "Applications", _applicationID);
                     }
                 }
 

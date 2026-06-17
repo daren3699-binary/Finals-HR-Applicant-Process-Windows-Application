@@ -108,6 +108,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
                         cmd.Parameters.AddWithValue("@by", Session.CurrentUsername);
                         cmd.ExecuteNonQuery();
                     }
+                    AuditLogger.Log("HR", Session.CurrentUserId, $"Screened applicant as {result}", "ScreeningResults", _applicationID);
                 }
                 MessageBox.Show($"Screening saved. Applicant marked as {result}.", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();

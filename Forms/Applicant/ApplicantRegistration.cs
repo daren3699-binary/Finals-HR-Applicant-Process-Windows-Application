@@ -133,10 +133,11 @@ namespace ApplicantRegistration
                         apCmd.Parameters.AddWithValue("@contact", contactInfo);
                         apCmd.ExecuteNonQuery();
                     }
+                    AuditLogger.Log("Applicant", newAccountID, "Registered new account", "ApplicantAccounts", newAccountID);
                 }
 
                 MessageBox.Show("Registration successful! You can now log in.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                
             }
             catch (MySqlException ex) when (ex.Number == 1062)
             {

@@ -1,12 +1,13 @@
-﻿using System;
+﻿using FinalsHRApplicantProcessWindowsApplication.Database;
+using FinalsHRApplicantProcessWindowsApplication.Helpers;
+using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using FinalsHRApplicantProcessWindowsApplication.Database;
-using MySql.Data.MySqlClient;
 
 namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
 {
@@ -179,6 +180,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
                         if (_isEditMode) cmd.Parameters.AddWithValue("@id", _selectedJobID);
                         cmd.ExecuteNonQuery();
                     }
+                    AuditLogger.Log("HR", Session.CurrentUserId, _isEditMode ? "Updated job vacancy" : "Created job vacancy", "JobVacancies", _selectedJobID);
                 }
 
                 MessageBox.Show(_isEditMode ? "Vacancy updated!" : "Vacancy added!", "Success");

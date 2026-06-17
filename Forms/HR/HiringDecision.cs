@@ -22,8 +22,15 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
 
         private void HiringDecision_Load(object sender, EventArgs e)
         {
+            if (Session.CurrentRole != "HR Manager" && Session.CurrentRole != "Admin")
+            {
+                MessageBox.Show("Access Denied. Only HR Manager and Admin can make hiring decisions.",
+                    "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                this.Close();
+                return;
+            }
+
             LoadApplicantInfo();
-            CheckRoleAccess();
         }
 
         private void LoadApplicantInfo()
@@ -51,17 +58,6 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
                 }
             }
             catch (Exception ex) { MessageBox.Show($"Error: {ex.Message}"); }
-        }
-
-        private void CheckRoleAccess()
-        {
-            bool canAccept = Session.CurrentRole == "HR Manager" || Session.CurrentRole == "Admin";
-            if (!canAccept)
-            {
-                cmbDecision.Items.Remove("Accepted");
-                lblWarning.Text = "⚠ You do not have permission to accept applicants.";
-                lblWarning.ForeColor = Color.Red;
-            }
         }
 
         private void btnSave_Click(object sender, EventArgs e)
