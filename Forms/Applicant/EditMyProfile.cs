@@ -6,11 +6,11 @@ using FinalsHRApplicantProcessWindowsApplication.Database;
 
 namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 {
-    public partial class MyProfile : Form
+    public partial class EditMyProfile : Form
     {
         private int _applicantAccountID;
 
-        public MyProfile(int applicantAccountID)
+        public EditMyProfile(int applicantAccountID)
         {
             InitializeComponent();
             _applicantAccountID = applicantAccountID;

@@ -37,9 +37,11 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 
             btnHome.Image = SidebarIcons.Home(iconColor);
             btnJobVacancies.Image = SidebarIcons.Briefcase(iconColor);
+            btnMyApplication.Image = SidebarIcons.Document(iconColor);
             btnAppStatus.Image = SidebarIcons.Clipboard(iconColor);
             btnMyDocuments.Image = SidebarIcons.Folder(iconColor);
-            btnMyProfile.Image = SidebarIcons.Person(iconColor);
+            btnViewProfile.Image = SidebarIcons.Person(iconColor);
+            btnMyProfile.Image = SidebarIcons.Pencil(iconColor);
         }
 
         private void btnHome_Click(object sender, EventArgs e)
@@ -240,12 +242,20 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 
         private void btnMyProfile_Click(object sender, EventArgs e)
         {
-            using (MyProfile profileForm = new MyProfile(_applicantAccountID))
+            using (EditMyProfile profileForm = new EditMyProfile(_applicantAccountID))
             {
                 profileForm.ShowDialog();
             }
 
             LoadApplicantNameAndStatus();
+        }
+
+        private void btnViewProfile_Click(object sender, EventArgs e)
+        {
+            pnlContent.Controls.Clear();
+            ViewProfile viewProfile = new ViewProfile(_applicantAccountID);
+            viewProfile.Dock = DockStyle.Fill;
+            pnlContent.Controls.Add(viewProfile);
         }
 
         private void btnLogout_Click(object sender, EventArgs e)

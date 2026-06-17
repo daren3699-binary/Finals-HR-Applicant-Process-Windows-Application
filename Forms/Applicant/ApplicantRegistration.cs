@@ -125,14 +125,12 @@ namespace ApplicantRegistration
                         insertCmd.ExecuteNonQuery();
                     }
 
-                    // get the new account ID
                     int newAccountID = 0;
                     using (MySqlCommand idCmd = new MySqlCommand("SELECT LAST_INSERT_ID()", conn))
                     {
                         newAccountID = Convert.ToInt32(idCmd.ExecuteScalar());
                     }
 
-                    // create the Applicants row so ApplicantID exists for future applications
                     string insertApplicant = @"INSERT INTO Applicants 
                                                (ApplicantAccountID, FirstName, LastName, MiddleName, DateOfBirth, Gender, ContactNumber) 
                                                VALUES (@aid, @first, @last, @middle, @dob, @gender, @contact)";

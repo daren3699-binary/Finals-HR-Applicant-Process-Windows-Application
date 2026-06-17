@@ -102,7 +102,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             }, color);
         }
 
-        // Used on the My Profile button
+        // Used on the My Profile (view) button
         public static Bitmap Person(Color color)
         {
             return CreateCanvas((g, pen) =>
@@ -112,6 +112,58 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 
                 // Shoulders
                 g.DrawArc(pen, 3, 9, 14, 12, 180, 180);
+            }, color);
+        }
+
+        // Used on the My Application button
+        public static Bitmap Document(Color color)
+        {
+            return CreateCanvas((g, pen) =>
+            {
+                // Page outline with folded corner
+                g.DrawLines(pen, new Point[]
+                {
+                    new Point(5, 2),
+                    new Point(14, 2),
+                    new Point(18, 6),
+                    new Point(18, 18),
+                    new Point(5, 18),
+                    new Point(5, 2)
+                });
+
+                // Folded corner
+                g.DrawLines(pen, new Point[]
+                {
+                    new Point(14, 2),
+                    new Point(14, 6),
+                    new Point(18, 6)
+                });
+
+                // Text lines
+                g.DrawLine(pen, 8, 10, 15, 10);
+                g.DrawLine(pen, 8, 13, 15, 13);
+                g.DrawLine(pen, 8, 16, 12, 16);
+            }, color);
+        }
+
+        // Used on the Edit My Profile button
+        public static Bitmap Pencil(Color color)
+        {
+            return CreateCanvas((g, pen) =>
+            {
+                // Pencil body
+                g.DrawLine(pen, 4, 17, 14, 7);
+                g.DrawLine(pen, 14, 7, 17, 4);
+
+                // Tip
+                g.DrawLine(pen, 4, 17, 3, 19);
+                g.DrawLine(pen, 3, 19, 5, 18);
+                g.DrawLine(pen, 5, 18, 4, 17);
+
+                // Eraser end
+                g.DrawLine(pen, 14, 7, 17, 10);
+                g.DrawLine(pen, 17, 4, 20, 7);
+                g.DrawLine(pen, 17, 10, 20, 7);
             }, color);
         }
     }

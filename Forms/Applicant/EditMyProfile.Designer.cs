@@ -1,6 +1,6 @@
 namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 {
-    partial class MyProfile
+    partial class EditMyProfile
     {
         private System.ComponentModel.IContainer components = null;
 
@@ -362,7 +362,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             pnlScrollWrapper.Controls.Add(grpWorkExp);
 
             // -------------------------------------------------------
-            // MyProfile Form
+            // EditMyProfile Form
             // -------------------------------------------------------
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -371,7 +371,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
             Controls.Add(pnlScrollWrapper);
             Controls.Add(pnlDivider);
             Controls.Add(pnlHeader);
-            Name = "MyProfile";
+            Name = "EditMyProfile";
             Text = "My Profile";
             Load += MyProfile_Load;
 
