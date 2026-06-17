@@ -65,6 +65,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
                 MessageBox.Show($"Database Error: {ex.Message}");
             }
             LoadAppliedJobs();
+            LoadDocumments();
         }
 
         private void LoadAppliedJobs()
@@ -103,6 +104,45 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
             catch (Exception ex) { MessageBox.Show($"Error loading applied jobs: {ex.Message}"); }
         }
 
+        private void LoadDocumments()
+        {
+            try
+            {
+                using (var conn = DBConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    string query = @"SELECT
+                                        rt.RequirementName,
+                                        ad.Status,
+                                        ad.FilePath,
+                                        ad.UploadedAt
+                                    FROM ApplicantDocuments ad
+                                    JOIN RequirementTypes rt
+                                        ON ad.RequirementTypeID = rt.RequirementTypeID
+                                    WHERE ad.ApplicationID = @appId";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@appId", _applicationID);
+
+                        DataTable table = new DataTable();
+
+                        using (var adapter = new MySqlDataAdapter(cmd))
+                        {
+                            adapter.Fill(table);
+                        }
+
+                        dgvDocuments.DataSource = table;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading documents: " + ex.Message);
+            }
+        }
+
         private void btnSave_Click(object sender, EventArgs e)
         {
             if (cmbStatus.SelectedItem == null)
@@ -112,10 +152,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
             }
 
             string selectedStatus = cmbStatus.SelectedItem.ToString();
-            if (cmbStatus.Items.Contains(selectedStatus))
-            {
-                selectedStatus = cmbStatus.SelectedItem.ToString();
-            }
+            
             //role guard - HR Staff cannot set Accepted
             if (selectedStatus == "Accepted" && Session.CurrentRole != "HR Manager" && Session.CurrentRole != "Admin")
             {

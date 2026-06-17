@@ -1,9 +1,10 @@
+using FinalsHRApplicantProcessWindowsApplication.Database;
+using FinalsHRApplicantProcessWindowsApplication.Helpers;
+using MySql.Data.MySqlClient;
 using System;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
-using FinalsHRApplicantProcessWindowsApplication.Database;
 
 namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 {
@@ -343,6 +344,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                     {
                         historyCmd.Parameters.AddWithValue("@appId", newApplicationId);
                         historyCmd.ExecuteNonQuery();
+                        AuditLogger.Log("Applicant", _applicantAccountID, $"Applied to job vacancy ID {jobId}", "Applications", newApplicationId);
                     }
 
                     MessageBox.Show("Application submitted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);

@@ -1,8 +1,10 @@
+using FinalsHRApplicantProcessWindowsApplication.Database;
+using FinalsHRApplicantProcessWindowsApplication.Helpers;
+using MySql.Data.MySqlClient;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
-using FinalsHRApplicantProcessWindowsApplication.Database;
+using FinalsHRApplicantProcessWindowsApplication.Helpers;
 
 namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 {
@@ -220,6 +222,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                             cmd.Parameters.AddWithValue("@workTo", txtWorkTo.Text.Trim());
                             cmd.Parameters.AddWithValue("@workRemarks", txtWorkRemarks.Text.Trim());
                             cmd.ExecuteNonQuery();
+                            AuditLogger.Log("Applicant", _applicantAccountID, "Updated profile information", "Applicants", _applicantAccountID);
                         }
                     }
                 }

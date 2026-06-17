@@ -99,9 +99,12 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.HR
                         cmd.Parameters.AddWithValue("@by", Session.CurrentUsername);
                         cmd.ExecuteNonQuery();
                     }
-                    MessageBox.Show("Interview scheduled successfully!", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.Close();
+
+                    AuditLogger.Log("HR", Session.CurrentUserId, "Scheduled interview", "InterviewSchedules", _applicationID);
+
                 }
+                MessageBox.Show("Interview scheduled successfully!", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
             }
             catch (Exception ex) { MessageBox.Show($"Error: {ex.Message}"); }
         }

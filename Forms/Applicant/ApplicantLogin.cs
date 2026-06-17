@@ -80,6 +80,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                                 else
                                     SessionManager.ClearSession();
 
+                                AuditLogger.Log("Applicant", accountID, "Applicant logged in", "ApplicantAccounts", accountID);
                                 ApplicantDashboard dashboard = new ApplicantDashboard(accountID);
                                 dashboard.Show();
                                 this.Hide();
