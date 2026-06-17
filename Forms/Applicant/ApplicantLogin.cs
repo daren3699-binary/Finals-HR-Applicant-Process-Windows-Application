@@ -55,16 +55,15 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                 {
                     conn.Open();
 
-                    string query = "SELECT ApplicantAccountID, IsActive FROM ApplicantAccounts WHERE Email = @Email AND PasswordHash = @Password";
+                    string query = "SELECT ApplicantAccountID, IsActive, PasswordHash FROM ApplicantAccounts WHERE Email = @Email";
 
                     using (var cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@Email", email);
-                        cmd.Parameters.AddWithValue("@Password", password);
 
                         using (var reader = cmd.ExecuteReader())
                         {
-                            if (reader.Read())
+                            if (reader.Read() && reader.GetString("PasswordHash") == PasswordHelper.Hash(password))
                             {
                                 bool isActive = reader.GetBoolean("IsActive");
 

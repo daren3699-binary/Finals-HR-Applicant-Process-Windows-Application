@@ -152,14 +152,12 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                         cmd.ExecuteNonQuery();
                     }
 
-                    string history = @"INSERT INTO ApplicationStatusHistory 
-                                       (ApplicationID, Status, Remarks, ChangedBy)
-                                       VALUES (@id, 'Withdrawn', 'Applicant withdrew the application.', 'Applicant')";
-
-                    using (MySqlCommand hCmd = new MySqlCommand(history, conn))
+                    string historyQuery = "INSERT INTO ApplicationStatusHistory (ApplicationID, Status, Remarks, ChangedBy) " +
+                                          "VALUES (@id, 'Withdrawn', 'Application withdrawn by applicant.', 'Applicant')";
+                    using (MySqlCommand historyCmd = new MySqlCommand(historyQuery, conn))
                     {
-                        hCmd.Parameters.AddWithValue("@id", _applicationID);
-                        hCmd.ExecuteNonQuery();
+                        historyCmd.Parameters.AddWithValue("@id", _applicationID);
+                        historyCmd.ExecuteNonQuery();
                     }
                 }
 

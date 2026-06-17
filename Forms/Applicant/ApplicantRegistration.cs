@@ -1,6 +1,7 @@
 using FinalsHRApplicantProcessWindowsApplication.Forms.Applicant;
 using MySql.Data.MySqlClient;
 using FinalsHRApplicantProcessWindowsApplication.Database;
+using FinalsHRApplicantProcessWindowsApplication.Helpers;
 using System;
 using System.Windows.Forms;
 
@@ -156,7 +157,7 @@ namespace ApplicantRegistration
                 insertCmd.Parameters.AddWithValue("@sex", sex);
                 insertCmd.Parameters.AddWithValue("@contactinfo", contactInfo);
                 insertCmd.Parameters.AddWithValue("@email", email);
-                insertCmd.Parameters.AddWithValue("@password", password);
+                insertCmd.Parameters.AddWithValue("@password", PasswordHelper.Hash(password));
                 int newAccountId = Convert.ToInt32(insertCmd.ExecuteScalar());
 
                 string profileQuery = "INSERT INTO Applicants (ApplicantAccountID, FirstName, LastName, MiddleName, DateOfBirth, Gender, ContactNumber) VALUES (@accId, @firstname, @lastname, @middlename, @dob, @gender, @contact)";
