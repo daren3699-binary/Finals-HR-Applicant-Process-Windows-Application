@@ -278,7 +278,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                                            FROM Applications a
                                            JOIN JobVacancies j ON a.JobID = j.JobVacancyID
                                            WHERE a.ApplicantAccountID = @uid
-                                             AND a.Status NOT IN ('Rejected', 'Withdrawn', 'Accepted')
+                                             AND a.Status NOT IN ('Rejected', 'Withdrawn')
                                            LIMIT 1";
                     using (MySqlCommand activeCmd = new MySqlCommand(activeQuery, conn))
                     {
@@ -289,10 +289,20 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                             {
                                 string activeTitle = activeReader.GetString("JobTitle");
                                 string activeStatus = activeReader.GetString("Status");
-                                MessageBox.Show(
-                                    "You already have an active application for \"" + activeTitle + "\" (Status: " + activeStatus + "). " +
-                                    "You must wait until that application is resolved (Accepted, Rejected, or Withdrawn) before applying to a new job.",
-                                    "Active Application Exists", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                                if (activeStatus == "Accepted")
+                                {
+                                    MessageBox.Show(
+                                        "You have already been accepted for \"" + activeTitle + "\". You cannot apply to another job.",
+                                        "Already Hired", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                }
+                                else
+                                {
+                                    MessageBox.Show(
+                                        "You already have an active application for \"" + activeTitle + "\" (Status: " + activeStatus + "). " +
+                                        "You must wait until that application is resolved (Accepted, Rejected, or Withdrawn) before applying to a new job.",
+                                        "Active Application Exists", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                }
                                 return;
                             }
                         }

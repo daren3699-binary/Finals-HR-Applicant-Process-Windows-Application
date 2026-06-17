@@ -30,6 +30,7 @@
             btnHome = new Button();
             lblMenuHomepage = new Label();
             btnMyApplication = new Button();
+            btnViewProfile = new Button();
             pnlContent = new Panel();
             lblSubWelcome = new Label();
             lblWelcome = new Label();
@@ -121,9 +122,11 @@
             pnlSidebar.BorderStyle = BorderStyle.FixedSingle;
             pnlSidebar.Controls.Add(pnlSidebarBottom);
             pnlSidebar.Controls.Add(btnMyProfile);
+            pnlSidebar.Controls.Add(btnViewProfile);
             pnlSidebar.Controls.Add(lblMenuEditProfile);
             pnlSidebar.Controls.Add(btnMyDocuments);
             pnlSidebar.Controls.Add(btnAppStatus);
+            pnlSidebar.Controls.Add(btnMyApplication);
             pnlSidebar.Controls.Add(lblMenuMyApplication);
             pnlSidebar.Controls.Add(btnJobVacancies);
             pnlSidebar.Controls.Add(lblMenuApplyJob);
@@ -154,12 +157,12 @@
             btnMyProfile.Font = new Font("Segoe UI", 10F);
             btnMyProfile.ForeColor = Color.FromArgb(30, 30, 30);
             btnMyProfile.ImageAlign = ContentAlignment.MiddleLeft;
-            btnMyProfile.Location = new Point(0, 355);
+            btnMyProfile.Location = new Point(0, 445);
             btnMyProfile.Name = "btnMyProfile";
             btnMyProfile.Padding = new Padding(15, 0, 0, 0);
             btnMyProfile.Size = new Size(220, 45);
             btnMyProfile.TabIndex = 11;
-            btnMyProfile.Text = "My Profile";
+            btnMyProfile.Text = "Edit My Profile";
             btnMyProfile.TextAlign = ContentAlignment.MiddleLeft;
             btnMyProfile.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnMyProfile.UseVisualStyleBackColor = false;
@@ -170,11 +173,31 @@
             lblMenuEditProfile.AutoSize = true;
             lblMenuEditProfile.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
             lblMenuEditProfile.ForeColor = Color.FromArgb(170, 170, 170);
-            lblMenuEditProfile.Location = new Point(20, 333);
+            lblMenuEditProfile.Location = new Point(20, 378);
             lblMenuEditProfile.Name = "lblMenuEditProfile";
             lblMenuEditProfile.Size = new Size(122, 19);
             lblMenuEditProfile.TabIndex = 10;
-            lblMenuEditProfile.Text = "EDIT MY PROFILE";
+            lblMenuEditProfile.Text = "MY PROFILE";
+            // 
+            // btnViewProfile
+            // 
+            btnViewProfile.BackColor = Color.Transparent;
+            btnViewProfile.Cursor = Cursors.Hand;
+            btnViewProfile.FlatAppearance.BorderSize = 0;
+            btnViewProfile.FlatStyle = FlatStyle.Flat;
+            btnViewProfile.Font = new Font("Segoe UI", 10F);
+            btnViewProfile.ForeColor = Color.FromArgb(30, 30, 30);
+            btnViewProfile.ImageAlign = ContentAlignment.MiddleLeft;
+            btnViewProfile.Location = new Point(0, 400);
+            btnViewProfile.Name = "btnViewProfile";
+            btnViewProfile.Padding = new Padding(15, 0, 0, 0);
+            btnViewProfile.Size = new Size(220, 45);
+            btnViewProfile.TabIndex = 12;
+            btnViewProfile.Text = "My Profile";
+            btnViewProfile.TextAlign = ContentAlignment.MiddleLeft;
+            btnViewProfile.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnViewProfile.UseVisualStyleBackColor = false;
+            btnViewProfile.Click += btnViewProfile_Click;
             // 
             // btnMyDocuments
             // 
@@ -185,7 +208,7 @@
             btnMyDocuments.Font = new Font("Segoe UI", 10F);
             btnMyDocuments.ForeColor = Color.FromArgb(30, 30, 30);
             btnMyDocuments.ImageAlign = ContentAlignment.MiddleLeft;
-            btnMyDocuments.Location = new Point(0, 275);
+            btnMyDocuments.Location = new Point(0, 320);
             btnMyDocuments.Name = "btnMyDocuments";
             btnMyDocuments.Padding = new Padding(15, 0, 0, 0);
             btnMyDocuments.Size = new Size(220, 45);
@@ -205,7 +228,7 @@
             btnAppStatus.Font = new Font("Segoe UI", 10F);
             btnAppStatus.ForeColor = Color.FromArgb(30, 30, 30);
             btnAppStatus.ImageAlign = ContentAlignment.MiddleLeft;
-            btnAppStatus.Location = new Point(0, 230);
+            btnAppStatus.Location = new Point(0, 275);
             btnAppStatus.Name = "btnAppStatus";
             btnAppStatus.Padding = new Padding(15, 0, 0, 0);
             btnAppStatus.Size = new Size(220, 45);
@@ -297,12 +320,15 @@
             btnMyApplication.FlatStyle = FlatStyle.Flat;
             btnMyApplication.Font = new Font("Segoe UI", 10F);
             btnMyApplication.ForeColor = Color.FromArgb(30, 30, 30);
-            btnMyApplication.Location = new Point(0, 175);
+            btnMyApplication.ImageAlign = ContentAlignment.MiddleLeft;
+            btnMyApplication.Location = new Point(0, 230);
             btnMyApplication.Name = "btnMyApplication";
+            btnMyApplication.Padding = new Padding(15, 0, 0, 0);
             btnMyApplication.Size = new Size(220, 45);
             btnMyApplication.TabIndex = 2;
-            btnMyApplication.Text = "   My Application";
+            btnMyApplication.Text = "My Application";
             btnMyApplication.TextAlign = ContentAlignment.MiddleLeft;
+            btnMyApplication.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnMyApplication.UseVisualStyleBackColor = false;
             btnMyApplication.Click += btnMyApplication_Click;
             // 
@@ -718,6 +744,7 @@
         private Label lblMenuMyApplication;
         private Label lblMenuEditProfile;
         private Button btnMyProfile;
+        private Button btnViewProfile;
         private Panel pnlContent;
         private Label lblWelcome;
         private Label lblSubWelcome;
