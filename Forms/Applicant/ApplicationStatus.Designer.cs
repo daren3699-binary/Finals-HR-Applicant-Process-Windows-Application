@@ -42,6 +42,10 @@
             lblStep6Title = new Label();
             lblStep6Desc = new Label();
 
+            pnlStatus7 = new Panel();
+            lblStep7Title = new Label();
+            lblStep7Desc = new Label();
+
             pnlInterviewDetails = new Panel();
             lblInterviewHeader = new Label();
             lblInterviewDateLabel = new Label();
@@ -68,7 +72,7 @@
             pnlTimelineTrack.BackColor = Color.FromArgb(220, 220, 220);
             pnlTimelineTrack.Location = new System.Drawing.Point(65, 120);
             pnlTimelineTrack.Name = "pnlTimelineTrack";
-            pnlTimelineTrack.Size = new System.Drawing.Size(4, 520);
+            pnlTimelineTrack.Size = new System.Drawing.Size(4, 600);
 
             pnlStatus1.BackColor = Color.FromArgb(220, 220, 220);
             pnlStatus1.Location = new System.Drawing.Point(57, 130);
@@ -177,6 +181,25 @@
             lblStep6Desc.Location = new System.Drawing.Point(95, 552);
             lblStep6Desc.Name = "lblStep6Desc";
             lblStep6Desc.Text = "Not yet determined.";
+
+            // ── Step 7 — Hired ────────────────────────────────────────────────────
+            pnlStatus7.BackColor = Color.FromArgb(220, 220, 220);
+            pnlStatus7.Location = new System.Drawing.Point(57, 610);
+            pnlStatus7.Name = "pnlStatus7";
+            pnlStatus7.Size = new System.Drawing.Size(20, 20);
+
+            lblStep7Title.AutoSize = true;
+            lblStep7Title.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblStep7Title.Location = new System.Drawing.Point(95, 607);
+            lblStep7Title.Name = "lblStep7Title";
+            lblStep7Title.Text = "Hired";
+
+            lblStep7Desc.AutoSize = true;
+            lblStep7Desc.Font = new Font("Segoe UI", 9F);
+            lblStep7Desc.ForeColor = Color.Gray;
+            lblStep7Desc.Location = new System.Drawing.Point(95, 632);
+            lblStep7Desc.Name = "lblStep7Desc";
+            lblStep7Desc.Text = "Not yet determined.";
 
             pnlInterviewDetails.BackColor = Color.White;
             pnlInterviewDetails.BorderStyle = BorderStyle.FixedSingle;
@@ -299,10 +322,13 @@
             Controls.Add(pnlStatus6);
             Controls.Add(lblStep6Title);
             Controls.Add(lblStep6Desc);
+            Controls.Add(pnlStatus7);
+            Controls.Add(lblStep7Title);
+            Controls.Add(lblStep7Desc);
             Controls.Add(pnlInterviewDetails);
             Controls.Add(pnlHRUpdates);
             Name = "ApplicationStatus";
-            Size = new System.Drawing.Size(1060, 715);
+            Size = new System.Drawing.Size(1060, 795);
             pnlInterviewDetails.ResumeLayout(false);
             pnlInterviewDetails.PerformLayout();
             pnlHRUpdates.ResumeLayout(false);
@@ -331,6 +357,9 @@
         private Panel pnlStatus6;
         private Label lblStep6Title;
         private Label lblStep6Desc;
+        private Panel pnlStatus7;
+        private Label lblStep7Title;
+        private Label lblStep7Desc;
         private Panel pnlInterviewDetails;
         private Label lblInterviewHeader;
         private Label lblInterviewDateLabel;
