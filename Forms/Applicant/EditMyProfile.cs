@@ -11,6 +11,7 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
     public partial class EditMyProfile : Form
     {
         private int _applicantAccountID;
+        private bool _editingAllowed = true;
 
         public EditMyProfile(int applicantAccountID)
         {
@@ -20,7 +21,44 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 
         private void MyProfile_Load(object sender, EventArgs e)
         {
+            CheckEditLock();
             LoadProfile();
+        }
+
+        private void CheckEditLock()
+        {
+            string query = @"SELECT Status FROM Applications
+                             WHERE ApplicantAccountID = @id
+                             ORDER BY DateApplied DESC LIMIT 1";
+            try
+            {
+                using (MySqlConnection conn = DBConnection.GetConnection())
+                {
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", _applicantAccountID);
+                        object result = cmd.ExecuteScalar();
+                        if (result != null)
+                        {
+                            string status = result.ToString();
+                            _editingAllowed = status == "Draft" || status == "Submitted";
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                _editingAllowed = true;
+            }
+
+            if (!_editingAllowed)
+            {
+                lblSubTitle.Text = "Locked. Editing is no longer allowed once HR has started review.";
+                lblSubTitle.ForeColor = Color.Crimson;
+                pnlScrollWrapper.Enabled = false;
+                btnSave.Enabled = false;
+            }
         }
 
         private void LoadProfile()
@@ -124,6 +162,12 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            if (!_editingAllowed)
+            {
+                MessageBox.Show("Your application is already under review. Profile edits are locked.", "Action Blocked", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(txtFirstName.Text) ||
                 string.IsNullOrWhiteSpace(txtLastName.Text))
             {
@@ -142,6 +186,21 @@ namespace FinalsHRApplicantProcessWindowsApplication.Forms.Applicant
                 using (MySqlConnection conn = DBConnection.GetConnection())
                 {
                     conn.Open();
+
+                    string lockCheckQuery = @"SELECT COUNT(*) FROM Applications
+                                              WHERE ApplicantAccountID = @id
+                                                AND Status NOT IN ('Draft', 'Submitted')";
+                    using (MySqlCommand lockCheckCmd = new MySqlCommand(lockCheckQuery, conn))
+                    {
+                        lockCheckCmd.Parameters.AddWithValue("@id", _applicantAccountID);
+                        long lockedCount = Convert.ToInt64(lockCheckCmd.ExecuteScalar());
+                        if (lockedCount > 0)
+                        {
+                            MessageBox.Show("Your application status changed. Edits were blocked.", "Action Blocked", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            CheckEditLock();
+                            return;
+                        }
+                    }
 
                     string checkQuery = "SELECT COUNT(*) FROM Applicants WHERE ApplicantAccountID = @id";
                     using (MySqlCommand checkCmd = new MySqlCommand(checkQuery, conn))
